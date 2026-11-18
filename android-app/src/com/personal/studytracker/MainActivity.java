@@ -101,6 +101,7 @@ public final class MainActivity extends AppCompatActivity {
     private YearMonth reviewMonth = YearMonth.now();
     private LocalDate habitDate = LocalDate.now();
     private boolean showHabitWeek = false;
+    private boolean showAllTodayStreaks;
     private boolean showTargets = false;
     private int sessionHistoryLimit = 20;
     private boolean remindersExpanded;
@@ -616,8 +617,8 @@ public final class MainActivity extends AppCompatActivity {
                     + " curriculum items complete.");
             addSecondaryButton(content, "Continue learning", () -> selectTab("Learn"));
         }
-        renderStreakHighlights();
         renderComingUp(today);
+        renderStreakHighlights();
     }
 
     private void renderDailyReminders() {
@@ -846,7 +847,10 @@ public final class MainActivity extends AppCompatActivity {
         if (coreHabits.isEmpty()) return;
 
         sectionTitle("A little momentum");
-        for (TrackerStore.Habit habit : coreHabits) {
+        int visibleCount = showAllTodayStreaks ? coreHabits.size()
+                : Math.min(3, coreHabits.size());
+        for (int i = 0; i < visibleCount; i++) {
+            TrackerStore.Habit habit = coreHabits.get(i);
             TrackerMetrics.Streak streak = TrackerMetrics.streak(
                     store, habit.id, LocalDate.now());
             LinearLayout body = addCardBody(content, Color.parseColor(AMBER));
@@ -868,6 +872,17 @@ public final class MainActivity extends AppCompatActivity {
             addCardHintTo(body, streak.current > 0
                     ? "Your best is " + streak.longest + " days. Keep it gentle and steady."
                     : "A fresh start counts. Check this habit off whenever you're ready.");
+        }
+        if (coreHabits.size() > 3) {
+            MaterialButton moreStreaks = outlinedButton();
+            styleLightOutlinedButton(moreStreaks);
+            moreStreaks.setText(showAllTodayStreaks
+                    ? "Show fewer streaks" : "See all " + coreHabits.size() + " core streaks");
+            moreStreaks.setOnClickListener(view -> {
+                showAllTodayStreaks = !showAllTodayStreaks;
+                render();
+            });
+            content.addView(moreStreaks, cardParams());
         }
     }
 
