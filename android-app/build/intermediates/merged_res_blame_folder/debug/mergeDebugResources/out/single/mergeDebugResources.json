@@ -1,0 +1,62 @@
+[
+    {
+        "merged": "/data/gradle/daemon/8.9/com.personal.studytracker-debug-31:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "/data/gradle/daemon/8.9/com.personal.studytracker-android-app-32:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "/data/gradle/daemon/8.9/com.personal.studytracker-debug-31:/drawable_ic_tab_targets.xml.flat",
+        "source": "/data/gradle/daemon/8.9/com.personal.studytracker-android-app-32:/drawable/ic_tab_targets.xml"
+    },
+    {
+        "merged": "/data/gradle/daemon/8.9/com.personal.studytracker-debug-31:/drawable_ic_tab_topics.xml.flat",
+        "source": "/data/gradle/daemon/8.9/com.personal.studytracker-android-app-32:/drawable/ic_tab_topics.xml"
+    },
+    {
+        "merged": "/data/gradle/daemon/8.9/com.personal.studytracker-debug-31:/drawable_ic_tab_today.xml.flat",
+        "source": "/data/gradle/daemon/8.9/com.personal.studytracker-android-app-32:/drawable/ic_tab_today.xml"
+    },
+    {
+        "merged": "com.personal.studytracker-debug-31:/layout_activity_main.xml.flat",
+        "source": "com.personal.studytracker-android-app-32:/layout/activity_main.xml"
+    },
+    {
+        "merged": "/data/gradle/daemon/8.9/com.personal.studytracker-debug-31:/layout_activity_main.xml.flat",
+        "source": "/data/gradle/daemon/8.9/com.personal.studytracker-android-app-32:/layout/activity_main.xml"
+    },
+    {
+        "merged": "/data/gradle/daemon/8.9/com.personal.studytracker-debug-31:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "/data/gradle/daemon/8.9/com.personal.studytracker-android-app-32:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "/data/gradle/daemon/8.9/com.personal.studytracker-debug-31:/drawable_ic_tab_sessions.xml.flat",
+        "source": "/data/gradle/daemon/8.9/com.personal.studytracker-android-app-32:/drawable/ic_tab_sessions.xml"
+    },
+    {
+        "merged": "/data/gradle/daemon/8.9/com.personal.studytracker-debug-31:/drawable_ic_location.xml.flat",
+        "source": "/data/gradle/daemon/8.9/com.personal.studytracker-android-app-32:/drawable/ic_location.xml"
+    },
+    {
+        "merged": "/data/gradle/daemon/8.9/com.personal.studytracker-debug-31:/drawable_ic_tab_streaks.xml.flat",
+        "source": "/data/gradle/daemon/8.9/com.personal.studytracker-android-app-32:/drawable/ic_tab_streaks.xml"
+    },
+    {
+        "merged": "/data/gradle/daemon/8.9/com.personal.studytracker-debug-31:/drawable_ic_tab_daily.xml.flat",
+        "source": "/data/gradle/daemon/8.9/com.personal.studytracker-android-app-32:/drawable/ic_tab_daily.xml"
+    },
+    {
+        "merged": "/data/gradle/daemon/8.9/com.personal.studytracker-debug-31:/drawable_bg_botanical_overlay.xml.flat",
+        "source": "/data/gradle/daemon/8.9/com.personal.studytracker-android-app-32:/drawable/bg_botanical_overlay.xml"
+    },
+    {
+        "merged": "/data/gradle/daemon/8.9/com.personal.studytracker-debug-31:/drawable_bg_focus_hero.xml.flat",
+        "source": "/data/gradle/daemon/8.9/com.personal.studytracker-android-app-32:/drawable/bg_focus_hero.xml"
+    },
+    {
+        "merged": "/data/gradle/daemon/8.9/com.personal.studytracker-debug-31:/drawable_ic_tab_reviews.xml.flat",
+        "source": "/data/gradle/daemon/8.9/com.personal.studytracker-android-app-32:/drawable/ic_tab_reviews.xml"
+    },
+    {
+        "merged": "/data/gradle/daemon/8.9/com.personal.studytracker-debug-31:/drawable_bg_page.xml.flat",
+        "source": "/data/gradle/daemon/8.9/com.personal.studytracker-android-app-32:/drawable/bg_page.xml"
+    }
+]

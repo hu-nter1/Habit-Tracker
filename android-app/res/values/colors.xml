@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#21594D</color>
+    <color name="primary_variant">#163F39</color>
+    <color name="secondary">#D97757</color>
+    <color name="danger">#B84E49</color>
+    <color name="background">#102F2A</color>
+    <color name="surface">#F7FAF6</color>
+    <color name="surface_variant">#DCE8DE</color>
+    <color name="text_primary">#20302B</color>
+    <color name="text_secondary">#415B51</color>
+    <color name="text_muted">#61746B</color>
+    <color name="page_text">#E9F3E9</color>
+    <color name="page_muted">#B6CCBD</color>
+    <color name="outline">#CAD8CE</color>
+    <color name="timer_accent">#347A61</color>
+    <color name="timer_track">#D6E8DC</color>
+    <color name="timer_face">#F8FBF7</color>
+    <color name="topic_accent_1">#21594D</color>
+    <color name="topic_accent_2">#487A91</color>
+    <color name="topic_accent_3">#B97153</color>
+    <color name="topic_accent_4">#786C91</color>
+    <color name="topic_accent_5">#397B73</color>
+    <color name="topic_accent_6">#A07843</color>
+    <color name="topic_accent_7">#6D7C49</color>
+    <color name="topic_accent_8">#4D7888</color>
+    <color name="topic_accent_9">#A75E5B</color>
+    <!-- Kept as resource aliases for existing Java view code. -->
+    <color name="green">#21594D</color>
+    <color name="green_light">#E0ECE2</color>
+    <color name="white">#F7FAF6</color>
+    <color name="text">#20302B</color>
+    <color name="muted">#61746B</color>
+    <color name="line">#CAD8CE</color>
+</resources>
