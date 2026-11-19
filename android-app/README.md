@@ -43,8 +43,14 @@ reminder. Plans without either time remain unscheduled tasks. Plans are
 separate from habit check-ins and session records.
 Each `<topic>` has an `id`, `name`, and `guidance`; its `<item>` children have
 an `id`, `text`, and `done` flag. The starter curriculum is inserted when the
-`<topics>` section is first created and can be edited in the Topics tab. Dates
-are `YYYY-MM-DD`; study durations are stored in seconds.
+`<topics>` section is first created and can be edited in the Topics tab. The
+current curriculum contains 13 cybersecurity topics and 143 checkable steps.
+Its version is stored as the `curriculum_version` attribute on `<topics>`.
+When upgrading an older starter curriculum with no checked steps, the app
+replaces the starter topics while retaining custom topics and matching topic
+IDs. If checked curriculum progress exists, the app asks whether to replace or
+append before changing it. Dates are `YYYY-MM-DD`; study durations are stored
+in seconds.
 Study-session topic fields are dropdowns populated from the saved curriculum,
 including topics added in Learn; sessions also save the selected topic ID so
 renaming a topic does not break its history. Each `<reading>` in

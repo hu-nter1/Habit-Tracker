@@ -254,6 +254,28 @@ public final class MainActivity extends AppCompatActivity {
         requestLocation();
         createNavigation();
         render();
+        if (store.isCurriculumMigrationPending()) {
+            content.post(this::showCurriculumMigrationPrompt);
+        }
+    }
+
+    private void showCurriculumMigrationPrompt() {
+        if (isFinishing() || !store.isCurriculumMigrationPending()) return;
+        new AlertDialog.Builder(this)
+                .setTitle("Keep your learning progress?")
+                .setMessage("Some curriculum steps are already checked off. Replace all current "
+                        + "topics with the new 13-topic plan, or append the new topics and keep "
+                        + "your existing checklists?")
+                .setPositiveButton("Replace topics", (dialog, which) -> runStoreAction(() -> {
+                    store.migrateCurriculum(false);
+                    render();
+                }))
+                .setNegativeButton("Append topics", (dialog, which) -> runStoreAction(() -> {
+                    store.migrateCurriculum(true);
+                    render();
+                }))
+                .setNeutralButton("Not now", null)
+                .show();
     }
 
     @Override protected void onResume() {

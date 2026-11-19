@@ -111,6 +111,8 @@ final class TrackerStore {
     private final Map<String, Review> reviews = new LinkedHashMap<>();
     private final List<Topic> topics = new ArrayList<>();
     private boolean topicsSectionFound;
+    private int topicsCurriculumVersion;
+    private boolean curriculumMigrationPending;
 
     TrackerStore(File filesDir) throws IOException {
         file = new File(filesDir, "tracker.xml");
@@ -119,9 +121,12 @@ final class TrackerStore {
             if (!topicsSectionFound) {
                 seedTopics();
                 save();
+            } else {
+                prepareCurriculumMigration();
             }
         } else {
             seedTopics();
+            topicsCurriculumVersion = Curriculum.VERSION;
             save();
         }
     }
@@ -134,6 +139,19 @@ final class TrackerStore {
     List<Session> getSessions() { return Collections.unmodifiableList(sessions); }
     List<ReadingLog> getReadingLogs() { return Collections.unmodifiableList(readingLogs); }
     List<Topic> getTopics() { return Collections.unmodifiableList(topics); }
+    boolean isCurriculumMigrationPending() { return curriculumMigrationPending; }
+
+    void migrateCurriculum(boolean append) throws IOException {
+        if (!curriculumMigrationPending) return;
+        if (append) {
+            addCurriculumTopics(new ArrayList<>(topics), null);
+        } else {
+            replaceAllTopicsWithCurriculum();
+        }
+        curriculumMigrationPending = false;
+        topicsCurriculumVersion = Curriculum.VERSION;
+        save();
+    }
 
     Review getReview(String weekStart) {
         Review review = reviews.get(weekStart);
@@ -466,48 +484,86 @@ final class TrackerStore {
     }
 
     private void seedTopics() {
-        addSeedTopic("Networking",
-                "Start with OSI/TCP-IP, then do subnetting by hand until it's automatic. "
-                        + "Use Professor Messer's Network+ videos.",
-                "IP addressing & subnetting", "DNS", "TCP/UDP & ports",
-                "How the web works (HTTP/HTTPS)", "OSI & TCP/IP models");
-        addSeedTopic("Operating Systems",
-                "Push into Windows SMB/RPC and Linux logs/systemd — these show up in every real scan.",
-                "Windows: processes, services, registry, AD basics", "Windows: SMB/RPC/NetBIOS",
-                "Linux: permissions, systemd, logs", "Linux: networking commands");
-        addSeedTopic("Identity",
-                "Tie concepts back to real findings, like SMB signing, instead of memorizing definitions.",
-                "Users vs groups", "Passwords & hashing basics", "Permissions (NTFS/Linux)",
-                "MFA concepts");
-        addSeedTopic("Applications",
-                "Light coverage for now — just enough to recognize terms later.",
-                "How a web request flows end-to-end", "Common vulnerabilities (SQLi, XSS basics)",
-                "How browsers/servers talk");
-        addSeedTopic("Cloud Basics", "One overview video is enough at this stage.",
-                "What \"the cloud\" actually is", "Shared responsibility model",
-                "Basic AWS/Azure concepts");
-        addSeedTopic("Scripting",
-                "Pick ONE language — Bash fits naturally with Kali work.",
-                "Python or Bash fundamentals", "Reading/writing simple scripts",
-                "Automating a repetitive task");
-        addSeedTopic("Explore Roles",
-                "Do this only after the 6 topics above feel solid.",
-                "Read 3 real job descriptions", "Pick one role and write down why",
-                "Talk to someone in the field");
-        addSeedTopic("Build Evidence",
-                "Turn your own nmap/Kali practice into your first documented project.",
-                "Home lab in VirtualBox", "TryHackMe or HTB rooms", "Wireshark captures",
-                "3 written-up projects");
-        addSeedTopic("Apply for Jobs", "Comes after evidence exists, not before.",
-                "Polished CV and LinkedIn", "Apply every week", "Interview practice");
+        topicsCurriculumVersion = Curriculum.VERSION;
+        addCurriculumTopics(new ArrayList<>(topics), null);
     }
 
-    private void addSeedTopic(String name, String guidance, String... itemTexts) {
-        Topic topic = new Topic(UUID.randomUUID().toString(), name, guidance);
-        for (String itemText : itemTexts) {
-            topic.items.add(new TopicItem(UUID.randomUUID().toString(), itemText, false));
+    private void prepareCurriculumMigration() throws IOException {
+        if (topicsCurriculumVersion >= Curriculum.VERSION) return;
+        if (!hasLegacyStarterTopics()) {
+            topicsCurriculumVersion = Curriculum.VERSION;
+            save();
+            return;
         }
-        topics.add(topic);
+        for (Topic topic : topics) {
+            for (TopicItem item : topic.items) {
+                if (item.done) {
+                    curriculumMigrationPending = true;
+                    return;
+                }
+            }
+        }
+        replaceStarterTopicsWithCurriculum();
+        topicsCurriculumVersion = Curriculum.VERSION;
+        save();
+    }
+
+    private boolean hasLegacyStarterTopics() {
+        int legacyTopicCount = 0;
+        for (Topic topic : topics) {
+            if (isLegacyStarterName(topic.name)) legacyTopicCount++;
+        }
+        return legacyTopicCount >= 2;
+    }
+
+    private static boolean isLegacyStarterName(String name) {
+        return "Networking".equals(name) || "Operating Systems".equals(name)
+                || "Identity".equals(name) || "Applications".equals(name)
+                || "Cloud Basics".equals(name) || "Scripting".equals(name)
+                || "Explore Roles".equals(name) || "Build Evidence".equals(name)
+                || "Apply for Jobs".equals(name);
+    }
+
+    private void replaceStarterTopicsWithCurriculum() {
+        List<Topic> previousTopics = new ArrayList<>(topics);
+        List<Topic> customTopics = new ArrayList<>();
+        for (Topic topic : topics) {
+            if (!isLegacyStarterName(topic.name)) customTopics.add(topic);
+        }
+        topics.clear();
+        addCurriculumTopics(previousTopics, customTopics);
+    }
+
+    private void replaceAllTopicsWithCurriculum() {
+        List<Topic> previousTopics = new ArrayList<>(topics);
+        topics.clear();
+        addCurriculumTopics(previousTopics, null);
+    }
+
+    private void addCurriculumTopics(
+            List<Topic> previousTopics, List<Topic> topicsToPreserve) {
+        for (Curriculum.Definition definition : Curriculum.all()) {
+            Topic existing = findExistingTopic(previousTopics, definition.name);
+            Topic topic = new Topic(existing == null ? UUID.randomUUID().toString() : existing.id,
+                    definition.name, definition.guidance);
+            for (String itemText : definition.items) {
+                topic.items.add(new TopicItem(UUID.randomUUID().toString(), itemText, false));
+            }
+            topics.add(topic);
+        }
+        if (topicsToPreserve != null) topics.addAll(topicsToPreserve);
+    }
+
+    private static Topic findExistingTopic(List<Topic> previousTopics, String newName) {
+        String oldName = newName;
+        if ("OS (Windows-focused)".equals(newName)) oldName = "Operating Systems";
+        else if ("Cloud".equals(newName)) oldName = "Cloud Basics";
+        else if ("Choose a Domain".equals(newName)) oldName = "Explore Roles";
+        else if ("Labs".equals(newName)) oldName = "Build Evidence";
+        for (Topic topic : previousTopics) {
+            if (oldName.equals(topic.name)) return topic;
+        }
+        return null;
     }
 
     private static String number(double value) {
@@ -531,7 +587,18 @@ final class TrackerStore {
                             || "reading_logs".equals(tag) || "reviews".equals(tag)
                             || "topics".equals(tag)) {
                         section = tag;
-                        if ("topics".equals(tag)) topicsSectionFound = true;
+                        if ("topics".equals(tag)) {
+                            topicsSectionFound = true;
+                            String version = attr(parser, "curriculum_version");
+                            if (!version.isEmpty()) {
+                                try {
+                                    topicsCurriculumVersion = Integer.parseInt(version);
+                                } catch (NumberFormatException exception) {
+                                    throw new IOException(
+                                            "Curriculum version in tracker XML is invalid.", exception);
+                                }
+                            }
+                        }
                     } else if ("day".equals(tag)) {
                         day = parser.getAttributeValue(null, "date");
                     } else if ("topic".equals(tag) && "topics".equals(section)) {
@@ -735,6 +802,8 @@ final class TrackerStore {
             xml.endTag(null, "reviews");
 
             xml.startTag(null, "topics");
+            xml.attribute(null, "curriculum_version",
+                    Integer.toString(topicsCurriculumVersion));
             for (Topic topic : topics) {
                 xml.startTag(null, "topic");
                 xml.attribute(null, "id", topic.id);
