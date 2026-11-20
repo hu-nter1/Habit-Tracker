@@ -38,6 +38,7 @@ public final class PlanReminderReceiver extends BroadcastReceiver {
                 PlanReminderScheduler.cancelPlan(context, planId);
                 return;
             }
+            if (snooze) PlanReminderScheduler.clearSnooze(context, planId);
             if (!notificationsAvailable(context)) {
                 Log.w(TAG, "Notifications are disabled; could not show plan reminder " + planId);
                 return;
@@ -76,7 +77,7 @@ public final class PlanReminderReceiver extends BroadcastReceiver {
     }
 
     private static void postNotification(Context context, String planId, String title) {
-        int notificationId = PlanReminderScheduler.notificationId(planId);
+        int notificationId = PlanReminderScheduler.notificationId(context, planId);
         Intent open = new Intent(context, MainActivity.class)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent content = PendingIntent.getActivity(context, notificationId, open,
@@ -111,6 +112,17 @@ public final class PlanReminderReceiver extends BroadcastReceiver {
             notification.setSound(RingtoneManager.getDefaultUri(
                     RingtoneManager.TYPE_NOTIFICATION));
         }
-        NotificationManagerCompat.from(context).notify(notificationId, notification.build());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+                && context.checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS)
+                != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+            Log.w(TAG, "Notification permission is unavailable for plan reminder " + planId);
+            return;
+        }
+        try {
+            NotificationManagerCompat.from(context).notify(notificationId, notification.build());
+        } catch (SecurityException exception) {
+            Log.w(TAG, "Notification permission changed while posting plan reminder " + planId,
+                    exception);
+        }
     }
 }

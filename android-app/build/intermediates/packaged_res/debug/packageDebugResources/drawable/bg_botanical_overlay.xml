@@ -40,15 +40,15 @@
         android:fillAlpha="0.11"
         android:pathData="M42,480 C23,473 13,459 13,440 C32,445 43,459 42,480 Z" />
     <path
-        android:fillColor="#F4F4CF"
+        android:fillColor="#C8C995"
         android:fillAlpha="0.48"
         android:pathData="M145,112l3,8 8,3 -8,3 -3,8 -3,-8 -8,-3 8,-3z" />
     <path
-        android:fillColor="#F4F4CF"
+        android:fillColor="#C8C995"
         android:fillAlpha="0.38"
         android:pathData="M272,286l2,6 6,2 -6,2 -2,6 -2,-6 -6,-2 6,-2z" />
     <path
-        android:fillColor="#F4F4CF"
+        android:fillColor="#C8C995"
         android:fillAlpha="0.32"
         android:pathData="M94,386l2,5 5,2 -5,2 -2,5 -2,-5 -5,-2 5,-2z" />
 </vector>

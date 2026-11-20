@@ -24,13 +24,14 @@ public final class DailyReminderReceiver extends BroadcastReceiver {
                 ? DailyReminderScheduler.MORNING_ENABLED
                 : DailyReminderScheduler.EVENING_ENABLED;
         if (!prefs.getBoolean(enabledKey, false)) return;
+        boolean snooze = intent.getBooleanExtra(DailyReminderScheduler.EXTRA_SNOOZE, false);
+        if (snooze) DailyReminderScheduler.clearSnooze(context, kind);
+        else DailyReminderScheduler.scheduleNextDay(context, kind);
         if (!AlarmSoundService.notificationsAvailable(context)) {
             Log.w(TAG, "Notifications are disabled; skipping " + kind + " reminder");
             return;
         }
 
-        boolean snooze = intent.getBooleanExtra(DailyReminderScheduler.EXTRA_SNOOZE, false);
-        if (!snooze) DailyReminderScheduler.scheduleNextDay(context, kind);
         boolean morning = DailyReminderScheduler.MORNING.equals(kind);
         String title = morning ? "A fresh day" : "Take a moment to check in";
         String message = morning

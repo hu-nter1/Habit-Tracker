@@ -20,7 +20,28 @@ public final class TimerBootReceiver extends BroadcastReceiver {
         PlanReminderScheduler.scheduleAll(context);
         SharedPreferences prefs = context.getSharedPreferences(
                 TimerAlarmScheduler.PREFS, Context.MODE_PRIVATE);
+        long snoozeEnd = prefs.getLong(TimerAlarmScheduler.KEY_SNOOZE_END_MILLIS, 0L);
+        boolean snoozeExpired = false;
+        if (snoozeEnd > 0L) {
+            if (snoozeEnd <= System.currentTimeMillis()) {
+                snoozeExpired = true;
+                prefs.edit().remove(TimerAlarmScheduler.KEY_SNOOZE_END_MILLIS)
+                        .putBoolean(TimerAlarmScheduler.KEY_ALARM_RINGING, true).apply();
+                TimerAlarmReceiver.startAlarmService(
+                        context, "Focus timer", "Your 5-minute snooze is over.");
+            } else {
+                TimerAlarmScheduler.scheduleSnooze(context, snoozeEnd);
+            }
+        }
+        boolean bootOrReplacement = Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())
+                || Intent.ACTION_MY_PACKAGE_REPLACED.equals(intent.getAction());
+        if (!snoozeExpired && bootOrReplacement && prefs.getBoolean(
+                TimerAlarmScheduler.KEY_ALARM_RINGING, false)) {
+            TimerAlarmReceiver.startAlarmService(context,
+                    "Focus timer complete", "Your study session is complete.");
+        }
         if (!prefs.getBoolean(TimerAlarmScheduler.KEY_RUNNING, false)
+                || prefs.getBoolean(TimerAlarmScheduler.KEY_PAUSED, false)
                 || prefs.getBoolean(TimerAlarmScheduler.KEY_STOPWATCH, false)) return;
         String token = prefs.getString(TimerAlarmScheduler.KEY_TOKEN, "");
         long endAt = prefs.getLong(TimerAlarmScheduler.KEY_END_MILLIS, 0L);

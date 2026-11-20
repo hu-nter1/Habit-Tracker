@@ -30,9 +30,15 @@ color topic_accent_6
 color topic_accent_7
 color topic_accent_8
 color topic_accent_9
-color white
 drawable bg_botanical_overlay
 drawable bg_focus_hero
+drawable ic_action_add
+drawable ic_action_check
+drawable ic_action_chevron_left
+drawable ic_action_chevron_right
+drawable ic_action_more
+drawable ic_action_pause
+drawable ic_action_play
 drawable ic_launcher_foreground
 drawable ic_location
 drawable ic_tab_daily

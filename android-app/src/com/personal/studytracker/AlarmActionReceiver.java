@@ -14,6 +14,8 @@ public final class AlarmActionReceiver extends BroadcastReceiver {
     @Override public void onReceive(Context context, Intent intent) {
         String action = intent == null ? "" : intent.getAction();
         if (ACTION_STOP_REMINDER.equals(action)) {
+            DailyReminderScheduler.clearSnooze(context,
+                    intent.getStringExtra(DailyReminderScheduler.EXTRA_KIND));
             AlarmSoundService.stop(context);
             return;
         }

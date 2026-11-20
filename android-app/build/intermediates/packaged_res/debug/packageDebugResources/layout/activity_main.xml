@@ -47,13 +47,15 @@
             <TextView
                 android:id="@+id/header_location"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="44dp"
                 android:layout_weight="1"
                 android:drawableStart="@drawable/ic_location"
                 android:drawablePadding="4dp"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:maxLines="1"
+                android:paddingStart="6dp"
+                android:paddingEnd="6dp"
                 android:textColor="#D0E2D6"
                 android:textSize="11sp" />
         </LinearLayout>
@@ -77,6 +79,7 @@
         app:tabSelectedTextColor="@color/primary"
         app:tabIndicatorColor="@color/secondary"
         app:tabIndicatorHeight="3dp"
+        app:tabRippleColor="@color/outline"
         app:tabTextAppearance="@style/TextAppearance.StudyTracker.Tab" />
 
     <ScrollView

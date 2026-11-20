@@ -21,7 +21,8 @@ public final class TimerAlarmReceiver extends BroadcastReceiver {
         String kind = intent == null ? "" : intent.getStringExtra(TimerAlarmScheduler.EXTRA_KIND);
         if (TimerAlarmScheduler.KIND_SNOOZE.equals(kind)) {
             context.getSharedPreferences(TimerAlarmScheduler.PREFS, Context.MODE_PRIVATE)
-                    .edit().putBoolean(TimerAlarmScheduler.KEY_ALARM_RINGING, true).apply();
+                    .edit().remove(TimerAlarmScheduler.KEY_SNOOZE_END_MILLIS)
+                    .putBoolean(TimerAlarmScheduler.KEY_ALARM_RINGING, true).apply();
             startAlarmService(context, "Focus timer", "Your 5-minute snooze is over.");
             return;
         }
@@ -31,13 +32,15 @@ public final class TimerAlarmReceiver extends BroadcastReceiver {
         String expectedToken = intent == null ? "" :
                 intent.getStringExtra(TimerAlarmScheduler.EXTRA_TOKEN);
         if (!prefs.getBoolean(TimerAlarmScheduler.KEY_RUNNING, false)
+                || prefs.getBoolean(TimerAlarmScheduler.KEY_PAUSED, false)
                 || prefs.getBoolean(TimerAlarmScheduler.KEY_STOPWATCH, false)
                 || expectedToken == null
                 || !expectedToken.equals(prefs.getString(TimerAlarmScheduler.KEY_TOKEN, ""))) {
             return;
         }
 
-        long startMillis = prefs.getLong(TimerAlarmScheduler.KEY_START_MILLIS, 0L);
+        long startMillis = prefs.getLong(TimerAlarmScheduler.KEY_SESSION_START_MILLIS,
+                prefs.getLong(TimerAlarmScheduler.KEY_START_MILLIS, 0L));
         int durationSeconds = prefs.getInt(TimerAlarmScheduler.KEY_DURATION_SECONDS, 0);
         String topic = prefs.getString(TimerAlarmScheduler.KEY_TOPIC, "");
         String topicId = prefs.getString(TimerAlarmScheduler.KEY_TOPIC_ID, "");
@@ -60,6 +63,7 @@ public final class TimerAlarmReceiver extends BroadcastReceiver {
 
         prefs.edit()
                 .putBoolean(TimerAlarmScheduler.KEY_RUNNING, false)
+                .putBoolean(TimerAlarmScheduler.KEY_PAUSED, false)
                 .putBoolean(TimerAlarmScheduler.KEY_ALARM_RINGING, true)
                 .apply();
         TimerAlarmScheduler.cancelTimer(context);
@@ -69,10 +73,14 @@ public final class TimerAlarmReceiver extends BroadcastReceiver {
         startAlarmService(context, "Focus timer complete", message);
     }
 
-    private void startAlarmService(Context context, String title, String message) {
+    static void startAlarmService(Context context, String title, String message) {
         Intent service = new Intent(context, AlarmSoundService.class)
                 .putExtra(AlarmSoundService.EXTRA_TITLE, title)
-                .putExtra(AlarmSoundService.EXTRA_MESSAGE, message);
+                .putExtra(AlarmSoundService.EXTRA_MESSAGE, message)
+                .putExtra(DailyReminderScheduler.EXTRA_SOUND,
+                        context.getSharedPreferences(TimerAlarmScheduler.PREFS,
+                                Context.MODE_PRIVATE)
+                                .getString(TimerAlarmScheduler.KEY_SOUND, ""));
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 context.startForegroundService(service);

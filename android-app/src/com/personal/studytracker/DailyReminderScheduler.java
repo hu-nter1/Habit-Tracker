@@ -37,13 +37,14 @@ final class DailyReminderScheduler {
     static void scheduleAll(Context context) {
         scheduleIfEnabled(context, MORNING);
         scheduleIfEnabled(context, EVENING);
+        restoreSnooze(context, MORNING);
+        restoreSnooze(context, EVENING);
     }
 
     static void scheduleIfEnabled(Context context, String kind) {
         String enabledKey = MORNING.equals(kind) ? MORNING_ENABLED : EVENING_ENABLED;
         if (!context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-                .getBoolean(enabledKey, false)
-                || !AlarmSoundService.notificationsAvailable(context)) {
+                .getBoolean(enabledKey, false)) {
             cancel(context, kind);
             return;
         }
@@ -72,7 +73,31 @@ final class DailyReminderScheduler {
         if (!context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
                 .getBoolean(enabledKey, false)
                 || !AlarmSoundService.notificationsAvailable(context)) return;
-        schedule(context, kind, System.currentTimeMillis() + 5 * 60 * 1000L, true);
+        long snoozeAt = System.currentTimeMillis() + 5 * 60 * 1000L;
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit()
+                .putLong(snoozeKey(kind), snoozeAt).apply();
+        schedule(context, kind, snoozeAt, true);
+    }
+
+    static void restoreSnooze(Context context, String kind) {
+        String enabledKey = MORNING.equals(kind) ? MORNING_ENABLED : EVENING_ENABLED;
+        android.content.SharedPreferences prefs =
+                context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        long snoozeAt = prefs.getLong(snoozeKey(kind), 0L);
+        if (snoozeAt <= 0L) return;
+        if (!prefs.getBoolean(enabledKey, false)
+                || !AlarmSoundService.notificationsAvailable(context)) {
+            clearSnooze(context, kind);
+            return;
+        }
+        schedule(context, kind, Math.max(System.currentTimeMillis(), snoozeAt), true);
+    }
+
+    static void clearSnooze(Context context, String kind) {
+        if (!MORNING.equals(kind) && !EVENING.equals(kind)) return;
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit()
+                .remove(snoozeKey(kind)).apply();
+        cancelAlarm(context, snoozeRequestCode(kind));
     }
 
     static LocalTime getTime(Context context, String kind) {
@@ -116,17 +141,26 @@ final class DailyReminderScheduler {
     }
 
     private static void cancel(Context context, String kind) {
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit()
+                .remove(snoozeKey(kind)).apply();
+        cancelAlarm(context, requestCode(kind));
+        cancelAlarm(context, snoozeRequestCode(kind));
+    }
+
+    private static void cancelAlarm(Context context, int requestCode) {
         AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (manager == null) return;
-        for (int requestCode : new int[]{requestCode(kind), snoozeRequestCode(kind)}) {
-            PendingIntent pending = PendingIntent.getBroadcast(context, requestCode,
-                    new Intent(context, DailyReminderReceiver.class),
-                    PendingIntent.FLAG_NO_CREATE | PendingIntent.FLAG_IMMUTABLE);
-            if (pending != null) {
-                manager.cancel(pending);
-                pending.cancel();
-            }
+        PendingIntent pending = PendingIntent.getBroadcast(context, requestCode,
+                new Intent(context, DailyReminderReceiver.class),
+                PendingIntent.FLAG_NO_CREATE | PendingIntent.FLAG_IMMUTABLE);
+        if (pending != null) {
+            manager.cancel(pending);
+            pending.cancel();
         }
+    }
+
+    private static String snoozeKey(String kind) {
+        return kind + "_snooze_at";
     }
 
     private static int requestCode(String kind) {

@@ -12,7 +12,9 @@ public final class PlanReminderActionReceiver extends BroadcastReceiver {
 
         android.app.NotificationManager manager =
                 context.getSystemService(android.app.NotificationManager.class);
-        if (manager != null) manager.cancel(PlanReminderScheduler.notificationId(planId));
+        if (manager != null) {
+            manager.cancel(PlanReminderScheduler.notificationId(context, planId));
+        }
 
         if (PlanReminderReceiver.ACTION_SNOOZE.equals(intent.getAction())) {
             String title = intent.getStringExtra(PlanReminderScheduler.EXTRA_PLAN_TITLE);

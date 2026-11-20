@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<incidents format="6" by="lint 8.7.3" type="conditional_incidents">
+
+    <incident
+        id="InlinedApi"
+        severity="warning"
+        message="">
+        <fix-data minSdk="fffffffffe000000" requiresApi="ffffffffc0000000"/>
+        <location
+            file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
+            line="2859"
+            column="46"
+            startOffset="138155"
+            endLine="2859"
+            endColumn="90"
+            endOffset="138199"/>
+        <map>
+            <entry
+                name="message"
+                string="Field requires API level 31 (current min is %1$s): `android.provider.Settings#ACTION_REQUEST_SCHEDULE_EXACT_ALARM`"/>
+            <api-levels id="minSdk"
+                value="fffffffffe000000"/>
+            <entry
+                name="name"
+                string="ACTION_REQUEST_SCHEDULE_EXACT_ALARM"/>
+            <entry
+                name="owner"
+                string="android.provider.Settings"/>
+            <api-levels id="requiresApi"
+                value="ffffffffc0000000"/>
+        </map>
+    </incident>
+
+    <incident
+        id="NotificationPermission"
+        severity="error"
+        message="When targeting Android 13 or higher, posting a permission requires holding the `POST_NOTIFICATIONS` permission">
+        <fix-data missing="android.permission.POST_NOTIFICATIONS"/>
+        <location
+            file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/PlanReminderReceiver.java"
+            line="122"
+            column="13"
+            startOffset="6553"
+            endLine="122"
+            endColumn="97"
+            endOffset="6637"/>
+    </incident>
+
+</incidents>

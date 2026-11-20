@@ -29,7 +29,6 @@ import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.CheckBox;
@@ -47,7 +46,6 @@ import android.app.DatePickerDialog;
 
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.tabs.TabLayout;
@@ -73,13 +71,18 @@ import java.util.UUID;
 
 public final class MainActivity extends AppCompatActivity {
     private static final String TAG = "StudyTracker";
-    private static final String GREEN = "#21594D";
-    private static final String MUTED = "#61746B";
+    private static final String GREEN = "#91C9A6";
+    private static final String MUTED = "#B6CCBD";
     private static final String PAGE_TEXT = "#E9F3E9";
     private static final String PAGE_MUTED = "#B6CCBD";
-    private static final String LINE = "#CAD8CE";
-    private static final String WHITE = "#F7FAF6";
+    private static final String LINE = "#527466";
+    private static final String LIGHT_SAGE = "#DCE8DE";
     private static final String AMBER = "#D97757";
+    private static final String BUTTON_MINT = "#B8E3C5";
+    private static final String BUTTON_DARK = "#173F37";
+    private static final String BUTTON_SURFACE = "#214A40";
+    private static final String BUTTON_OUTLINE = "#648C79";
+    private static final int ACTION_BUTTON_HEIGHT_DP = 48;
     private static final String[] TABS = {
             "Today", "Habits", "Study", "Review", "Learn"
     };
@@ -101,6 +104,7 @@ public final class MainActivity extends AppCompatActivity {
     private LocalDate reviewWeekStart = LocalDate.now().with(DayOfWeek.MONDAY);
     private YearMonth reviewMonth = YearMonth.now();
     private LocalDate habitDate = LocalDate.now();
+    private LocalDate habitWeekStart = LocalDate.now().with(DayOfWeek.MONDAY);
     private boolean showHabitWeek = false;
     private boolean showAllTodayStreaks;
     private boolean showTargets = false;
@@ -108,12 +112,16 @@ public final class MainActivity extends AppCompatActivity {
     private boolean remindersExpanded;
     private String pendingReminderKind;
     private boolean timerRunning;
+    private boolean timerPaused;
     private boolean timerStopwatch;
     private boolean stopwatchMode;
     private boolean resetScrollOnRender;
     private long timerStartMillis;
+    private long timerSessionStartMillis;
     private long timerEndMillis;
+    private long timerPausedRemainingMillis;
     private int timerDurationSeconds;
+    private int timerElapsedSeconds;
     private String timerToken = "";
     private String timerTopicValue = "";
     private String timerTopicIdValue = "";
@@ -140,6 +148,7 @@ public final class MainActivity extends AppCompatActivity {
     private static final int REQUEST_MORNING_RINGTONE = 4104;
     private static final int REQUEST_EVENING_RINGTONE = 4105;
     private static final int REQUEST_PLAN_NOTIFICATIONS = 4106;
+    private static final int REQUEST_TIMER_RINGTONE = 4107;
     private final Runnable clockTick = new Runnable() {
         @Override public void run() {
             if (headerDateTime != null) {
@@ -216,7 +225,7 @@ public final class MainActivity extends AppCompatActivity {
         actions.addView(dismiss, new LinearLayout.LayoutParams(
                 0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
         MaterialButton snooze = outlinedButton();
-        styleLightOutlinedButton(snooze);
+        stylePageOutlinedButton(snooze);
         snooze.setText("Snooze 5 min");
         LinearLayout.LayoutParams snoozeParams = new LinearLayout.LayoutParams(
                 0, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
@@ -229,9 +238,9 @@ public final class MainActivity extends AppCompatActivity {
     private final Runnable timerTick = new Runnable() {
         @Override public void run() {
             if (!timerRunning || timerStatus == null) return;
+            if (timerPaused) return;
             if (timerStopwatch) {
-                long elapsed = Math.max(0,
-                        (System.currentTimeMillis() - timerStartMillis) / 1000);
+                long elapsed = activeStopwatchSeconds(System.currentTimeMillis());
                 if (timerStatus != null) timerStatus.setText("Stopwatch in progress");
                 if (timerCountdown != null) {
                     String elapsedLabel = formatStopwatchTime(elapsed);
@@ -248,8 +257,7 @@ public final class MainActivity extends AppCompatActivity {
                 handler.postDelayed(this, 1000);
                 return;
             }
-            long remaining = Math.max(0,
-                    (timerEndMillis - System.currentTimeMillis() + 999) / 1000);
+            long remaining = remainingTimerSeconds(System.currentTimeMillis());
             if (remaining == 0) {
                 boolean stillRunning = getSharedPreferences(
                         TimerAlarmScheduler.PREFS, MODE_PRIVATE)
@@ -303,11 +311,13 @@ public final class MainActivity extends AppCompatActivity {
         PlanReminderReceiver.ensureNotificationChannel(this);
         content = findViewById(R.id.content);
         tabs = findViewById(R.id.tabs);
+        tabs.setMinimumHeight(dp(48));
         scroll = findViewById(R.id.main_scroll);
         scroll.setBackground(new AnimatedPageBackground(
                 getDrawable(R.drawable.bg_botanical_overlay)));
         headerDateTime = findViewById(R.id.header_datetime);
         headerLocation = findViewById(R.id.header_location);
+        setPressableText(headerLocation, "Show or refresh your area");
         headerLocation.setOnClickListener(view -> requestLocation());
         remindersExpanded = getSharedPreferences(
                 DailyReminderScheduler.PREFS, MODE_PRIVATE)
@@ -354,7 +364,7 @@ public final class MainActivity extends AppCompatActivity {
             if ("Study".equals(activeTab) || "Today".equals(activeTab)) {
                 reloadStore();
                 render();
-                if (timerRunning && "Study".equals(activeTab)) {
+                if (timerRunning && !timerPaused && "Study".equals(activeTab)) {
                     handler.removeCallbacks(timerTick);
                     handler.post(timerTick);
                 }
@@ -422,7 +432,16 @@ public final class MainActivity extends AppCompatActivity {
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if ((requestCode == REQUEST_MORNING_RINGTONE
+        if (requestCode == REQUEST_TIMER_RINGTONE && resultCode == RESULT_OK) {
+            Uri sound = data == null ? null
+                    : data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+            getSharedPreferences(TimerAlarmScheduler.PREFS, MODE_PRIVATE).edit()
+                    .putString(TimerAlarmScheduler.KEY_SOUND,
+                            sound == null ? "" : sound.toString())
+                    .apply();
+            Toast.makeText(this, "Focus timer sound saved", Toast.LENGTH_SHORT).show();
+            if ("Study".equals(activeTab)) render();
+        } else if ((requestCode == REQUEST_MORNING_RINGTONE
                 || requestCode == REQUEST_EVENING_RINGTONE) && resultCode == RESULT_OK) {
             Uri sound = data == null ? null
                     : data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
@@ -531,9 +550,15 @@ public final class MainActivity extends AppCompatActivity {
         android.content.SharedPreferences prefs = getSharedPreferences(
                 TimerAlarmScheduler.PREFS, MODE_PRIVATE);
         timerRunning = prefs.getBoolean(TimerAlarmScheduler.KEY_RUNNING, false);
+        timerPaused = prefs.getBoolean(TimerAlarmScheduler.KEY_PAUSED, false);
         timerStartMillis = prefs.getLong(TimerAlarmScheduler.KEY_START_MILLIS, 0L);
+        timerSessionStartMillis = prefs.getLong(
+                TimerAlarmScheduler.KEY_SESSION_START_MILLIS, timerStartMillis);
         timerEndMillis = prefs.getLong(TimerAlarmScheduler.KEY_END_MILLIS, 0L);
+        timerPausedRemainingMillis = prefs.getLong(
+                TimerAlarmScheduler.KEY_PAUSED_REMAINING_MILLIS, 0L);
         timerDurationSeconds = prefs.getInt(TimerAlarmScheduler.KEY_DURATION_SECONDS, 0);
+        timerElapsedSeconds = prefs.getInt(TimerAlarmScheduler.KEY_ELAPSED_SECONDS, 0);
         timerToken = prefs.getString(TimerAlarmScheduler.KEY_TOKEN, "");
         timerTopicValue = prefs.getString(TimerAlarmScheduler.KEY_TOPIC, "");
         timerTopicIdValue = prefs.getString(TimerAlarmScheduler.KEY_TOPIC_ID, "");
@@ -543,7 +568,7 @@ public final class MainActivity extends AppCompatActivity {
             timerTopicIdValue = topicIdForName(timerTopicValue);
         }
         timerInterruptedValue = prefs.getBoolean(TimerAlarmScheduler.KEY_INTERRUPTED, false);
-        if (timerRunning && !timerStopwatch && !timerToken.isEmpty()) {
+        if (timerRunning && !timerPaused && !timerStopwatch && !timerToken.isEmpty()) {
             long dueAt = Math.max(System.currentTimeMillis(), timerEndMillis);
             TimerAlarmScheduler.scheduleTimer(this, dueAt, timerToken);
         }
@@ -658,9 +683,19 @@ public final class MainActivity extends AppCompatActivity {
         addMetricTile(secondMetrics, "Curriculum", String.format(Locale.getDefault(),
                 curriculum.totalItems == 0 ? "—" : "%.0f%%", curriculum.percentage()), AMBER);
         summary.addView(secondMetrics);
+        addSecondaryButton(summary, targetCount == 0
+                ? "Set a number goal" : "Review goals & targets", () -> {
+            showTargets = true;
+            selectTab("Study");
+        });
 
         MaterialButton focusButton = primaryButton();
         focusButton.setText(timerRunning ? "Return to your focus session" : "Start a focus session");
+        focusButton.setIcon(getDrawable(R.drawable.ic_tab_sessions));
+        focusButton.setIconTint(android.content.res.ColorStateList.valueOf(
+                Color.parseColor(BUTTON_DARK)));
+        focusButton.setIconSize(dp(20));
+        focusButton.setIconPadding(dp(8));
         focusButton.setOnClickListener(view -> selectTab("Study"));
         content.addView(focusButton, cardParams());
 
@@ -720,7 +755,18 @@ public final class MainActivity extends AppCompatActivity {
             sectionTitle("Learning progress");
             addHint(curriculum.completedItems + " of " + curriculum.totalItems
                     + " curriculum items complete.");
-            addSecondaryButton(content, "Continue learning", () -> selectTab("Learn"));
+            TrackerStore.Topic nextTopic = nextIncompleteTopic();
+            TrackerStore.TopicItem nextItem = nextIncompleteItem(nextTopic);
+            if (nextTopic == null || nextItem == null) {
+                addHint("You have completed every learning step. Add a topic whenever you're ready.");
+                addSecondaryButton(content, "Explore your learning path", () -> selectTab("Learn"));
+            } else {
+                addHint("Up next in " + nextTopic.name + ": " + nextItem.text);
+                addSecondaryButton(content, "Continue " + nextTopic.name, () -> {
+                    expandedTopics.add(nextTopic.id);
+                    selectTab("Learn");
+                });
+            }
         }
         renderComingUp(today);
         renderStreakHighlights();
@@ -751,7 +797,7 @@ public final class MainActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams.WRAP_CONTENT, 1));
         MaterialButton settings = miniButton(remindersExpanded ? "Done" : "Set up");
         settings.setTextSize(12);
-        settings.setMinHeight(dp(40));
+        settings.setMinHeight(dp(48));
         settings.setContentDescription(remindersExpanded
                 ? "Hide daily reminder settings" : "Set up daily reminders");
         settings.setOnClickListener(view -> {
@@ -761,6 +807,7 @@ public final class MainActivity extends AppCompatActivity {
         });
         summary.addView(settings);
         body.addView(summary);
+        setPressableView(body, "Toggle daily reminder settings");
         body.setOnClickListener(view -> {
             remindersExpanded = !remindersExpanded;
             prefs.edit().putBoolean("settings_expanded", remindersExpanded).apply();
@@ -914,6 +961,23 @@ public final class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void chooseTimerSound(Uri currentSound) {
+        Intent picker = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
+                .putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALARM)
+                .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
+                .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false)
+                .putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,
+                        RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM))
+                .putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, currentSound);
+        try {
+            startActivityForResult(picker, REQUEST_TIMER_RINGTONE);
+        } catch (android.content.ActivityNotFoundException exception) {
+            Log.e(TAG, "No system ringtone picker is available", exception);
+            Toast.makeText(this, "This device doesn't provide a ringtone picker.",
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
     private void prepareEnabledReminders() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
                 && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
@@ -980,7 +1044,7 @@ public final class MainActivity extends AppCompatActivity {
         }
         if (coreHabits.size() > 3) {
             MaterialButton moreStreaks = outlinedButton();
-            styleLightOutlinedButton(moreStreaks);
+            stylePageOutlinedButton(moreStreaks);
             moreStreaks.setText(showAllTodayStreaks
                     ? "Show fewer streaks" : "See all " + coreHabits.size() + " core streaks");
             moreStreaks.setOnClickListener(view -> {
@@ -1008,7 +1072,7 @@ public final class MainActivity extends AppCompatActivity {
             MaterialButton dayButton = outlinedButton();
             dayButton.setText(label);
             dayButton.setTextSize(13);
-            styleLightOutlinedButton(dayButton);
+            stylePageOutlinedButton(dayButton);
             dayButton.setMinHeight(dp(84));
             dayButton.setInsetTop(0);
             dayButton.setInsetBottom(0);
@@ -1079,7 +1143,8 @@ public final class MainActivity extends AppCompatActivity {
             }
             planRow.addView(details, new LinearLayout.LayoutParams(0,
                     LinearLayout.LayoutParams.WRAP_CONTENT, 1));
-            MaterialButton more = miniButton("More");
+            FrameLayout more = iconActionButton(
+                    R.drawable.ic_action_more, "More plan actions", dp(48), dp(48));
             more.setOnClickListener(view -> {
                 PopupMenu menu = new PopupMenu(this, more);
                 menu.getMenu().add("Edit");
@@ -1098,7 +1163,9 @@ public final class MainActivity extends AppCompatActivity {
                 });
                 menu.show();
             });
-            planRow.addView(more);
+            LinearLayout.LayoutParams moreParams = new LinearLayout.LayoutParams(dp(48), dp(48));
+            moreParams.setMarginStart(dp(8));
+            planRow.addView(more, moreParams);
             body.addView(planRow);
         }
     }
@@ -1133,6 +1200,7 @@ public final class MainActivity extends AppCompatActivity {
         addFieldLabel(form, "END");
         form.addView(endTime);
         form.addView(reminderHint);
+        styleDialogContent(form);
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle(existing == null ? "Add to your plan" : "Edit plan")
                 .setView(form)
@@ -1240,10 +1308,11 @@ public final class MainActivity extends AppCompatActivity {
         pageHeader("Habits", "Keep a simple routine. Plan for today or choose a day ahead.");
         LinearLayout dateControls = row();
         MaterialButton previousDay = outlinedButton();
-        previousDay.setText("‹");
+        previousDay.setIcon(getDrawable(R.drawable.ic_action_chevron_left));
+        previousDay.setIconTint(buttonStateColors(PAGE_TEXT, "#9AAF9F"));
         previousDay.setContentDescription("Previous day");
         previousDay.setEnabled(habitDate.isAfter(LocalDate.now()));
-        dateControls.addView(previousDay, new LinearLayout.LayoutParams(dp(52), dp(44)));
+        dateControls.addView(previousDay, new LinearLayout.LayoutParams(dp(48), dp(48)));
         LinearLayout.LayoutParams previousDayParams =
                 (LinearLayout.LayoutParams) previousDay.getLayoutParams();
         previousDayParams.setMargins(0, 0, dp(4), 0);
@@ -1257,7 +1326,7 @@ public final class MainActivity extends AppCompatActivity {
         MaterialButton dateButton = outlinedButton();
         dateButton.setText(habitDate.equals(LocalDate.now()) ? "Today"
                 : habitDate.format(DateTimeFormatter.ofPattern("EEE, MMM d", Locale.getDefault())));
-        LinearLayout.LayoutParams dateButtonParams = new LinearLayout.LayoutParams(0, dp(44), 1);
+        LinearLayout.LayoutParams dateButtonParams = new LinearLayout.LayoutParams(0, dp(48), 1);
         dateButtonParams.setMargins(dp(4), 0, dp(4), 0);
         dateControls.addView(dateButton, dateButtonParams);
         dateButton.setOnClickListener(view -> {
@@ -1271,10 +1340,11 @@ public final class MainActivity extends AppCompatActivity {
             picker.show();
         });
         MaterialButton nextDay = outlinedButton();
-        nextDay.setText("›");
+        nextDay.setIcon(getDrawable(R.drawable.ic_action_chevron_right));
+        nextDay.setIconTint(buttonStateColors(PAGE_TEXT, "#9AAF9F"));
         nextDay.setContentDescription("Next day");
         nextDay.setEnabled(true);
-        dateControls.addView(nextDay, new LinearLayout.LayoutParams(dp(52), dp(44)));
+        dateControls.addView(nextDay, new LinearLayout.LayoutParams(dp(48), dp(48)));
         LinearLayout.LayoutParams nextDayParams =
                 (LinearLayout.LayoutParams) nextDay.getLayoutParams();
         nextDayParams.setMargins(dp(4), 0, 0, 0);
@@ -1349,7 +1419,10 @@ public final class MainActivity extends AppCompatActivity {
                 }
                 MaterialButton edit = miniButton("Edit");
                 edit.setOnClickListener(view -> editHabit(habit));
-                habitRow.addView(edit);
+                LinearLayout.LayoutParams editParams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT, dp(48));
+                editParams.setMarginStart(dp(8));
+                habitRow.addView(edit, editParams);
                 body.addView(habitRow);
             }
         }
@@ -1357,7 +1430,7 @@ public final class MainActivity extends AppCompatActivity {
                 () -> editHabit(null));
 
         MaterialButton weekToggle = outlinedButton();
-        styleLightOutlinedButton(weekToggle);
+        stylePageOutlinedButton(weekToggle);
         weekToggle.setText(showHabitWeek ? "Hide weekly overview" : "See weekly overview");
         weekToggle.setOnClickListener(view -> {
             showHabitWeek = !showHabitWeek;
@@ -1371,16 +1444,16 @@ public final class MainActivity extends AppCompatActivity {
     }
 
     private void renderHabitWeek(List<TrackerStore.Habit> habits) {
-        LocalDate monday = habitDate.with(DayOfWeek.MONDAY);
+        LocalDate monday = habitWeekStart;
         LinearLayout controls = row();
         MaterialButton previousWeek = outlinedButton();
-        previousWeek.setText("‹");
+        previousWeek.setIcon(getDrawable(R.drawable.ic_action_chevron_left));
+        previousWeek.setIconTint(buttonStateColors(PAGE_TEXT, "#9AAF9F"));
         previousWeek.setContentDescription("Previous week");
-        LocalDate currentMonday = LocalDate.now().with(DayOfWeek.MONDAY);
-        previousWeek.setEnabled(monday.isAfter(currentMonday));
-        controls.addView(previousWeek, new LinearLayout.LayoutParams(dp(48), dp(42)));
+        previousWeek.setEnabled(true);
+        controls.addView(previousWeek, new LinearLayout.LayoutParams(dp(48), dp(48)));
         previousWeek.setOnClickListener(view -> {
-            habitDate = habitDate.minusWeeks(1);
+            habitWeekStart = habitWeekStart.minusWeeks(1);
             render();
         });
         TextView weekLabel = text(monday.format(DateTimeFormatter.ofPattern(
@@ -1389,15 +1462,17 @@ public final class MainActivity extends AppCompatActivity {
                 "MMM d", Locale.getDefault())), 13, true);
         weekLabel.setGravity(Gravity.CENTER);
         controls.addView(weekLabel, new LinearLayout.LayoutParams(0,
-                dp(42), 1));
+                dp(48), 1));
         MaterialButton nextWeek = outlinedButton();
-        nextWeek.setText("›");
+        nextWeek.setIcon(getDrawable(R.drawable.ic_action_chevron_right));
+        nextWeek.setIconTint(buttonStateColors(PAGE_TEXT, "#9AAF9F"));
         nextWeek.setContentDescription("Next week");
-        nextWeek.setEnabled(true);
-        controls.addView(nextWeek, new LinearLayout.LayoutParams(dp(48), dp(42)));
+        nextWeek.setEnabled(monday.isBefore(LocalDate.now().with(DayOfWeek.MONDAY)));
+        controls.addView(nextWeek, new LinearLayout.LayoutParams(dp(48), dp(48)));
         nextWeek.setOnClickListener(view -> {
-            habitDate = habitDate.plusWeeks(1);
-            if (habitDate.isAfter(LocalDate.now())) habitDate = LocalDate.now();
+            if (habitWeekStart.isBefore(LocalDate.now().with(DayOfWeek.MONDAY))) {
+                habitWeekStart = habitWeekStart.plusWeeks(1);
+            }
             render();
         });
         LinearLayout controlsCard = addCardBody(content, Color.parseColor(GREEN));
@@ -1435,10 +1510,11 @@ public final class MainActivity extends AppCompatActivity {
                 boolean done = TrackerMetrics.isDone(store.getChecks(), habit.id, day);
                 TextView chip = text(dayLabels[i] + "\n" + (done ? "✓" : "·"), 11, true);
                 chip.setGravity(Gravity.CENTER);
-                chip.setTextColor(Color.parseColor(done ? WHITE : MUTED));
+                chip.setTextColor(Color.parseColor(done ? LIGHT_SAGE : "#415B51"));
                 android.graphics.drawable.GradientDrawable background =
                         new android.graphics.drawable.GradientDrawable();
-                background.setColor(done ? Color.parseColor(GREEN) : getColor(R.color.surface_variant));
+                background.setColor(done ? getColor(R.color.primary)
+                        : getColor(R.color.surface_variant));
                 background.setCornerRadius(dp(8));
                 if (day.equals(habitDate)) {
                     background.setStroke(dp(2), Color.parseColor(AMBER));
@@ -1475,6 +1551,7 @@ public final class MainActivity extends AppCompatActivity {
         if (habit != null) core.setChecked(habit.core);
         form.addView(name);
         form.addView(core);
+        styleDialogContent(form);
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle(habit == null ? "Add habit" : "Edit habit")
                 .setView(form)
@@ -1617,39 +1694,30 @@ public final class MainActivity extends AppCompatActivity {
 
     private void addFocusHero() {
         LinearLayout hero = vertical();
-        hero.setBackgroundResource(R.drawable.bg_focus_hero);
-        hero.setElevation(dp(4));
-        hero.setClipToOutline(true);
 
-        LinearLayout heroContent = vertical();
-        heroContent.setGravity(Gravity.CENTER_HORIZONTAL);
-        heroContent.setPadding(dp(18), dp(14), dp(18), dp(14));
-
-        TextView eyebrow = text("DAY BY DAY · FOCUS", 10, true);
-        eyebrow.setTextColor(Color.parseColor("#C4E4C2"));
-        eyebrow.setLetterSpacing(0.12f);
-        heroContent.addView(eyebrow);
-
-        TextView headline = text("Make room for what matters.", 23, true);
-        headline.setTextColor(Color.parseColor("#F4F7E8"));
-        headline.setGravity(Gravity.CENTER);
-        headline.setPadding(dp(4), dp(2), dp(4), 0);
-        heroContent.addView(headline);
+        LinearLayout heroContent = row();
+        heroContent.setPadding(dp(4), dp(8), dp(4), dp(12));
+        LinearLayout copy = vertical();
+        TextView headline = text("Focus, one step at a time.", 18, true);
+        headline.setTextColor(Color.parseColor(PAGE_TEXT));
+        copy.addView(headline);
 
         TextView subtitle = text("A little focus can grow into real progress.", 12, false);
-        subtitle.setTextColor(Color.parseColor("#D1E2D4"));
-        subtitle.setGravity(Gravity.CENTER);
-        heroContent.addView(subtitle);
+        subtitle.setTextColor(Color.parseColor(PAGE_MUTED));
+        subtitle.setPadding(0, dp(2), 0, 0);
+        copy.addView(subtitle);
+        heroContent.addView(copy, new LinearLayout.LayoutParams(
+                0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
 
         focusSprout = new FocusSproutView();
         focusSprout.setDarkBackground(true);
-        LinearLayout.LayoutParams plantParams = new LinearLayout.LayoutParams(dp(112), dp(112));
-        plantParams.topMargin = dp(6);
+        LinearLayout.LayoutParams plantParams = new LinearLayout.LayoutParams(dp(56), dp(56));
+        plantParams.setMarginStart(dp(8));
         heroContent.addView(focusSprout, plantParams);
 
         hero.addView(heroContent);
         LinearLayout.LayoutParams heroParams = cardParams();
-        heroParams.setMargins(0, dp(4), 0, dp(14));
+        heroParams.setMargins(0, dp(2), 0, dp(10));
         this.content.addView(hero, heroParams);
     }
 
@@ -1668,8 +1736,18 @@ public final class MainActivity extends AppCompatActivity {
         timerCard.addView(durationLabel);
         timerCard.addView(timerMinutes);
         timerPresets = row();
-        addSecondaryButton(timerPresets, "25 min", () -> timerMinutes.setText("25"));
-        addSecondaryButton(timerPresets, "50 min", () -> timerMinutes.setText("50"));
+        MaterialButton preset25 = miniButton("25 min");
+        preset25.setContentDescription("Set focus timer to 25 minutes");
+        preset25.setOnClickListener(view -> timerMinutes.setText("25"));
+        timerPresets.addView(preset25, new LinearLayout.LayoutParams(
+                0, dp(48), 1));
+        MaterialButton preset50 = miniButton("50 min");
+        preset50.setContentDescription("Set focus timer to 50 minutes");
+        preset50.setOnClickListener(view -> timerMinutes.setText("50"));
+        LinearLayout.LayoutParams preset50Params = new LinearLayout.LayoutParams(
+                0, dp(48), 1);
+        preset50Params.setMarginStart(dp(8));
+        timerPresets.addView(preset50, preset50Params);
         timerCard.addView(timerPresets);
 
         LinearLayout timerModes = row();
@@ -1691,17 +1769,30 @@ public final class MainActivity extends AppCompatActivity {
         timerModes.addView(stopwatch, stopwatchParams);
         timerCard.addView(timerModes);
         updateTimerModeVisibility();
+        timerModes.setVisibility(timerRunning ? View.GONE : View.VISIBLE);
 
         timerTopic = topicDropdown("Choose a study topic", timerTopicIdValue, timerTopicValue);
         timerTopic.setEnabled(!timerRunning);
-        addFieldLabel(timerCard, "STUDY TOPIC");
+        TextView topicLabel = fieldLabel(timerRunning ? "SESSION TOPIC" : "STUDY TOPIC");
+        timerCard.addView(topicLabel);
         timerInterrupted = new CheckBox(this);
         timerInterrupted.setText("Interrupted");
         styleCheckBox(timerInterrupted);
         timerInterrupted.setChecked(timerInterruptedValue);
         timerInterrupted.setEnabled(!timerRunning);
+        timerInterrupted.setVisibility(timerRunning ? View.GONE : View.VISIBLE);
         timerCard.addView(timerTopic);
         timerCard.addView(timerInterrupted);
+        android.content.SharedPreferences timerPrefs = getSharedPreferences(
+                TimerAlarmScheduler.PREFS, MODE_PRIVATE);
+        String timerSoundValue = timerPrefs.getString(TimerAlarmScheduler.KEY_SOUND, "");
+        Uri timerSound = timerSoundValue.isEmpty() ? null : Uri.parse(timerSoundValue);
+        Uri displayedTimerSound = timerSound == null
+                ? RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM) : timerSound;
+        MaterialButton timerSoundButton = outlinedButton();
+        timerSoundButton.setText("Alarm sound: " + getRingtoneTitle(displayedTimerSound));
+        timerSoundButton.setOnClickListener(view -> chooseTimerSound(timerSound));
+        timerCard.addView(timerSoundButton);
 
         FrameLayout timerFace = new FrameLayout(this);
         timerProgress = new CircularProgressIndicator(this);
@@ -1726,9 +1817,8 @@ public final class MainActivity extends AppCompatActivity {
         timerLabels.setGravity(Gravity.CENTER);
         timerCountdown = text(timerRunning
                 ? (timerStopwatch
-                    ? formatStopwatchTime((System.currentTimeMillis() - timerStartMillis) / 1000)
-                    : formatClock((int) Math.max(0,
-                        (timerEndMillis - System.currentTimeMillis() + 999) / 1000)))
+                    ? formatStopwatchTime(activeStopwatchSeconds(System.currentTimeMillis()))
+                    : formatClock((int) remainingTimerSeconds(System.currentTimeMillis())))
                 : stopwatchMode ? formatStopwatchTime(0)
                     : formatClock(timerDurationSeconds > 0 ? timerDurationSeconds : 25 * 60),
                 38, true);
@@ -1740,8 +1830,10 @@ public final class MainActivity extends AppCompatActivity {
                 : "Time remaining " + timerCountdown.getText());
         timerCountdown.setTextSize(timerStopwatch || stopwatchMode ? 32 : 40);
         timerStatus = text(timerRunning
-                ? (timerStopwatch ? "Stopwatch in progress" : "Focus session in progress")
+                ? timerPaused ? "Paused"
+                    : timerStopwatch ? "Stopwatch in progress" : "Focus session in progress"
                 : "Ready when you are", 12, false);
+        timerStatus.setTextColor(getColor(R.color.text_primary));
         timerLabels.addView(timerCountdown);
         timerLabels.addView(timerStatus);
         FrameLayout.LayoutParams labelsParams = new FrameLayout.LayoutParams(
@@ -1763,11 +1855,16 @@ public final class MainActivity extends AppCompatActivity {
         updateTimerPreview();
 
         if (timerRunning && !timerStopwatch) {
-            long remaining = Math.max(0, (timerEndMillis - System.currentTimeMillis()) / 1000);
+            long remaining = remainingTimerSeconds(System.currentTimeMillis());
             timerProgress.setMax(Math.max(1, timerDurationSeconds));
             timerProgress.setProgress(Math.max(0, timerDurationSeconds - (int) remaining));
             focusSprout.setProgress(1f - (float) remaining
                     / Math.max(1, timerDurationSeconds));
+        } else if (timerRunning && timerStopwatch) {
+            long elapsed = activeStopwatchSeconds(System.currentTimeMillis());
+            timerProgress.setMax(3600);
+            timerProgress.setProgress((int) (elapsed % 3600));
+            focusSprout.setProgress(Math.min(1f, elapsed / 1500f));
         } else {
             boolean ringing = isTimerAlarmRinging();
             if (ringing) {
@@ -1782,27 +1879,82 @@ public final class MainActivity extends AppCompatActivity {
         timerActionButton = primaryButton();
         boolean alarmRinging = isTimerAlarmRinging();
         timerActionButton.setText(timerRunning
-                ? (timerStopwatch ? "Finish stopwatch & save" : "End session & save")
+                ? "Save session"
                 : alarmRinging ? "Dismiss alarm" : stopwatchMode
                     ? "Start stopwatch" : "Start focus timer");
+        timerActionButton.setContentDescription(timerRunning
+                ? (timerStopwatch ? "Finish stopwatch and save session"
+                    : "Finish focus session and save")
+                : alarmRinging ? "Dismiss focus timer alarm" : stopwatchMode
+                    ? "Start stopwatch" : "Start focus timer");
+        if (timerRunning) {
+            timerActionButton.setIcon(getDrawable(R.drawable.ic_action_check));
+        } else {
+            timerActionButton.setIcon(getDrawable(R.drawable.ic_tab_sessions));
+        }
+        timerActionButton.setIconTint(android.content.res.ColorStateList.valueOf(
+                Color.parseColor(BUTTON_DARK)));
+        timerActionButton.setIconSize(dp(20));
+        timerActionButton.setIconPadding(dp(8));
         timerActionButton.setOnClickListener(view -> {
             if (timerRunning) stopTimer();
             else if (alarmRinging) dismissAlarm();
             else startTimer();
         });
+        if (timerRunning) {
+            timerActionButton.setMinWidth(0);
+            timerActionButton.setMinimumWidth(0);
+            timerActionButton.setMinHeight(dp(ACTION_BUTTON_HEIGHT_DP));
+            timerActionButton.setTextSize(14);
+            timerActionButton.setPadding(dp(14), 0, dp(14), 0);
+            timerActionButton.setCornerRadius(dp(12));
+            timerActionButton.setIconSize(dp(18));
+            timerActionButton.setIconPadding(dp(6));
+            timerActionButton.setElevation(dp(1));
+        }
         if (alarmRinging) timerActionButton.setVisibility(View.GONE);
-        timerCard.addView(timerActionButton);
+        if (timerRunning) {
+            LinearLayout timerActions = row();
+            timerActions.setGravity(Gravity.CENTER);
+            timerActions.addView(timerActionButton, new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT, dp(ACTION_BUTTON_HEIGHT_DP)));
+            FrameLayout pauseButton = iconActionButton(
+                    timerPaused ? R.drawable.ic_action_play : R.drawable.ic_action_pause,
+                    timerPaused ? "Resume focus timer" : "Pause focus timer",
+                    dp(56), dp(ACTION_BUTTON_HEIGHT_DP));
+            pauseButton.setOnClickListener(view -> {
+                if (timerPaused) resumeTimer();
+                else pauseTimer();
+            });
+            LinearLayout.LayoutParams pauseParams = new LinearLayout.LayoutParams(
+                    dp(56), dp(ACTION_BUTTON_HEIGHT_DP));
+            pauseParams.setMarginStart(dp(10));
+            timerActions.addView(pauseButton, pauseParams);
+            timerCard.addView(timerActions);
+        } else {
+            timerCard.addView(timerActionButton);
+        }
         if (timerRunning && timerStopwatch) {
             MaterialButton discard = outlinedButton();
-            styleLightOutlinedButton(discard);
+            stylePageOutlinedButton(discard);
             discard.setText("Discard stopwatch");
             discard.setOnClickListener(view -> confirmDiscardStopwatch());
             timerCard.addView(discard);
         }
-        if (timerRunning) {
+        if (timerRunning && !timerPaused) {
             handler.removeCallbacks(timerTick);
             handler.post(timerTick);
         }
+
+        MaterialButton targetsToggle = outlinedButton();
+        stylePageOutlinedButton(targetsToggle);
+        targetsToggle.setText(showTargets ? "Hide goals & targets" : "Goals & targets");
+        targetsToggle.setOnClickListener(view -> {
+            showTargets = !showTargets;
+            render();
+        });
+        content.addView(targetsToggle, cardParams());
+        if (showTargets) renderTargets();
 
         sectionTitle("Log a session");
         LinearLayout manualForm = addCardBody(content, getColor(R.color.outline));
@@ -1867,15 +2019,6 @@ public final class MainActivity extends AppCompatActivity {
         renderTopicStudySummary();
         renderReadingHistory();
 
-        MaterialButton targetsToggle = outlinedButton();
-        styleLightOutlinedButton(targetsToggle);
-        targetsToggle.setText(showTargets ? "Hide goals & targets" : "Track a number goal");
-        targetsToggle.setOnClickListener(view -> {
-            showTargets = !showTargets;
-            render();
-        });
-        content.addView(targetsToggle, cardParams());
-        if (showTargets) renderTargets();
     }
 
     private void renderSessionHistory() {
@@ -1945,9 +2088,9 @@ public final class MainActivity extends AppCompatActivity {
             to.setText("");
         });
         quickFilters.addView(lastWeek, new LinearLayout.LayoutParams(
-                0, dp(40), 1));
+                0, dp(48), 1));
         LinearLayout.LayoutParams allParams = new LinearLayout.LayoutParams(
-                0, dp(40), 1);
+                0, dp(48), 1);
         allParams.setMargins(dp(8), 0, 0, 0);
         quickFilters.addView(allDates, allParams);
         filters.addView(quickFilters);
@@ -1976,9 +2119,9 @@ public final class MainActivity extends AppCompatActivity {
             sessionHistoryLimit = 20;
             displaySessionHistory("", null, null, false);
         });
-        filterActions.addView(apply, new LinearLayout.LayoutParams(0, dp(40), 1));
+        filterActions.addView(apply, new LinearLayout.LayoutParams(0, dp(48), 1));
         LinearLayout.LayoutParams clearParams = new LinearLayout.LayoutParams(
-                0, dp(40), 1);
+                0, dp(48), 1);
         clearParams.setMargins(dp(8), 0, 0, 0);
         filterActions.addView(clear, clearParams);
         filters.addView(filterActions);
@@ -2050,18 +2193,18 @@ public final class MainActivity extends AppCompatActivity {
             MaterialButton delete = miniButton("Delete");
             delete.setTextColor(getColor(R.color.danger));
             delete.setOnClickListener(view -> confirmDeleteSession(session));
-            LinearLayout.LayoutParams editParams = new LinearLayout.LayoutParams(0, dp(38), 1);
+            LinearLayout.LayoutParams editParams = new LinearLayout.LayoutParams(0, dp(48), 1);
             editParams.setMargins(0, dp(6), dp(6), 0);
             actions.addView(edit, editParams);
             LinearLayout.LayoutParams deleteParams = new LinearLayout.LayoutParams(
-                    0, dp(38), 1);
+                    0, dp(48), 1);
             deleteParams.setMargins(dp(6), dp(6), 0, 0);
             actions.addView(delete, deleteParams);
             card.addView(actions);
         }
         if (shown < matches.size()) {
             MaterialButton showAll = outlinedButton();
-            styleLightOutlinedButton(showAll);
+            stylePageOutlinedButton(showAll);
             showAll.setText("Show all " + matches.size() + " sessions");
             showAll.setOnClickListener(view -> {
                 sessionHistoryLimit = matches.size();
@@ -2107,7 +2250,7 @@ public final class MainActivity extends AppCompatActivity {
     }
 
     private void updateTimerModeVisibility() {
-        int visibility = stopwatchMode ? View.GONE : View.VISIBLE;
+        int visibility = stopwatchMode || timerRunning ? View.GONE : View.VISIBLE;
         durationIntro.setVisibility(visibility);
         durationLabel.setVisibility(visibility);
         timerMinutes.setVisibility(visibility);
@@ -2118,8 +2261,11 @@ public final class MainActivity extends AppCompatActivity {
 
     private void styleModeButton(MaterialButton button, boolean selected) {
         button.setBackgroundTintList(android.content.res.ColorStateList.valueOf(
-                getColor(selected ? R.color.primary : R.color.surface)));
-        button.setTextColor(getColor(selected ? R.color.surface : R.color.text_primary));
+                Color.parseColor(selected ? BUTTON_MINT : BUTTON_DARK)));
+        button.setTextColor(Color.parseColor(selected ? BUTTON_DARK : PAGE_TEXT));
+        button.setStrokeColor(android.content.res.ColorStateList.valueOf(
+                Color.parseColor(selected ? BUTTON_MINT : GREEN)));
+        button.setStrokeWidth(selected ? 0 : dp(1));
     }
 
     private void confirmDiscardStopwatch() {
@@ -2136,12 +2282,16 @@ public final class MainActivity extends AppCompatActivity {
         TimerAlarmScheduler.cancelSnooze(this);
         getSharedPreferences(TimerAlarmScheduler.PREFS, MODE_PRIVATE).edit()
                 .putBoolean(TimerAlarmScheduler.KEY_RUNNING, false)
+                .putBoolean(TimerAlarmScheduler.KEY_PAUSED, false)
                 .putBoolean(TimerAlarmScheduler.KEY_STOPWATCH, false)
                 .putBoolean(TimerAlarmScheduler.KEY_ALARM_RINGING, false)
                 .remove(TimerAlarmScheduler.KEY_TOKEN)
                 .apply();
         timerRunning = false;
+        timerPaused = false;
         timerStopwatch = false;
+        timerElapsedSeconds = 0;
+        timerPausedRemainingMillis = 0L;
         timerStartMillis = 0L;
         timerEndMillis = 0L;
         timerDurationSeconds = 0;
@@ -2290,9 +2440,9 @@ public final class MainActivity extends AppCompatActivity {
             displayReadingHistory("", null, null);
         });
         filterActions.addView(apply, new LinearLayout.LayoutParams(
-                0, dp(40), 1));
+                0, dp(48), 1));
         LinearLayout.LayoutParams clearParams = new LinearLayout.LayoutParams(
-                0, dp(40), 1);
+                0, dp(48), 1);
         clearParams.setMargins(dp(8), 0, 0, 0);
         filterActions.addView(clear, clearParams);
         filters.addView(filterActions);
@@ -2373,11 +2523,11 @@ public final class MainActivity extends AppCompatActivity {
             delete.setTextColor(getColor(R.color.danger));
             delete.setOnClickListener(view -> confirmDeleteReadingLog(entry));
             LinearLayout.LayoutParams editParams = new LinearLayout.LayoutParams(
-                    0, dp(38), 1);
+                    0, dp(48), 1);
             editParams.setMargins(0, dp(6), dp(6), 0);
             actions.addView(edit, editParams);
             LinearLayout.LayoutParams deleteParams = new LinearLayout.LayoutParams(
-                    0, dp(38), 1);
+                    0, dp(48), 1);
             deleteParams.setMargins(dp(6), dp(6), 0, 0);
             actions.addView(delete, deleteParams);
             card.addView(actions);
@@ -2419,6 +2569,7 @@ public final class MainActivity extends AppCompatActivity {
         styleCheckBox(interrupted);
         interrupted.setChecked("true".equals(session.interrupted));
         form.addView(interrupted);
+        styleDialogContent(form);
 
         android.widget.ScrollView scrollableForm = new android.widget.ScrollView(this);
         scrollableForm.setFillViewport(true);
@@ -2510,6 +2661,7 @@ public final class MainActivity extends AppCompatActivity {
         notes.setText(entry.notes);
         addFieldLabel(form, "YOUR READING NOTES");
         form.addView(notes);
+        styleDialogContent(form);
         android.widget.ScrollView scrollableForm = new android.widget.ScrollView(this);
         scrollableForm.setFillViewport(true);
         scrollableForm.addView(form);
@@ -2572,6 +2724,10 @@ public final class MainActivity extends AppCompatActivity {
             String hint, String selectedTopicId, String selectedTopicName) {
         MaterialAutoCompleteTextView field = new MaterialAutoCompleteTextView(this);
         field.setHint(hint);
+        field.setTextColor(Color.parseColor(PAGE_TEXT));
+        field.setHintTextColor(Color.parseColor(MUTED));
+        field.setBackgroundTintList(android.content.res.ColorStateList.valueOf(
+                Color.parseColor(LINE)));
         field.setSingleLine(true);
         field.setThreshold(0);
         field.setInputType(InputType.TYPE_NULL);
@@ -2589,22 +2745,46 @@ public final class MainActivity extends AppCompatActivity {
                 selectedPosition = names.size() - 1;
             }
         }
-        field.setAdapter(new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, names));
+        field.setAdapter(new ArrayAdapter<String>(this, 0, names) {
+            @Override public View getView(int position, View convertView,
+                    android.view.ViewGroup parent) {
+                return topicDropdownRow(getItem(position));
+            }
+
+            @Override public View getDropDownView(int position, View convertView,
+                    android.view.ViewGroup parent) {
+                return topicDropdownRow(getItem(position));
+            }
+        });
+        android.graphics.drawable.GradientDrawable dropdownBackground =
+                new android.graphics.drawable.GradientDrawable();
+        dropdownBackground.setColor(Color.parseColor(BUTTON_SURFACE));
+        dropdownBackground.setCornerRadius(dp(14));
+        dropdownBackground.setStroke(dp(1), Color.parseColor(BUTTON_OUTLINE));
+        field.setDropDownBackgroundDrawable(dropdownBackground);
         field.setDropDownHeight(dp(420));
+        field.setMinHeight(dp(48));
         field.setOnItemClickListener((parent, view, position, itemId) ->
                 field.setTag(ids.get(position)));
         field.setText(selectedPosition == 0 ? "" : names.get(selectedPosition), false);
         if (selectedPosition > 0) field.setTag(ids.get(selectedPosition));
         field.setOnClickListener(view -> field.showDropDown());
-        field.setOnTouchListener((view, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_UP && field.isEnabled()) {
-                field.post(field::showDropDown);
-            }
-            return false;
-        });
-        field.setContentDescription(hint);
+        field.setContentDescription(hint + ". Tap to choose a topic.");
         return field;
+    }
+
+    private TextView topicDropdownRow(String topicName) {
+        TextView option = new TextView(this);
+        option.setText(topicName);
+        option.setTextColor(Color.parseColor(PAGE_TEXT));
+        option.setTextSize(16);
+        option.setGravity(Gravity.CENTER_VERTICAL);
+        option.setMinHeight(dp(52));
+        option.setPadding(dp(18), 0, dp(18), 0);
+        option.setBackground(new android.graphics.drawable.RippleDrawable(
+                android.content.res.ColorStateList.valueOf(
+                        Color.argb(42, 184, 227, 197)), null, null));
+        return option;
     }
 
     private String selectedTopicId(EditText field) {
@@ -2618,6 +2798,23 @@ public final class MainActivity extends AppCompatActivity {
             if (topic.name.equals(name)) return topic.id;
         }
         return "";
+    }
+
+    private TrackerStore.Topic nextIncompleteTopic() {
+        for (TrackerStore.Topic topic : store.getTopics()) {
+            for (TrackerStore.TopicItem item : topic.items) {
+                if (!item.done) return topic;
+            }
+        }
+        return null;
+    }
+
+    private TrackerStore.TopicItem nextIncompleteItem(TrackerStore.Topic topic) {
+        if (topic == null) return null;
+        for (TrackerStore.TopicItem item : topic.items) {
+            if (!item.done) return item;
+        }
+        return null;
     }
 
     private String topicNameForSession(TrackerStore.Session session) {
@@ -2681,8 +2878,12 @@ public final class MainActivity extends AppCompatActivity {
 
         timerDurationSeconds = minutes * 60;
         timerStopwatch = false;
+        timerPaused = false;
+        timerPausedRemainingMillis = 0L;
+        timerElapsedSeconds = 0;
         TimerAlarmScheduler.cancelSnooze(this);
         timerStartMillis = System.currentTimeMillis();
+        timerSessionStartMillis = timerStartMillis;
         timerEndMillis = timerStartMillis + timerDurationSeconds * 1000L;
         timerTopicValue = timerTopic.getText().toString().trim();
         timerInterruptedValue = timerInterrupted.isChecked();
@@ -2690,12 +2891,16 @@ public final class MainActivity extends AppCompatActivity {
         timerRunning = true;
         getSharedPreferences(TimerAlarmScheduler.PREFS, MODE_PRIVATE).edit()
                 .putBoolean(TimerAlarmScheduler.KEY_RUNNING, true)
+                .putBoolean(TimerAlarmScheduler.KEY_PAUSED, false)
                 .putBoolean(TimerAlarmScheduler.KEY_STOPWATCH, false)
                 .putBoolean(TimerAlarmScheduler.KEY_ALARM_RINGING, false)
                 .putString(TimerAlarmScheduler.KEY_TOKEN, timerToken)
                 .putLong(TimerAlarmScheduler.KEY_START_MILLIS, timerStartMillis)
+                .putLong(TimerAlarmScheduler.KEY_SESSION_START_MILLIS, timerSessionStartMillis)
                 .putLong(TimerAlarmScheduler.KEY_END_MILLIS, timerEndMillis)
                 .putInt(TimerAlarmScheduler.KEY_DURATION_SECONDS, timerDurationSeconds)
+                .putInt(TimerAlarmScheduler.KEY_ELAPSED_SECONDS, 0)
+                .putLong(TimerAlarmScheduler.KEY_PAUSED_REMAINING_MILLIS, 0L)
                 .putString(TimerAlarmScheduler.KEY_TOPIC, timerTopicValue)
                 .putString(TimerAlarmScheduler.KEY_TOPIC_ID, timerTopicIdValue)
                 .putBoolean(TimerAlarmScheduler.KEY_INTERRUPTED, timerInterruptedValue)
@@ -2708,10 +2913,14 @@ public final class MainActivity extends AppCompatActivity {
 
     private void startStopwatch() {
         timerStopwatch = true;
+        timerPaused = false;
+        timerPausedRemainingMillis = 0L;
+        timerElapsedSeconds = 0;
         timerDurationSeconds = 0;
         TimerAlarmScheduler.cancelTimer(this);
         TimerAlarmScheduler.cancelSnooze(this);
         timerStartMillis = System.currentTimeMillis();
+        timerSessionStartMillis = timerStartMillis;
         timerEndMillis = 0L;
         timerTopicValue = timerTopic.getText().toString().trim();
         timerInterruptedValue = timerInterrupted.isChecked();
@@ -2719,12 +2928,16 @@ public final class MainActivity extends AppCompatActivity {
         timerRunning = true;
         getSharedPreferences(TimerAlarmScheduler.PREFS, MODE_PRIVATE).edit()
                 .putBoolean(TimerAlarmScheduler.KEY_RUNNING, true)
+                .putBoolean(TimerAlarmScheduler.KEY_PAUSED, false)
                 .putBoolean(TimerAlarmScheduler.KEY_STOPWATCH, true)
                 .putBoolean(TimerAlarmScheduler.KEY_ALARM_RINGING, false)
                 .putString(TimerAlarmScheduler.KEY_TOKEN, timerToken)
                 .putLong(TimerAlarmScheduler.KEY_START_MILLIS, timerStartMillis)
+                .putLong(TimerAlarmScheduler.KEY_SESSION_START_MILLIS, timerSessionStartMillis)
                 .putLong(TimerAlarmScheduler.KEY_END_MILLIS, 0L)
                 .putInt(TimerAlarmScheduler.KEY_DURATION_SECONDS, 0)
+                .putInt(TimerAlarmScheduler.KEY_ELAPSED_SECONDS, 0)
+                .putLong(TimerAlarmScheduler.KEY_PAUSED_REMAINING_MILLIS, 0L)
                 .putString(TimerAlarmScheduler.KEY_TOPIC, timerTopicValue)
                 .putString(TimerAlarmScheduler.KEY_TOPIC_ID, timerTopicIdValue)
                 .putBoolean(TimerAlarmScheduler.KEY_INTERRUPTED, timerInterruptedValue)
@@ -2732,6 +2945,57 @@ public final class MainActivity extends AppCompatActivity {
         render();
         handler.removeCallbacks(timerTick);
         handler.post(timerTick);
+    }
+
+    private void pauseTimer() {
+        if (!timerRunning || timerPaused) return;
+        long now = System.currentTimeMillis();
+        if (timerStopwatch) {
+            timerElapsedSeconds = (int) Math.min(Integer.MAX_VALUE,
+                    activeStopwatchSeconds(now));
+        } else {
+            timerPausedRemainingMillis = Math.max(0L, timerEndMillis - now);
+        }
+        timerPaused = true;
+        handler.removeCallbacks(timerTick);
+        TimerAlarmScheduler.cancelTimer(this);
+        getSharedPreferences(TimerAlarmScheduler.PREFS, MODE_PRIVATE).edit()
+                .putBoolean(TimerAlarmScheduler.KEY_PAUSED, true)
+                .putInt(TimerAlarmScheduler.KEY_ELAPSED_SECONDS, timerElapsedSeconds)
+                .putLong(TimerAlarmScheduler.KEY_PAUSED_REMAINING_MILLIS,
+                        timerPausedRemainingMillis)
+                .apply();
+        render();
+    }
+
+    private void resumeTimer() {
+        if (!timerRunning || !timerPaused) return;
+        timerStartMillis = System.currentTimeMillis();
+        timerPaused = false;
+        if (!timerStopwatch) {
+            timerEndMillis = timerStartMillis + timerPausedRemainingMillis;
+        }
+        getSharedPreferences(TimerAlarmScheduler.PREFS, MODE_PRIVATE).edit()
+                .putBoolean(TimerAlarmScheduler.KEY_PAUSED, false)
+                .putLong(TimerAlarmScheduler.KEY_START_MILLIS, timerStartMillis)
+                .putLong(TimerAlarmScheduler.KEY_SESSION_START_MILLIS, timerSessionStartMillis)
+                .putLong(TimerAlarmScheduler.KEY_END_MILLIS, timerEndMillis)
+                .apply();
+        if (!timerStopwatch) TimerAlarmScheduler.scheduleTimer(this, timerEndMillis, timerToken);
+        render();
+        handler.removeCallbacks(timerTick);
+        handler.post(timerTick);
+    }
+
+    private long activeStopwatchSeconds(long now) {
+        long currentSegment = timerPaused ? 0L : Math.max(0L, now - timerStartMillis) / 1000L;
+        return Math.min(Integer.MAX_VALUE, timerElapsedSeconds + currentSegment);
+    }
+
+    private long remainingTimerSeconds(long now) {
+        long remainingMillis = timerPaused
+                ? timerPausedRemainingMillis : Math.max(0L, timerEndMillis - now);
+        return Math.max(0L, (remainingMillis + 999L) / 1000L);
     }
 
     private void stopTimer() {
@@ -2742,13 +3006,15 @@ public final class MainActivity extends AppCompatActivity {
             render();
             return;
         }
-        long startMillis = timerStartMillis;
-        int elapsedSeconds = (int) Math.min(Integer.MAX_VALUE,
-                Math.max(0, (System.currentTimeMillis() - timerStartMillis) / 1000));
-        int seconds = timerStopwatch ? Math.max(1, elapsedSeconds)
-                : Math.max(1, Math.min(timerDurationSeconds, elapsedSeconds));
+        long now = System.currentTimeMillis();
+        long elapsedMillis = timerStopwatch
+                ? activeStopwatchSeconds(now) * 1000L
+                : timerDurationSeconds * 1000L - (timerPaused
+                    ? timerPausedRemainingMillis : Math.max(0L, timerEndMillis - now));
+        int seconds = (int) Math.max(1L,
+                Math.min(Integer.MAX_VALUE, elapsedMillis / 1000L));
         LocalDateTime start = LocalDateTime.ofInstant(
-                Instant.ofEpochMilli(startMillis), ZoneId.systemDefault());
+                Instant.ofEpochMilli(timerSessionStartMillis), ZoneId.systemDefault());
         LocalDateTime end = LocalDateTime.now();
         try {
             TimerAlarmScheduler.cancelTimer(this);
@@ -2759,17 +3025,20 @@ public final class MainActivity extends AppCompatActivity {
                     seconds, timerTopicIdValue, timerTopicValue, timerInterruptedValue);
             prefs.edit()
                     .putBoolean(TimerAlarmScheduler.KEY_RUNNING, false)
+                    .putBoolean(TimerAlarmScheduler.KEY_PAUSED, false)
                     .putBoolean(TimerAlarmScheduler.KEY_STOPWATCH, false)
                     .putBoolean(TimerAlarmScheduler.KEY_ALARM_RINGING, false)
                     .apply();
             timerRunning = false;
+            timerPaused = false;
             timerStopwatch = false;
+            timerElapsedSeconds = 0;
             handler.removeCallbacks(timerTick);
             Toast.makeText(this, "Session saved: " + formatDuration(seconds),
                     Toast.LENGTH_SHORT).show();
             render();
         } catch (IOException exception) {
-            if (timerRunning) {
+            if (timerRunning && !timerPaused) {
                 TimerAlarmScheduler.scheduleTimer(this,
                         Math.max(System.currentTimeMillis() + 1000, timerEndMillis), timerToken);
             }
@@ -2816,6 +3085,7 @@ public final class MainActivity extends AppCompatActivity {
         pageHeader("Learning path", "Small steps add up. Pick a topic and work at your own pace.");
         TrackerMetrics.CurriculumProgress progress = TrackerMetrics.curriculum(store);
         LinearLayout summary = addCardBody(content, Color.parseColor(AMBER));
+        summary.setTag("curriculum-progress-summary");
         summary.addView(text("Your progress", 15, true));
         summary.addView(text(progress.completedItems + " of " + progress.totalItems
                 + " steps done · " + String.format(Locale.getDefault(),
@@ -2846,26 +3116,21 @@ public final class MainActivity extends AppCompatActivity {
         name.setTextColor(Color.parseColor(GREEN));
         heading.addView(name, new LinearLayout.LayoutParams(0,
                 LinearLayout.LayoutParams.WRAP_CONTENT, 1));
-        TextView expand = text(expandedTopics.contains(topic.id) ? "Hide" : "Steps", 12, true);
-        expand.setTextColor(Color.parseColor(MUTED));
-        expand.setGravity(Gravity.CENTER);
-        expand.setMinWidth(dp(52));
-        expand.setMinHeight(dp(44));
+        MaterialButton expand = miniButton(expandedTopics.contains(topic.id) ? "Hide" : "Steps");
         expand.setContentDescription(expandedTopics.contains(topic.id)
                 ? "Hide " + topic.name + " checklist" : "Show " + topic.name + " checklist");
         expand.setOnClickListener(view -> toggleTopic(topic));
-        heading.addView(expand);
-        TextView edit = text("Edit", 12, true);
+        heading.addView(expand, miniActionParams(false));
+        MaterialButton edit = miniButton("Edit");
         edit.setTextColor(Color.parseColor(AMBER));
-        edit.setGravity(Gravity.CENTER);
-        edit.setMinWidth(dp(48));
-        edit.setMinHeight(dp(44));
         edit.setContentDescription("Edit " + topic.name + " name and guidance");
         edit.setOnClickListener(view -> editTopic(topic));
-        heading.addView(edit);
+        heading.addView(edit, miniActionParams(true));
         card.addView(heading);
+        setPressableView(heading, "Show or hide " + topic.name + " checklist");
         name.setOnClickListener(view -> toggleTopic(topic));
         heading.setOnClickListener(view -> toggleTopic(topic));
+        setPressableText(name, "Show or hide " + topic.name + " checklist");
 
         TextView guidance = text(topic.guidance.isEmpty()
                 ? "No guidance note yet." : topic.guidance, 13, false);
@@ -2917,14 +3182,12 @@ public final class MainActivity extends AppCompatActivity {
                 itemRow.addView(itemText, new LinearLayout.LayoutParams(0,
                         LinearLayout.LayoutParams.WRAP_CONTENT, 1));
                 itemText.setOnClickListener(view -> editTopicItem(topic, item));
-                TextView editStep = text("Edit", 12, true);
+                setPressableText(itemText, "Edit step: " + item.text);
+                MaterialButton editStep = miniButton("Edit");
                 editStep.setTextColor(Color.parseColor(AMBER));
-                editStep.setGravity(Gravity.CENTER);
-                editStep.setMinWidth(dp(52));
-                editStep.setMinHeight(dp(44));
                 editStep.setContentDescription("Edit step: " + item.text);
                 editStep.setOnClickListener(view -> editTopicItem(topic, item));
-                itemRow.addView(editStep);
+                itemRow.addView(editStep, miniActionParams(true));
                 card.addView(itemRow);
             }
             addSecondaryButton(card, "Add a step", () -> editTopicItem(topic, null));
@@ -2947,12 +3210,9 @@ public final class MainActivity extends AppCompatActivity {
         }
         for (int i = 0; i < content.getChildCount(); i++) {
             View child = content.getChildAt(i);
-            if (!(child instanceof MaterialCardView)) continue;
-            MaterialCardView card = (MaterialCardView) child;
-            if (!(card.getChildAt(0) instanceof LinearLayout)) continue;
-            LinearLayout frame = (LinearLayout) card.getChildAt(0);
-            if (!(frame.getChildAt(1) instanceof LinearLayout)) continue;
-            LinearLayout body = (LinearLayout) frame.getChildAt(1);
+            if (!"curriculum-progress-summary".equals(child.getTag())
+                    || !(child instanceof LinearLayout)) continue;
+            LinearLayout body = (LinearLayout) child;
             if (body.getChildCount() < 3
                     || !(body.getChildAt(0) instanceof TextView)
                     || !"Your progress".contentEquals(
@@ -3019,6 +3279,7 @@ public final class MainActivity extends AppCompatActivity {
             form.addView(manageSteps);
         }
 
+        styleDialogContent(form);
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle(topic == null ? "Add topic" : "Edit topic")
                 .setView(form)
@@ -3159,9 +3420,10 @@ public final class MainActivity extends AppCompatActivity {
         pageHeader("Review", "Look back at what you did, then choose what comes next.");
         LinearLayout period = row();
         MaterialButton previous = outlinedButton();
-        previous.setText("‹");
+        previous.setIcon(getDrawable(R.drawable.ic_action_chevron_left));
+        previous.setIconTint(buttonStateColors(PAGE_TEXT, "#9AAF9F"));
         previous.setContentDescription("Previous week");
-        period.addView(previous, new LinearLayout.LayoutParams(dp(52), dp(44)));
+        period.addView(previous, new LinearLayout.LayoutParams(dp(48), dp(48)));
         previous.setOnClickListener(view -> {
             reviewWeekStart = reviewWeekStart.minusWeeks(1);
             render();
@@ -3170,10 +3432,11 @@ public final class MainActivity extends AppCompatActivity {
         periodLabel.setGravity(Gravity.CENTER);
         period.addView(periodLabel, new LinearLayout.LayoutParams(0, dp(48), 1));
         MaterialButton next = outlinedButton();
-        next.setText("›");
+        next.setIcon(getDrawable(R.drawable.ic_action_chevron_right));
+        next.setIconTint(buttonStateColors(PAGE_TEXT, "#9AAF9F"));
         next.setContentDescription("Next week");
         next.setEnabled(reviewWeekStart.isBefore(LocalDate.now().with(DayOfWeek.MONDAY)));
-        period.addView(next, new LinearLayout.LayoutParams(dp(52), dp(44)));
+        period.addView(next, new LinearLayout.LayoutParams(dp(48), dp(48)));
         next.setOnClickListener(view -> {
             if (reviewWeekStart.isBefore(LocalDate.now().with(DayOfWeek.MONDAY))) {
                 reviewWeekStart = reviewWeekStart.plusWeeks(1);
@@ -3298,9 +3561,10 @@ public final class MainActivity extends AppCompatActivity {
         removeMonthlyRows();
         LinearLayout monthControls = row();
         MaterialButton previous = outlinedButton();
-        previous.setText("‹");
+        previous.setIcon(getDrawable(R.drawable.ic_action_chevron_left));
+        previous.setIconTint(buttonStateColors(PAGE_TEXT, "#9AAF9F"));
         previous.setContentDescription("Previous month");
-        monthControls.addView(previous, new LinearLayout.LayoutParams(dp(52), dp(44)));
+        monthControls.addView(previous, new LinearLayout.LayoutParams(dp(48), dp(48)));
         previous.setOnClickListener(view -> {
             reviewMonth = reviewMonth.minusMonths(1);
             render();
@@ -3311,10 +3575,11 @@ public final class MainActivity extends AppCompatActivity {
         monthLabel.setGravity(Gravity.CENTER);
         monthControls.addView(monthLabel, new LinearLayout.LayoutParams(0, dp(48), 1));
         MaterialButton next = outlinedButton();
-        next.setText("›");
+        next.setIcon(getDrawable(R.drawable.ic_action_chevron_right));
+        next.setIconTint(buttonStateColors(PAGE_TEXT, "#9AAF9F"));
         next.setContentDescription("Next month");
         next.setEnabled(month.isBefore(YearMonth.now()));
-        monthControls.addView(next, new LinearLayout.LayoutParams(dp(52), dp(44)));
+        monthControls.addView(next, new LinearLayout.LayoutParams(dp(48), dp(48)));
         next.setOnClickListener(view -> {
             if (reviewMonth.isBefore(YearMonth.now())) {
                 reviewMonth = reviewMonth.plusMonths(1);
@@ -3773,7 +4038,7 @@ public final class MainActivity extends AppCompatActivity {
         field.setHint(hint);
         field.setInputType(inputType);
         field.setTextSize(15);
-        field.setTextColor(Color.parseColor("#20302B"));
+        field.setTextColor(Color.parseColor(PAGE_TEXT));
         field.setHintTextColor(Color.parseColor(MUTED));
         field.setPadding(dp(12), dp(8), dp(12), dp(8));
         field.setBackgroundTintList(android.content.res.ColorStateList.valueOf(
@@ -3789,7 +4054,7 @@ public final class MainActivity extends AppCompatActivity {
         TextView view = new TextView(this);
         view.setText(value);
         view.setTextSize(size);
-        view.setTextColor(Color.parseColor("#20302B"));
+        view.setTextColor(Color.parseColor(PAGE_TEXT));
         view.setTypeface(android.graphics.Typeface.create(
                 bold ? "sans-serif-medium" : "sans-serif",
                 android.graphics.Typeface.NORMAL));
@@ -3802,7 +4067,7 @@ public final class MainActivity extends AppCompatActivity {
         title.setTextColor(Color.parseColor(PAGE_TEXT));
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        params.setMargins(0, dp(8), 0, dp(4));
+        params.setMargins(0, dp(14), 0, dp(4));
         title.setLayoutParams(params);
         content.addView(title);
     }
@@ -3850,66 +4115,46 @@ public final class MainActivity extends AppCompatActivity {
     private void addCard(String value) { addCardTo(content, value, GREEN); }
 
     private void addCardTo(LinearLayout parent, String value, String accent) {
-        TextView card = text(value, 14, false);
-        addCardContent(parent, card, Color.parseColor(accent),
+        TextView entry = text(value, 14, false);
+        addCardContent(parent, entry, Color.parseColor(accent),
                 new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT));
     }
 
     private LinearLayout addCardBody(LinearLayout parent, int accentColor) {
-        MaterialCardView card = new MaterialCardView(this);
-        card.setRadius(dp(12));
-        card.setCardElevation(dp(2));
-        card.setStrokeWidth(dp(1));
-        card.setStrokeColor(getColor(R.color.outline));
-        card.setCardBackgroundColor(Color.parseColor(WHITE));
-        card.setUseCompatPadding(true);
-
-        LinearLayout frame = row();
-        View stripe = new View(this);
-        stripe.setBackgroundColor(accentColor);
-        frame.addView(stripe, new LinearLayout.LayoutParams(dp(4),
-                LinearLayout.LayoutParams.MATCH_PARENT));
         LinearLayout body = vertical();
-        body.setPadding(dp(16), dp(12), dp(16), dp(12));
-        frame.addView(body, new LinearLayout.LayoutParams(0,
-                LinearLayout.LayoutParams.WRAP_CONTENT, 1));
-        card.addView(frame);
-
+        body.setPadding(0, dp(8), 0, dp(8));
+        LinearLayout section = vertical();
+        View marker = new View(this);
+        marker.setBackgroundColor(accentColor);
+        section.addView(marker, new LinearLayout.LayoutParams(dp(28), dp(2)));
+        section.addView(body);
+        View divider = new View(this);
+        divider.setBackgroundColor(getColor(R.color.outline));
+        section.addView(divider, new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, dp(1)));
         LinearLayout.LayoutParams params = cardParams();
-        params.setMargins(0, dp(4), 0, dp(12));
-        parent.addView(card, params);
+        params.setMargins(0, dp(2), 0, dp(8));
+        parent.addView(section, params);
         return body;
     }
 
-    private MaterialCardView addCardContent(
+    private View addCardContent(
             LinearLayout parent, View child, int accentColor,
             LinearLayout.LayoutParams childParams) {
-        MaterialCardView card = new MaterialCardView(this);
-        card.setRadius(dp(12));
-        card.setCardElevation(dp(2));
-        card.setStrokeWidth(dp(1));
-        card.setStrokeColor(getColor(R.color.outline));
-        card.setCardBackgroundColor(Color.parseColor(WHITE));
-        card.setUseCompatPadding(true);
-
-        LinearLayout frame = row();
-        View stripe = new View(this);
-        stripe.setBackgroundColor(accentColor);
-        frame.addView(stripe, new LinearLayout.LayoutParams(dp(4),
-                LinearLayout.LayoutParams.MATCH_PARENT));
-        LinearLayout body = vertical();
-        body.setPadding(dp(10), dp(6), dp(10), dp(6));
-        body.addView(child, childParams);
-        frame.addView(body, new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
-        card.addView(frame);
+        LinearLayout section = vertical();
+        child.setPadding(dp(4), dp(8), dp(4), dp(8));
+        section.addView(child, childParams);
+        View divider = new View(this);
+        divider.setBackgroundColor(Color.argb(55, Color.red(accentColor),
+                Color.green(accentColor), Color.blue(accentColor)));
+        section.addView(divider, new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, dp(1)));
         LinearLayout.LayoutParams params = cardParams();
-        params.setMargins(0, dp(4), 0, dp(10));
-        parent.addView(card, params);
-        return card;
+        params.setMargins(0, 0, 0, dp(6));
+        parent.addView(section, params);
+        return section;
     }
 
     private LinearLayout row() {
@@ -3928,22 +4173,29 @@ public final class MainActivity extends AppCompatActivity {
     private void addPrimaryButton(LinearLayout parent, String label, Runnable action) {
         MaterialButton button = primaryButton();
         button.setText(label);
+        button.setIcon(getDrawable(R.drawable.ic_action_add));
+        button.setIconTint(android.content.res.ColorStateList.valueOf(
+                Color.parseColor(BUTTON_DARK)));
+        button.setIconSize(dp(20));
+        button.setIconPadding(dp(8));
         button.setOnClickListener(view -> action.run());
         parent.addView(button);
     }
 
     private void addSecondaryButton(LinearLayout parent, String label, Runnable action) {
         MaterialButton button = outlinedButton();
-        styleLightOutlinedButton(button);
+        stylePageOutlinedButton(button);
         button.setText(label);
         button.setOnClickListener(view -> action.run());
         parent.addView(button);
     }
 
-    private void styleLightOutlinedButton(MaterialButton button) {
-        button.setBackgroundTintList(android.content.res.ColorStateList.valueOf(
-                getColor(R.color.surface)));
-        button.setTextColor(getColor(R.color.text_primary));
+    private void stylePageOutlinedButton(MaterialButton button) {
+        button.setBackgroundTintList(buttonStateColors(
+                BUTTON_SURFACE, "#31574D"));
+        button.setTextColor(buttonStateColors(PAGE_TEXT, "#9AAF9F"));
+        button.setStrokeColor(buttonStateColors(BUTTON_OUTLINE, "#47665D"));
+        button.setStrokeWidth(dp(1));
     }
 
     private MaterialButton outlinedButton() {
@@ -3951,15 +4203,72 @@ public final class MainActivity extends AppCompatActivity {
                 com.google.android.material.R.attr.materialButtonOutlinedStyle);
         button.setAllCaps(false);
         button.setLetterSpacing(0);
-        button.setCornerRadius(dp(12));
+        button.setCornerRadius(dp(14));
+        button.setTextSize(14);
+        button.setTypeface(android.graphics.Typeface.create(
+                "sans-serif-medium", android.graphics.Typeface.NORMAL));
+        button.setMinHeight(dp(ACTION_BUTTON_HEIGHT_DP));
+        button.setInsetTop(0);
+        button.setInsetBottom(0);
+        button.setBackgroundTintList(buttonStateColors(
+                BUTTON_SURFACE, "#31574D"));
+        button.setTextColor(buttonStateColors(PAGE_TEXT, "#9AAF9F"));
+        button.setStrokeColor(buttonStateColors(BUTTON_OUTLINE, "#47665D"));
+        button.setStrokeWidth(dp(1));
+        button.setRippleColor(android.content.res.ColorStateList.valueOf(
+                Color.argb(52, 184, 227, 197)));
         return button;
+    }
+
+    private void styleDialogContent(View view) {
+        if (view instanceof EditText) {
+            EditText field = (EditText) view;
+            field.setTextColor(getColor(R.color.text_primary));
+            field.setHintTextColor(getColor(R.color.text_muted));
+            field.setBackgroundTintList(android.content.res.ColorStateList.valueOf(
+                    getColor(R.color.outline)));
+            field.setCompoundDrawableTintList(android.content.res.ColorStateList.valueOf(
+                    getColor(R.color.primary)));
+        } else if (view instanceof MaterialButton) {
+            MaterialButton button = (MaterialButton) view;
+            button.setTextColor(getColor(R.color.text_primary));
+            button.setBackgroundTintList(android.content.res.ColorStateList.valueOf(
+                    getColor(R.color.surface)));
+            button.setStrokeColor(android.content.res.ColorStateList.valueOf(
+                    getColor(R.color.primary)));
+        } else if (view instanceof TextView) {
+            ((TextView) view).setTextColor(getColor(R.color.text_primary));
+        }
+        if (view instanceof CheckBox) {
+            ((CheckBox) view).setButtonTintList(android.content.res.ColorStateList.valueOf(
+                    getColor(R.color.primary)));
+        }
+        if (view instanceof android.view.ViewGroup) {
+            android.view.ViewGroup group = (android.view.ViewGroup) view;
+            for (int i = 0; i < group.getChildCount(); i++) {
+                styleDialogContent(group.getChildAt(i));
+            }
+        }
     }
 
     private MaterialButton primaryButton() {
         MaterialButton button = new MaterialButton(this);
-        button.setCornerRadius(dp(12));
+        button.setCornerRadius(dp(14));
         button.setAllCaps(false);
         button.setLetterSpacing(0);
+        button.setTextSize(15);
+        button.setTypeface(android.graphics.Typeface.create(
+                "sans-serif-medium", android.graphics.Typeface.NORMAL));
+        button.setMinHeight(dp(ACTION_BUTTON_HEIGHT_DP));
+        button.setInsetTop(0);
+        button.setInsetBottom(0);
+        button.setPadding(dp(18), 0, dp(18), 0);
+        button.setBackgroundTintList(buttonStateColors(
+                BUTTON_MINT, "#668173"));
+        button.setTextColor(buttonStateColors(BUTTON_DARK, "#E4ECE6"));
+        button.setRippleColor(android.content.res.ColorStateList.valueOf(
+                Color.argb(44, 23, 63, 55)));
+        button.setElevation(dp(2));
         return button;
     }
 
@@ -3968,16 +4277,92 @@ public final class MainActivity extends AppCompatActivity {
         button.setText(label);
         button.setMinWidth(0);
         button.setMinimumWidth(0);
-        button.setMinHeight(dp(34));
-        button.setTextSize(10);
-        button.setPadding(dp(2), 0, dp(2), 0);
+        button.setCornerRadius(dp(10));
+        button.setMinHeight(dp(ACTION_BUTTON_HEIGHT_DP));
+        button.setTextSize(12);
+        button.setTypeface(android.graphics.Typeface.create(
+                "sans-serif-medium", android.graphics.Typeface.NORMAL));
+        button.setPadding(dp(12), 0, dp(12), 0);
+        button.setBackgroundTintList(buttonStateColors(
+                "#285448", "#315D51"));
+        button.setTextColor(buttonStateColors(PAGE_TEXT, "#AFC2B5"));
+        button.setStrokeColor(buttonStateColors("#729A81", "#587766"));
+        button.setStrokeWidth(dp(1));
         button.setInsetTop(0);
         button.setInsetBottom(0);
         return button;
     }
 
+    private FrameLayout iconActionButton(
+            int iconResource, String description, int width, int height) {
+        FrameLayout button = new FrameLayout(this);
+        button.setMinimumWidth(width);
+        button.setMinimumHeight(height);
+        button.setFocusable(true);
+        button.setClickable(true);
+        button.setContentDescription(description);
+        android.graphics.drawable.GradientDrawable shape =
+                new android.graphics.drawable.GradientDrawable();
+        shape.setColor(Color.parseColor(BUTTON_SURFACE));
+        shape.setCornerRadius(dp(14));
+        shape.setStroke(dp(1), Color.parseColor(BUTTON_OUTLINE));
+        android.graphics.drawable.GradientDrawable mask =
+                new android.graphics.drawable.GradientDrawable();
+        mask.setColor(Color.WHITE);
+        mask.setCornerRadius(dp(14));
+        button.setBackground(new android.graphics.drawable.RippleDrawable(
+                android.content.res.ColorStateList.valueOf(
+                        Color.argb(52, 184, 227, 197)), shape, mask));
+        ImageView icon = new ImageView(this);
+        icon.setImageResource(iconResource);
+        icon.setColorFilter(Color.parseColor(PAGE_TEXT));
+        button.addView(icon, new FrameLayout.LayoutParams(dp(24), dp(24), Gravity.CENTER));
+        button.setElevation(dp(1));
+        return button;
+    }
+
+    private LinearLayout.LayoutParams miniActionParams(boolean withGap) {
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, dp(48));
+        if (withGap) params.setMarginStart(dp(8));
+        return params;
+    }
+
+    private void setPressableText(TextView view, String description) {
+        view.setMinHeight(dp(ACTION_BUTTON_HEIGHT_DP));
+        view.setFocusable(true);
+        view.setClickable(true);
+        view.setContentDescription(description);
+        view.setBackground(new android.graphics.drawable.RippleDrawable(
+                android.content.res.ColorStateList.valueOf(
+                        Color.argb(52, 184, 227, 197)), null, null));
+    }
+
+    private void setPressableView(View view, String description) {
+        view.setMinimumHeight(dp(ACTION_BUTTON_HEIGHT_DP));
+        view.setFocusable(true);
+        view.setClickable(true);
+        view.setContentDescription(description);
+        view.setForeground(new android.graphics.drawable.RippleDrawable(
+                android.content.res.ColorStateList.valueOf(
+                        Color.argb(52, 184, 227, 197)), null, null));
+    }
+
+    private android.content.res.ColorStateList buttonStateColors(
+            String enabledColor, String disabledColor) {
+        return new android.content.res.ColorStateList(
+                new int[][] {
+                        new int[] {-android.R.attr.state_enabled},
+                        new int[] {}
+                },
+                new int[] {
+                        Color.parseColor(disabledColor),
+                        Color.parseColor(enabledColor)
+                });
+    }
+
     private void styleCheckBox(CheckBox checkBox) {
-        checkBox.setTextColor(Color.parseColor("#20302B"));
+        checkBox.setTextColor(Color.parseColor(PAGE_TEXT));
         checkBox.setButtonTintList(android.content.res.ColorStateList.valueOf(
                 Color.parseColor(GREEN)));
     }
@@ -3996,6 +4381,7 @@ public final class MainActivity extends AppCompatActivity {
     private void makeDatePicker(EditText field, String label, boolean notAfterToday) {
         field.setFocusable(false);
         field.setClickable(true);
+        field.setMinHeight(dp(48));
         field.setContentDescription(label + ". Tap to choose a date.");
         field.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_tab_today, 0);
         field.setCompoundDrawablePadding(dp(8));
@@ -4020,6 +4406,7 @@ public final class MainActivity extends AppCompatActivity {
     private void makeTimePicker(EditText field, String label) {
         field.setFocusable(false);
         field.setClickable(true);
+        field.setMinHeight(dp(48));
         field.setContentDescription(label + ". Tap to choose a time.");
         field.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_tab_sessions, 0);
         field.setCompoundDrawablePadding(dp(8));

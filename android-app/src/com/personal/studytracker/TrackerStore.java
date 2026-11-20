@@ -144,7 +144,18 @@ final class TrackerStore {
     void migrateCurriculum(boolean append) throws IOException {
         if (!curriculumMigrationPending) return;
         if (append) {
-            addCurriculumTopics(new ArrayList<>(topics), null);
+            List<Topic> previousTopics = new ArrayList<>(topics);
+            topics.clear();
+            topics.addAll(previousTopics);
+            for (Curriculum.Definition definition : Curriculum.all()) {
+                if (findExistingTopic(previousTopics, definition.name) != null) continue;
+                Topic topic = new Topic(UUID.randomUUID().toString(),
+                        definition.name, definition.guidance);
+                for (String itemText : definition.items) {
+                    topic.items.add(new TopicItem(UUID.randomUUID().toString(), itemText, false));
+                }
+                topics.add(topic);
+            }
         } else {
             replaceAllTopicsWithCurriculum();
         }

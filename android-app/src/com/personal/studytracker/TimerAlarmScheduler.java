@@ -11,16 +11,22 @@ final class TimerAlarmScheduler {
     private static final String TAG = "StudyTrackerAlarm";
     static final String PREFS = "focus_timer";
     static final String KEY_RUNNING = "running";
+    static final String KEY_PAUSED = "paused";
     static final String KEY_STOPWATCH = "stopwatch";
     static final String KEY_STOPWATCH_MODE = "stopwatch_mode";
     static final String KEY_ALARM_RINGING = "alarm_ringing";
+    static final String KEY_SNOOZE_END_MILLIS = "snooze_end_millis";
     static final String KEY_TOKEN = "token";
     static final String KEY_START_MILLIS = "start_millis";
+    static final String KEY_SESSION_START_MILLIS = "session_start_millis";
     static final String KEY_END_MILLIS = "end_millis";
     static final String KEY_DURATION_SECONDS = "duration_seconds";
+    static final String KEY_ELAPSED_SECONDS = "elapsed_seconds";
+    static final String KEY_PAUSED_REMAINING_MILLIS = "paused_remaining_millis";
     static final String KEY_TOPIC = "topic";
     static final String KEY_TOPIC_ID = "topic_id";
     static final String KEY_INTERRUPTED = "interrupted";
+    static final String KEY_SOUND = "sound";
     static final String EXTRA_KIND = "kind";
     static final String EXTRA_TOKEN = "token";
     static final String KIND_TIMER = "timer";
@@ -41,9 +47,15 @@ final class TimerAlarmScheduler {
     }
 
     static void scheduleSnooze(Context context) {
+        scheduleSnooze(context, System.currentTimeMillis() + 5 * 60 * 1000L);
+    }
+
+    static void scheduleSnooze(Context context, long snoozeAtMillis) {
         Intent intent = new Intent(context, TimerAlarmReceiver.class)
                 .putExtra(EXTRA_KIND, KIND_SNOOZE);
-        schedule(context, System.currentTimeMillis() + 5 * 60 * 1000L,
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit()
+                .putLong(KEY_SNOOZE_END_MILLIS, snoozeAtMillis).apply();
+        schedule(context, Math.max(System.currentTimeMillis(), snoozeAtMillis),
                 intent, SNOOZE_REQUEST, true);
     }
 
@@ -53,6 +65,8 @@ final class TimerAlarmScheduler {
 
     static void cancelSnooze(Context context) {
         cancel(context, SNOOZE_REQUEST);
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit()
+                .remove(KEY_SNOOZE_END_MILLIS).apply();
     }
 
     private static void cancel(Context context, int requestCode) {

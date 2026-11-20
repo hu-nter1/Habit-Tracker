@@ -18,13 +18,15 @@ final class PlanReminderScheduler {
     static final String EXTRA_PLAN_ID = "plan_id";
     static final String EXTRA_PLAN_TITLE = "plan_title";
     static final String EXTRA_SNOOZE = "plan_snooze";
+    private static final String SNOOZE_PREFS = "plan_reminder_snoozes";
+    private static final String NOTIFICATION_ID_PREFS = "plan_notification_ids";
     private static final String TAG = "StudyTrackerPlans";
 
     static void scheduleAll(Context context) {
         try {
             TrackerStore store = new TrackerStore(context.getFilesDir());
             for (TrackerStore.PlanItem plan : store.getPlans()) {
-                schedulePlan(context, plan);
+                schedulePlan(context, plan, true);
             }
         } catch (IOException exception) {
             Log.e(TAG, "Could not load plans to schedule reminders", exception);
@@ -32,31 +34,47 @@ final class PlanReminderScheduler {
     }
 
     static void schedulePlan(Context context, TrackerStore.PlanItem plan) {
+        schedulePlan(context, plan, false);
+    }
+
+    private static void schedulePlan(
+            Context context, TrackerStore.PlanItem plan, boolean restoreSnooze) {
         cancelScheduled(context, plan.id);
-        if (plan.done || plan.time == null || plan.time.trim().isEmpty()
-                || !PlanReminderReceiver.notificationsAvailable(context)) return;
-        try {
-            LocalDate day = LocalDate.parse(plan.date);
-            LocalTime time = LocalTime.parse(plan.time);
-            ZonedDateTime due = ZonedDateTime.of(day, time, ZoneId.systemDefault());
-            if (!due.isAfter(ZonedDateTime.now())) return;
-            schedule(context, plan.id, plan.text, due.toInstant().toEpochMilli(), false);
-        } catch (RuntimeException exception) {
-            Log.e(TAG, "Could not schedule reminder for plan " + plan.id, exception);
+        if (!restoreSnooze) clearSnoozeState(context, plan.id);
+        if (!plan.done) {
+            if (plan.time != null && !plan.time.trim().isEmpty()
+                    && PlanReminderReceiver.notificationsAvailable(context)) {
+                try {
+                    LocalDate day = LocalDate.parse(plan.date);
+                    LocalTime time = LocalTime.parse(plan.time);
+                    ZonedDateTime due = ZonedDateTime.of(day, time, ZoneId.systemDefault());
+                    if (due.isAfter(ZonedDateTime.now())) {
+                        schedule(context, plan.id, plan.text,
+                                due.toInstant().toEpochMilli(), false);
+                    }
+                } catch (RuntimeException exception) {
+                    Log.e(TAG, "Could not schedule reminder for plan " + plan.id, exception);
+                }
+            }
+            if (restoreSnooze) restoreSnooze(context, plan);
         }
     }
 
     static void scheduleSnooze(Context context, String planId, String title) {
         if (!PlanReminderReceiver.notificationsAvailable(context)) return;
+        long snoozeAt = System.currentTimeMillis() + 5 * 60 * 1000L;
+        context.getSharedPreferences(SNOOZE_PREFS, Context.MODE_PRIVATE).edit()
+                .putLong(snoozeKey(planId), snoozeAt).apply();
         schedule(context, planId, title,
-                System.currentTimeMillis() + 5 * 60 * 1000L, true);
+                snoozeAt, true);
     }
 
     static void cancelPlan(Context context, String planId) {
         cancelScheduled(context, planId);
+        clearSnoozeState(context, planId);
         android.app.NotificationManager notifications =
                 context.getSystemService(android.app.NotificationManager.class);
-        if (notifications != null) notifications.cancel(notificationId(planId));
+        if (notifications != null) notifications.cancel(notificationId(context, planId));
     }
 
     private static void cancelScheduled(Context context, String planId) {
@@ -72,6 +90,39 @@ final class PlanReminderScheduler {
         }
     }
 
+    static void clearSnooze(Context context, String planId) {
+        clearSnoozeState(context, planId);
+        AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        if (manager == null) return;
+        PendingIntent pending = pendingIntent(context, planId, "", true,
+                PendingIntent.FLAG_NO_CREATE);
+        if (pending != null) {
+            manager.cancel(pending);
+            pending.cancel();
+        }
+    }
+
+    private static void clearSnoozeState(Context context, String planId) {
+        context.getSharedPreferences(SNOOZE_PREFS, Context.MODE_PRIVATE).edit()
+                .remove(snoozeKey(planId)).apply();
+    }
+
+    private static void restoreSnooze(Context context, TrackerStore.PlanItem plan) {
+        long snoozeAt = context.getSharedPreferences(SNOOZE_PREFS, Context.MODE_PRIVATE)
+                .getLong(snoozeKey(plan.id), 0L);
+        if (snoozeAt <= 0L) return;
+        if (!PlanReminderReceiver.notificationsAvailable(context)) {
+            clearSnoozeState(context, plan.id);
+            return;
+        }
+        schedule(context, plan.id, plan.text,
+                Math.max(System.currentTimeMillis(), snoozeAt), true);
+    }
+
+    private static String snoozeKey(String planId) {
+        return "snooze_" + planId;
+    }
+
     static TrackerStore.PlanItem findPlan(Context context, String planId) throws IOException {
         TrackerStore store = new TrackerStore(context.getFilesDir());
         List<TrackerStore.PlanItem> plans = store.getPlans();
@@ -81,8 +132,23 @@ final class PlanReminderScheduler {
         return null;
     }
 
-    static int notificationId(String planId) {
-        return 820000 + (planId.hashCode() & 0x000FFFFF);
+    static synchronized int notificationId(Context context, String planId) {
+        android.content.SharedPreferences prefs = context.getSharedPreferences(
+                NOTIFICATION_ID_PREFS, Context.MODE_PRIVATE);
+        int saved = prefs.getInt(planId, 0);
+        if (saved != 0) return saved;
+
+        java.util.Set<Integer> used = new java.util.HashSet<>();
+        for (Object value : prefs.getAll().values()) {
+            if (value instanceof Integer) used.add((Integer) value);
+        }
+        int candidate = planId.hashCode() & Integer.MAX_VALUE;
+        if (candidate == 0) candidate = 1;
+        while (used.contains(candidate)) {
+            candidate = candidate == Integer.MAX_VALUE ? 1 : candidate + 1;
+        }
+        prefs.edit().putInt(planId, candidate).apply();
+        return candidate;
     }
 
     private static void schedule(

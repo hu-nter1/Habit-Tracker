@@ -62,7 +62,8 @@ public final class AlarmSoundService extends Service {
     private Notification buildNotification(String title, String message, boolean reminder) {
         Intent stopIntent = new Intent(this, AlarmActionReceiver.class)
                 .setAction(reminder ? AlarmActionReceiver.ACTION_STOP_REMINDER
-                        : AlarmActionReceiver.ACTION_STOP);
+                        : AlarmActionReceiver.ACTION_STOP)
+                .putExtra(DailyReminderScheduler.EXTRA_KIND, reminderKind);
         PendingIntent stop = PendingIntent.getBroadcast(this, 1, stopIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         Intent openIntent = new Intent(this, MainActivity.class)

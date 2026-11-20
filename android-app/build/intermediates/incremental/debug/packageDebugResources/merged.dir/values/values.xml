@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="background">#102F2A</color>
+    <color name="danger">#B84E49</color>
+    <color name="green">#21594D</color>
+    <color name="green_light">#E0ECE2</color>
+    <color name="line">#CAD8CE</color>
+    <color name="muted">#61746B</color>
+    <color name="outline">#CAD8CE</color>
+    <color name="page_muted">#B6CCBD</color>
+    <color name="page_text">#D9E8DB</color>
+    <color name="primary">#21594D</color>
+    <color name="primary_variant">#163F39</color>
+    <color name="secondary">#D97757</color>
+    <color name="surface">#D8E5DA</color>
+    <color name="surface_variant">#DCE8DE</color>
+    <color name="text">#20302B</color>
+    <color name="text_muted">#61746B</color>
+    <color name="text_primary">#20302B</color>
+    <color name="text_secondary">#415B51</color>
+    <color name="timer_accent">#347A61</color>
+    <color name="timer_face">#E1EBDD</color>
+    <color name="timer_track">#D6E8DC</color>
+    <color name="topic_accent_1">#21594D</color>
+    <color name="topic_accent_2">#487A91</color>
+    <color name="topic_accent_3">#B97153</color>
+    <color name="topic_accent_4">#786C91</color>
+    <color name="topic_accent_5">#397B73</color>
+    <color name="topic_accent_6">#A07843</color>
+    <color name="topic_accent_7">#6D7C49</color>
+    <color name="topic_accent_8">#4D7888</color>
+    <color name="topic_accent_9">#A75E5B</color>
+    <string name="app_name">Day by Day</string>
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary_variant</item>
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorOnPrimary">@color/surface</item>
+        <item name="colorOnSecondary">@color/text_primary</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="materialButtonStyle">@style/Widget.StudyTracker.Button</item>
+        <item name="materialButtonOutlinedStyle">@style/Widget.StudyTracker.Button.Outlined</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:colorAccent">@color/secondary</item>
+        <item name="android:statusBarColor">@color/primary_variant</item>
+        <item name="android:navigationBarColor">@color/primary_variant</item>
+        <item name="android:windowBackground">@color/background</item>
+        <item name="android:colorBackgroundFloating">@color/surface</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+    <style name="TextAppearance.StudyTracker.Tab" parent="TextAppearance.MaterialComponents.Button">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+    <style name="Widget.StudyTracker.Button" parent="Widget.MaterialComponents.Button">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="cornerRadius">14dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+    </style>
+    <style name="Widget.StudyTracker.Button.Outlined" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="cornerRadius">14dp</item>
+    </style>
+</resources>

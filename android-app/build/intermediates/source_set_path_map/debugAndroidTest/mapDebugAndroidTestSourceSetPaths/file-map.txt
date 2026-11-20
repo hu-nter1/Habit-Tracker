@@ -1,0 +1,5 @@
+com.personal.studytracker.test-core-1.6.1-0 /data/gradle/caches/8.9/transforms/df117f97eb1554a166d0367994412058/transformed/core-1.6.1/res
+com.personal.studytracker.test-androidTest-1 /home/king/Desktop/Tracker/android-app/build/generated/res/resValues/androidTest/debug
+com.personal.studytracker.test-mergeDebugAndroidTestResources-2 /home/king/Desktop/Tracker/android-app/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/merged.dir
+com.personal.studytracker.test-mergeDebugAndroidTestResources-3 /home/king/Desktop/Tracker/android-app/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/stripped.dir
+com.personal.studytracker.test-debugAndroidTest-4 /home/king/Desktop/Tracker/android-app/build/intermediates/merged_res/debugAndroidTest/mergeDebugAndroidTestResources

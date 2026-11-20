@@ -6,12 +6,19 @@ keeping number goals inside Study and core-habit streaks on Today.
 `res/layout/activity_main.xml` defines the app shell,
 and Material Components supplies the tab bar, buttons, cards, and progress
 indicators. Five equal-width tabs use icons and compact labels. The interface
-uses a slowly animated forest-green glow backdrop with drifting light points,
-soft botanical details, pale high-contrast cards, and a coral accent. Its
+keeps its animated forest-green botanical background, with clear section
+headings, thin dividers, mint accents, and no stacked information cards. Its
 date-and-location header is kept compact. The Study page has an original
 sprout illustration that grows as focus time passes. Its calm, progress-led
 approach takes general inspiration from focus apps such as Forest while
 keeping Day by Day's own colors, artwork, and layout.
+Primary actions use mint fills, secondary actions use outlined evergreen
+surfaces, and buttons keep consistent 48dp touch targets with clear ripple and
+disabled states. Timer pause/resume and date navigation use accessible icon
+buttons. While timing, save and pause are grouped as balanced, compact
+rounded-rectangle actions rather than oversized or circular buttons. Add and
+focus actions include compact leading icons, and topic dropdowns use the app's
+evergreen palette.
 
 ## Build and install
 
@@ -26,6 +33,17 @@ adb shell am start -n com.personal.studytracker/.MainActivity
 The Gradle wrapper can also build directly from `android-app/`. It
 uses the local Android SDK selected by `ANDROID_SDK_ROOT` or `ANDROID_HOME`.
 The app compiles against Android 35 and Material Components 1.12.0.
+
+Build the isolated storage, curriculum, and review-metrics instrumentation tests
+with:
+
+```sh
+./android-app/gradlew -p android-app assembleDebugAndroidTest
+```
+
+The tests write only to a temporary directory in the app cache. Run them on a
+disposable emulator or test device: the Gradle connected-test task can uninstall
+the target app and erase its private data during cleanup.
 
 ## Data
 
@@ -67,43 +85,49 @@ starts with the 20 most recent matches; older results can be expanded.
 The Review chart includes both focus sessions and reading time.
 
 The Today tab brings together today's check-ins, focus time, number goals,
-streaks, and a short dated plan. Plans can be made for today or upcoming days;
-they are not counted as completed activity. The Habits tab puts the date-based
-checklist first and keeps the optional Monday–Sunday overview. The Review tab
-shows completed activity only through today, with a weekly chart and month
-summaries that exclude future dates. Learn contains an editable curriculum
-with a checklist and progress indicator for each topic.
+streaks, and a short dated plan. Its learning-progress prompt points to the
+next unchecked curriculum step and opens that topic directly. Plans can be made
+for today or upcoming days; they are not counted as completed activity. The
+Habits tab puts the date-based checklist first and keeps the optional
+Monday–Sunday overview. The Review tab shows completed activity only through
+today, with a weekly chart and month summaries that exclude future dates. Learn
+contains an editable curriculum with a checklist and progress indicator for
+each topic.
 
 ## Focus timer and device context
 
 The Study tab includes a countdown timer (1–720 minutes) with 25- and
-50-minute presets and a count-up stopwatch; both require selecting a
-curriculum topic and can be discarded before saving when using the stopwatch.
+50-minute presets and a count-up stopwatch. Both can be paused and resumed,
+require selecting a curriculum topic, and the stopwatch can be discarded
+before saving. Choose the focus alarm sound from the Study timer.
 When the countdown ends, the app logs the session to the existing `<sessions>`
 XML section, then plays the device alarm sound and vibration. Dismiss and
 five-minute snooze controls are available both in the notification and inside
 the app on Today and Study. You can also save a separate reading log with
-date, topic, minutes, and optional notes; it appears in Reading history and
-optional pages read; it appears in Reading history and contributes to
-study-time totals without pretending it was a timed focus session.
+date, topic, minutes, and optional notes or page count; it appears in Reading
+history and contributes to study-time totals without pretending it was a timed
+focus session.
 Both histories support editing and confirmed deletion; reading logs include
 search and date-range filters.
 The alarm notification can be stopped or snoozed for five minutes. Active timer
 state is stored separately in app-private preferences; the alarm is restored
-after an app/device restart. Android may ask for notification and exact-alarm
-access so the timer can alert reliably while the app is closed.
+after an app/device restart, including an active five-minute snooze. Android may
+ask for notification and exact-alarm access so the timer can alert reliably
+while the app is closed.
 
 The Today tab also lets you enable a recurring morning planning reminder and
 an evening check-in reminder. Each has its own time and selectable system alarm
 sound. These settings are kept in app preferences (not in `tracker.xml`) and
-are rescheduled after device restart or a time-zone change. Allow notifications
-and exact alarms when Android asks so reminders can play at the chosen time.
+are rescheduled after device restart or a time-zone change; pending snoozes are
+restored too. Allow notifications and exact alarms when Android asks so
+reminders can play at the chosen time.
 
 Timed plans also receive their own notification at the planned time, using the
 device's default notification sound. Each activity notification includes
-Dismiss and five-minute Snooze actions. Leave a plan's time blank to avoid a
-notification. Plans cannot be created for past dates; past target entries and
-study sessions remain available as historical records.
+Dismiss and five-minute Snooze actions, and a pending snooze is restored after
+device restart. Leave a plan's time blank to avoid a notification. Plans cannot
+be created for past dates; past target entries and study sessions remain
+available as historical records.
 
 The header displays the device's current date/time and, with location permission,
 an approximate city/area derived from the device's coarse location. Location is

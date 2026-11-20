@@ -1,0 +1,3 @@
+com.personal.studytracker.test
+style WhiteBackgroundDialogTheme
+style WhiteBackgroundTheme
