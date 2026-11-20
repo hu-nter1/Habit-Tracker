@@ -35,20 +35,20 @@
                     <map id="android.settings.REQUEST_SCHEDULE_EXACT_ALARM (used to start an activity)">
                         <location id="0"
                             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-                            line="998"
+                            line="1000"
                             column="35"
-                            startOffset="47174"
-                            endLine="999"
+                            startOffset="47180"
+                            endLine="1001"
                             endColumn="66"
-                            endOffset="47296"/>
+                            endOffset="47302"/>
                         <location id="1"
                             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-                            line="2859"
+                            line="2861"
                             column="35"
-                            startOffset="138144"
-                            endLine="2860"
+                            startOffset="138150"
+                            endLine="2862"
                             endColumn="66"
-                            endOffset="138266"/>
+                            endOffset="138272"/>
                     </map>
             </map>
     </map>

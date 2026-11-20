@@ -1,4 +1,4 @@
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:2859: Warning: Field requires API level 31 (current min is 26): android.provider.Settings#ACTION_REQUEST_SCHEDULE_EXACT_ALARM [InlinedApi]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:2861: Warning: Field requires API level 31 (current min is 26): android.provider.Settings#ACTION_REQUEST_SCHEDULE_EXACT_ALARM [InlinedApi]
                 Intent settings = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM,
                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -68,43 +68,64 @@
    However, you may simply not be aware that a more recent version is
    available, and that is what this lint check helps find.
 
+/home/king/Desktop/Tracker/android-app/AndroidManifest.xml:21: Warning: Expecting android:screenOrientation="unspecified" or "fullSensor" for this activity so the user can use the application in any orientation and provide a great experience on Chrome OS devices [LockedOrientationActivity]
+            android:screenOrientation="portrait">
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "LockedOrientationActivity":
+   The <activity> element should not be locked to any orientation so that
+   users can take advantage of the multi-window environments and larger
+   screens available on Android. To fix the issue, consider declaring the
+   corresponding activity element with `screenOrientation="unspecified"`or
+   fullSensor attribute.
+
+   https://developer.android.com/topic/arc/window-management
+
+/home/king/Desktop/Tracker/android-app/AndroidManifest.xml:21: Warning: Should not restrict activity to fixed orientation. This may not be suitable for different form factors, causing the app to be letterboxed. [DiscouragedApi]
+            android:screenOrientation="portrait">
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "DiscouragedApi":
+   Discouraged APIs are allowed and are not deprecated, but they may be unfit
+   for common use (e.g. due to slow performance or subtle behavior).
+
 /home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:317: Warning: Use AppCompatResources.getDrawable() [UseCompatLoadingForDrawables from androidx.appcompat]
                 getDrawable(R.drawable.bg_botanical_overlay)));
                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:694: Warning: Use AppCompatResources.getDrawable() [UseCompatLoadingForDrawables from androidx.appcompat]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:696: Warning: Use AppCompatResources.getDrawable() [UseCompatLoadingForDrawables from androidx.appcompat]
         focusButton.setIcon(getDrawable(R.drawable.ic_tab_sessions));
                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1311: Warning: Use AppCompatResources.getDrawable() [UseCompatLoadingForDrawables from androidx.appcompat]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1313: Warning: Use AppCompatResources.getDrawable() [UseCompatLoadingForDrawables from androidx.appcompat]
         previousDay.setIcon(getDrawable(R.drawable.ic_action_chevron_left));
                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1343: Warning: Use AppCompatResources.getDrawable() [UseCompatLoadingForDrawables from androidx.appcompat]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1345: Warning: Use AppCompatResources.getDrawable() [UseCompatLoadingForDrawables from androidx.appcompat]
         nextDay.setIcon(getDrawable(R.drawable.ic_action_chevron_right));
                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1450: Warning: Use AppCompatResources.getDrawable() [UseCompatLoadingForDrawables from androidx.appcompat]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1452: Warning: Use AppCompatResources.getDrawable() [UseCompatLoadingForDrawables from androidx.appcompat]
         previousWeek.setIcon(getDrawable(R.drawable.ic_action_chevron_left));
                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1467: Warning: Use AppCompatResources.getDrawable() [UseCompatLoadingForDrawables from androidx.appcompat]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1469: Warning: Use AppCompatResources.getDrawable() [UseCompatLoadingForDrawables from androidx.appcompat]
         nextWeek.setIcon(getDrawable(R.drawable.ic_action_chevron_right));
                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1891: Warning: Use AppCompatResources.getDrawable() [UseCompatLoadingForDrawables from androidx.appcompat]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1893: Warning: Use AppCompatResources.getDrawable() [UseCompatLoadingForDrawables from androidx.appcompat]
             timerActionButton.setIcon(getDrawable(R.drawable.ic_action_check));
                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1893: Warning: Use AppCompatResources.getDrawable() [UseCompatLoadingForDrawables from androidx.appcompat]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1895: Warning: Use AppCompatResources.getDrawable() [UseCompatLoadingForDrawables from androidx.appcompat]
             timerActionButton.setIcon(getDrawable(R.drawable.ic_tab_sessions));
                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:3423: Warning: Use AppCompatResources.getDrawable() [UseCompatLoadingForDrawables from androidx.appcompat]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:3425: Warning: Use AppCompatResources.getDrawable() [UseCompatLoadingForDrawables from androidx.appcompat]
         previous.setIcon(getDrawable(R.drawable.ic_action_chevron_left));
                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:3435: Warning: Use AppCompatResources.getDrawable() [UseCompatLoadingForDrawables from androidx.appcompat]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:3437: Warning: Use AppCompatResources.getDrawable() [UseCompatLoadingForDrawables from androidx.appcompat]
         next.setIcon(getDrawable(R.drawable.ic_action_chevron_right));
                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:3564: Warning: Use AppCompatResources.getDrawable() [UseCompatLoadingForDrawables from androidx.appcompat]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:3566: Warning: Use AppCompatResources.getDrawable() [UseCompatLoadingForDrawables from androidx.appcompat]
         previous.setIcon(getDrawable(R.drawable.ic_action_chevron_left));
                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:3578: Warning: Use AppCompatResources.getDrawable() [UseCompatLoadingForDrawables from androidx.appcompat]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:3580: Warning: Use AppCompatResources.getDrawable() [UseCompatLoadingForDrawables from androidx.appcompat]
         next.setIcon(getDrawable(R.drawable.ic_action_chevron_right));
                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:4176: Warning: Use AppCompatResources.getDrawable() [UseCompatLoadingForDrawables from androidx.appcompat]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:4178: Warning: Use AppCompatResources.getDrawable() [UseCompatLoadingForDrawables from androidx.appcompat]
         button.setIcon(getDrawable(R.drawable.ic_action_add));
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -115,13 +136,13 @@
    Identifier: androidx.appcompat
    Feedback: https://issuetracker.google.com/issues/new?component=460343
 
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:4230: Warning: Use TextViewCompat.setCompoundDrawableTintList() [UseCompatTextViewDrawableApis from androidx.appcompat]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:4232: Warning: Use TextViewCompat.setCompoundDrawableTintList() [UseCompatTextViewDrawableApis from androidx.appcompat]
             field.setCompoundDrawableTintList(android.content.res.ColorStateList.valueOf(
             ^
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:4388: Warning: Use TextViewCompat.setCompoundDrawableTintList() [UseCompatTextViewDrawableApis from androidx.appcompat]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:4390: Warning: Use TextViewCompat.setCompoundDrawableTintList() [UseCompatTextViewDrawableApis from androidx.appcompat]
         field.setCompoundDrawableTintList(android.content.res.ColorStateList.valueOf(
         ^
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:4413: Warning: Use TextViewCompat.setCompoundDrawableTintList() [UseCompatTextViewDrawableApis from androidx.appcompat]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:4415: Warning: Use TextViewCompat.setCompoundDrawableTintList() [UseCompatTextViewDrawableApis from androidx.appcompat]
         field.setCompoundDrawableTintList(android.content.res.ColorStateList.valueOf(
         ^
 
@@ -163,7 +184,7 @@
    https://developer.android.com/about/versions/12/backup-restore#xml-changes
    https://goo.gle/DataExtractionRules
 
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:3992: Warning: Avoid object allocations during draw/layout operations (preallocate and reuse instead) [DrawAllocation]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:3994: Warning: Avoid object allocations during draw/layout operations (preallocate and reuse instead) [DrawAllocation]
                 Path completionLine = new Path();
                                       ~~~~~~~~~~
 
@@ -327,111 +348,111 @@
         headerLocation.setText("Finding your area…");
                                ~~~~~~~~~~~~~~~~~~~~
 /home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:476: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
-            headerLocation.setText("Location services are off · tap to retry");
-                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:488: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
-                    if (headerLocation != null) headerLocation.setText("Location unavailable · tap to retry");
-                                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:495: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
-                    headerLocation.setText("Area unavailable · tap to retry");
-                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:500: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
-            headerLocation.setText("Location permission needed · tap to allow");
-                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:529: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
-                else headerLocation.setText("Location active · area name unavailable");
-                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:735: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
+            headerLocation.setText("Location off · tap to retry");
+                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:489: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+                        headerLocation.setText("Location off · tap to retry");
+                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:497: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+                    headerLocation.setText("Area unavailable · retry");
+                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:502: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+            headerLocation.setText("Permission needed · tap to allow");
+                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:531: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+                else headerLocation.setText("Location active · name unavailable");
+                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:737: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
                 check.setText(habit.name + (habit.core ? "  ·  Core" : ""));
                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1549: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1551: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
         core.setText("Core habit (track streak)");
                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1729: Warning: Number formatting does not take into account locale settings. Consider using String.format instead. [SetTextI18n]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1731: Warning: Number formatting does not take into account locale settings. Consider using String.format instead. [SetTextI18n]
         timerMinutes.setText(Integer.toString(
                              ^
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1741: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1743: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
         preset25.setOnClickListener(view -> timerMinutes.setText("25"));
                                                                  ~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1746: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1748: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
         preset50.setOnClickListener(view -> timerMinutes.setText("50"));
                                                                  ~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1757: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1759: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
         countdownMode.setText("Countdown");
                               ~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1764: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1766: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
         stopwatch.setText("Stopwatch");
                           ~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1779: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1781: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
         timerInterrupted.setText("Interrupted");
                                  ~~~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1793: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1795: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
         timerSoundButton.setText("Alarm sound: " + getRingtoneTitle(displayedTimerSound));
                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1793: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1795: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
         timerSoundButton.setText("Alarm sound: " + getRingtoneTitle(displayedTimerSound));
                                  ~~~~~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1871: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1873: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
                 timerStatus.setText("Time's up · dismiss or snooze below");
                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1872: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1874: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
                 timerCountdown.setText("Done");
                                        ~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1940: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1942: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
             discard.setText("Discard stopwatch");
                             ~~~~~~~~~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1983: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:1985: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
         interrupted.setText("Interrupted");
                             ~~~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:2076: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:2078: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
         interruptedOnly.setText("Interrupted sessions only");
                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:2208: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:2210: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
             showAll.setText("Show all " + matches.size() + " sessions");
                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:2208: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:2210: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
             showAll.setText("Show all " + matches.size() + " sessions");
                             ~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:2208: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:2210: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
             showAll.setText("Show all " + matches.size() + " sessions");
                                                            ~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:2226: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:2228: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
             timerStatus.setText("Ready when you are");
                                 ~~~~~~~~~~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:2237: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:2239: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
             timerStatus.setText("Ready when you are");
                                 ~~~~~~~~~~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:2319: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:2321: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
         minutes.setText("20");
                         ~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:2323: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:2325: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
         addSecondaryButton(durationPresets, "15 min", () -> minutes.setText("15"));
                                                                             ~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:2324: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:2326: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
         addSecondaryButton(durationPresets, "30 min", () -> minutes.setText("30"));
                                                                             ~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:2325: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:2327: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
         addSecondaryButton(durationPresets, "45 min", () -> minutes.setText("45"));
                                                                             ~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:2568: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:2570: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
         interrupted.setText("This session was interrupted");
                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:2649: Warning: Number formatting does not take into account locale settings. Consider using String.format instead. [SetTextI18n]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:2651: Warning: Number formatting does not take into account locale settings. Consider using String.format instead. [SetTextI18n]
         minutes.setText(Integer.toString(entry.durationMinutes));
                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:2653: Warning: Number formatting does not take into account locale settings. Consider using String.format instead. [SetTextI18n]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:2655: Warning: Number formatting does not take into account locale settings. Consider using String.format instead. [SetTextI18n]
         if (entry.pagesRead > 0) pagesRead.setText(Integer.toString(entry.pagesRead));
                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:3221: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:3223: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
             progressText.setText(completedItems + " of " + totalItems
                                  ^
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:3221: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:3223: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
             progressText.setText(completedItems + " of " + totalItems
                                                   ~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:3222: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:3224: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
                     + " steps done · " + String.format(Locale.getDefault(), "%.0f%%",
                       ~~~~~~~~~~~~~~~~
-/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:3278: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java:3280: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
             manageSteps.setText("Manage steps");
                                 ~~~~~~~~~~~~~~
 
@@ -448,4 +469,4 @@
 
    https://developer.android.com/guide/topics/resources/localization.html
 
-0 errors, 91 warnings
+0 errors, 93 warnings

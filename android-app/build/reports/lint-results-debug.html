@@ -177,9 +177,9 @@ document.getElementById(id).style.display = 'none';
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
   <header class="mdl-layout__header">
     <div class="mdl-layout__header-row">
-      <span class="mdl-layout-title">Lint Report: 91 warnings</span>
+      <span class="mdl-layout-title">Lint Report: 93 warnings</span>
       <div class="mdl-layout-spacer"></div>
-      <nav class="mdl-navigation mdl-layout--large-screen-only">Check performed at Fri Nov 20 12:48:29 EAT 2026 by AGP (8.7.3)</nav>
+      <nav class="mdl-navigation mdl-layout--large-screen-only">Check performed at Fri Nov 20 13:51:03 EAT 2026 by AGP (8.7.3)</nav>
     </div>
   </header>
   <div class="mdl-layout__drawer">
@@ -190,6 +190,8 @@ document.getElementById(id).style.display = 'none';
       <a class="mdl-navigation__link" href="#VectorRaster"><i class="material-icons warning-icon">warning</i>Vector Image Generation (1)</a>
       <a class="mdl-navigation__link" href="#AndroidGradlePluginVersion"><i class="material-icons warning-icon">warning</i>Obsolete Android Gradle Plugin Version (1)</a>
       <a class="mdl-navigation__link" href="#GradleDependency"><i class="material-icons warning-icon">warning</i>Obsolete Gradle Dependency (3)</a>
+      <a class="mdl-navigation__link" href="#LockedOrientationActivity"><i class="material-icons warning-icon">warning</i>Incompatible screenOrientation value (1)</a>
+      <a class="mdl-navigation__link" href="#DiscouragedApi"><i class="material-icons warning-icon">warning</i>Using discouraged APIs (1)</a>
       <a class="mdl-navigation__link" href="#UseCompatLoadingForDrawables"><i class="material-icons warning-icon">warning</i>Should not call <code>Context.getDrawable</code> or <code>Resources.getDrawable</code> directly (13)</a>
       <a class="mdl-navigation__link" href="#UseCompatTextViewDrawableApis"><i class="material-icons warning-icon">warning</i>Should not call <code>TextView.setCompoundDrawableTintList</code> or <code>TextView.setCompoundDrawableTintMode</code> directly (3)</a>
       <a class="mdl-navigation__link" href="#UseCompatTextViewDrawableXml"><i class="material-icons warning-icon">warning</i>Compat compound drawable attributes should be used on <code>TextView</code> (1)</a>
@@ -226,6 +228,12 @@ document.getElementById(id).style.display = 'none';
 <tr>
 <td class="countColumn">3</td><td class="issueColumn"><i class="material-icons warning-icon">warning</i>
 <a href="#GradleDependency">GradleDependency</a>: Obsolete Gradle Dependency</td></tr>
+<tr>
+<td class="countColumn">1</td><td class="issueColumn"><i class="material-icons warning-icon">warning</i>
+<a href="#LockedOrientationActivity">LockedOrientationActivity</a>: Incompatible screenOrientation value</td></tr>
+<tr>
+<td class="countColumn">1</td><td class="issueColumn"><i class="material-icons warning-icon">warning</i>
+<a href="#DiscouragedApi">DiscouragedApi</a>: Using discouraged APIs</td></tr>
 <tr>
 <td class="countColumn">13</td><td class="issueColumn"><i class="material-icons warning-icon">warning</i>
 <a href="#UseCompatLoadingForDrawables">UseCompatLoadingForDrawables</a>: Should not call <code>Context.getDrawable</code> or <code>Resources.getDrawable</code> directly</td></tr>
@@ -285,14 +293,14 @@ Dismiss</button>            </div>
               <div class="mdl-card__supporting-text">
 <div class="issue">
 <div class="warningslist">
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:2859</span>: <span class="message">Field requires API level 31 (current min is 26): <code>android.provider.Settings#ACTION_REQUEST_SCHEDULE_EXACT_ALARM</code></span><br /><pre class="errorlines">
-<span class="lineno"> 2856 </span>     }
-<span class="lineno"> 2857 </span>     <span class="keyword">if</span> (!TimerAlarmScheduler.canScheduleExact(<span class="keyword">this</span>)) {
-<span class="lineno"> 2858 </span>         <span class="keyword">try</span> {
-<span class="caretline"><span class="lineno"> 2859 </span>             Intent settings = <span class="keyword">new</span> Intent(<span class="warning">Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM</span>,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 2860 </span>                     Uri.parse(<span class="string">"package:"</span> + getPackageName()));
-<span class="lineno"> 2861 </span>             startActivity(settings);
-<span class="lineno"> 2862 </span>             Toast.makeText(<span class="keyword">this</span>, <span class="string">"Allow exact alarms, then tap Start focus timer again."</span>,
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:2861</span>: <span class="message">Field requires API level 31 (current min is 26): <code>android.provider.Settings#ACTION_REQUEST_SCHEDULE_EXACT_ALARM</code></span><br /><pre class="errorlines">
+<span class="lineno"> 2858 </span>     }
+<span class="lineno"> 2859 </span>     <span class="keyword">if</span> (!TimerAlarmScheduler.canScheduleExact(<span class="keyword">this</span>)) {
+<span class="lineno"> 2860 </span>         <span class="keyword">try</span> {
+<span class="caretline"><span class="lineno"> 2861 </span>             Intent settings = <span class="keyword">new</span> Intent(<span class="warning">Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM</span>,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 2862 </span>                     Uri.parse(<span class="string">"package:"</span> + getPackageName()));
+<span class="lineno"> 2863 </span>             startActivity(settings);
+<span class="lineno"> 2864 </span>             Toast.makeText(<span class="keyword">this</span>, <span class="string">"Allow exact alarms, then tap Start focus timer again."</span>,
 </pre>
 
 </div>
@@ -478,6 +486,98 @@ To suppress this error, use the issue id "GradleDependency" as explained in the 
 Explain</button><button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="GradleDependencyCardLink" onclick="hideid('GradleDependencyCard');">
 Dismiss</button>            </div>
             </div>
+          </section><a name="LockedOrientationActivity"></a>
+<section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp" id="LockedOrientationActivityCard" style="display: block;">
+            <div class="mdl-card mdl-cell mdl-cell--12-col">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">Incompatible screenOrientation value</h2>
+  </div>
+              <div class="mdl-card__supporting-text">
+<div class="issue">
+<div class="warningslist">
+<span class="location"><a href="../../AndroidManifest.xml">../../AndroidManifest.xml</a>:21</span>: <span class="message">Expecting <code>android:screenOrientation="unspecified"</code> or <code>"fullSensor"</code> for this activity so the user can use the application in any orientation and provide a great experience on Chrome OS devices</span><br /><pre class="errorlines">
+<span class="lineno"> 18 </span><span class="attribute">            </span><span class="prefix">android:</span><span class="attribute">name</span>=<span class="value">".MainActivity"</span>
+<span class="lineno"> 19 </span>            <span class="prefix">android:</span><span class="attribute">configChanges</span>=<span class="value">"orientation|screenSize"</span>
+<span class="lineno"> 20 </span>            <span class="prefix">android:</span><span class="attribute">exported</span>=<span class="value">"true"</span>
+<span class="caretline"><span class="lineno"> 21 </span>            <span class="warning"><span class="prefix">android:</span><span class="attribute">screenOrientation</span>=<span class="value">"portrait"</span></span>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 22 </span>            <span class="tag">&lt;intent-filter></span>
+<span class="lineno"> 23 </span>                <span class="tag">&lt;action</span><span class="attribute"> </span><span class="prefix">android:</span><span class="attribute">name</span>=<span class="value">"android.intent.action.MAIN"</span> />
+<span class="lineno"> 24 </span>                <span class="tag">&lt;category</span><span class="attribute"> </span><span class="prefix">android:</span><span class="attribute">name</span>=<span class="value">"android.intent.category.LAUNCHER"</span> />
+</pre>
+
+</div>
+<div class="metadata"><div class="explanation" id="explanationLockedOrientationActivity" style="display: none;">
+The <code>&lt;activity></code> element should not be locked to any orientation so that users can take advantage of the multi-window environments and larger screens available on Android. To fix the issue, consider declaring the corresponding activity element with `screenOrientation="unspecified"`or <code>fullSensor</code> attribute.<br/><div class="moreinfo">More info: <a href="https://developer.android.com/topic/arc/window-management">https://developer.android.com/topic/arc/window-management</a>
+</div>Note: This issue has an associated quickfix operation in Android Studio and IntelliJ IDEA.<br>
+To suppress this error, use the issue id "LockedOrientationActivity" as explained in the <a href="#SuppressInfo">Suppressing Warnings and Errors</a> section.<br/>
+<br/></div>
+</div>
+</div>
+<div class="chips">
+<span class="mdl-chip">
+    <span class="mdl-chip__text">LockedOrientationActivity</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Correctness</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Warning</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Priority 4/10</span>
+</span>
+</div>
+              </div>
+              <div class="mdl-card__actions mdl-card--border">
+<button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="explanationLockedOrientationActivityLink" onclick="reveal('explanationLockedOrientationActivity');">
+Explain</button><button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="LockedOrientationActivityCardLink" onclick="hideid('LockedOrientationActivityCard');">
+Dismiss</button>            </div>
+            </div>
+          </section><a name="DiscouragedApi"></a>
+<section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp" id="DiscouragedApiCard" style="display: block;">
+            <div class="mdl-card mdl-cell mdl-cell--12-col">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">Using discouraged APIs</h2>
+  </div>
+              <div class="mdl-card__supporting-text">
+<div class="issue">
+<div class="warningslist">
+<span class="location"><a href="../../AndroidManifest.xml">../../AndroidManifest.xml</a>:21</span>: <span class="message">Should not restrict activity to fixed orientation. This may not be suitable for different form factors, causing the app to be letterboxed.</span><br /><pre class="errorlines">
+<span class="lineno"> 18 </span><span class="attribute">            </span><span class="prefix">android:</span><span class="attribute">name</span>=<span class="value">".MainActivity"</span>
+<span class="lineno"> 19 </span>            <span class="prefix">android:</span><span class="attribute">configChanges</span>=<span class="value">"orientation|screenSize"</span>
+<span class="lineno"> 20 </span>            <span class="prefix">android:</span><span class="attribute">exported</span>=<span class="value">"true"</span>
+<span class="caretline"><span class="lineno"> 21 </span>            <span class="warning"><span class="prefix">android:</span><span class="attribute">screenOrientation</span>=<span class="value">"portrait"</span></span>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 22 </span>            <span class="tag">&lt;intent-filter></span>
+<span class="lineno"> 23 </span>                <span class="tag">&lt;action</span><span class="attribute"> </span><span class="prefix">android:</span><span class="attribute">name</span>=<span class="value">"android.intent.action.MAIN"</span> />
+<span class="lineno"> 24 </span>                <span class="tag">&lt;category</span><span class="attribute"> </span><span class="prefix">android:</span><span class="attribute">name</span>=<span class="value">"android.intent.category.LAUNCHER"</span> />
+</pre>
+
+</div>
+<div class="metadata"><div class="explanation" id="explanationDiscouragedApi" style="display: none;">
+Discouraged APIs are allowed and are not deprecated, but they may be unfit for common use (e.g. due to slow performance or subtle behavior).<br/>To suppress this error, use the issue id "DiscouragedApi" as explained in the <a href="#SuppressInfo">Suppressing Warnings and Errors</a> section.<br/>
+<br/></div>
+</div>
+</div>
+<div class="chips">
+<span class="mdl-chip">
+    <span class="mdl-chip__text">DiscouragedApi</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Correctness</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Warning</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Priority 2/10</span>
+</span>
+</div>
+              </div>
+              <div class="mdl-card__actions mdl-card--border">
+<button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="explanationDiscouragedApiLink" onclick="reveal('explanationDiscouragedApi');">
+Explain</button><button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="DiscouragedApiCardLink" onclick="hideid('DiscouragedApiCard');">
+Dismiss</button>            </div>
+            </div>
           </section><a name="UseCompatLoadingForDrawables"></a>
 <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp" id="UseCompatLoadingForDrawablesCard" style="display: block;">
             <div class="mdl-card mdl-cell mdl-cell--12-col">
@@ -497,126 +597,126 @@ Dismiss</button>            </div>
 <span class="lineno">  320 </span>        setPressableText(headerLocation, <span class="string">"Show or refresh your area"</span>);
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:694</span>: <span class="message">Use <code>AppCompatResources.getDrawable()</code></span><br /><pre class="errorlines">
-<span class="lineno">  691 </span>
-<span class="lineno">  692 </span>  MaterialButton focusButton = primaryButton();
-<span class="lineno">  693 </span>  focusButton.setText(timerRunning ? <span class="string">"Return to your focus session"</span> : <span class="string">"Start a focus session"</span>);
-<span class="caretline"><span class="lineno">  694 </span>  focusButton.setIcon(<span class="warning">getDrawable(R.drawable.ic_tab_sessions)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno">  695 </span>  focusButton.setIconTint(android.content.res.ColorStateList.valueOf(
-<span class="lineno">  696 </span>          Color.parseColor(BUTTON_DARK)));
-<span class="lineno">  697 </span>  focusButton.setIconSize(dp(<span class="number">20</span>));
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:696</span>: <span class="message">Use <code>AppCompatResources.getDrawable()</code></span><br /><pre class="errorlines">
+<span class="lineno">  693 </span>
+<span class="lineno">  694 </span>  MaterialButton focusButton = primaryButton();
+<span class="lineno">  695 </span>  focusButton.setText(timerRunning ? <span class="string">"Return to your focus session"</span> : <span class="string">"Start a focus session"</span>);
+<span class="caretline"><span class="lineno">  696 </span>  focusButton.setIcon(<span class="warning">getDrawable(R.drawable.ic_tab_sessions)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  697 </span>  focusButton.setIconTint(android.content.res.ColorStateList.valueOf(
+<span class="lineno">  698 </span>          Color.parseColor(BUTTON_DARK)));
+<span class="lineno">  699 </span>  focusButton.setIconSize(dp(<span class="number">20</span>));
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1311</span>: <span class="message">Use <code>AppCompatResources.getDrawable()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 1308 </span>     pageHeader(<span class="string">"Habits"</span>, <span class="string">"Keep a simple routine. Plan for today or choose a day ahead."</span>);
-<span class="lineno"> 1309 </span>     LinearLayout dateControls = row();
-<span class="lineno"> 1310 </span>     MaterialButton previousDay = outlinedButton();
-<span class="caretline"><span class="lineno"> 1311 </span>     previousDay.setIcon(<span class="warning">getDrawable(R.drawable.ic_action_chevron_left)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 1312 </span>     previousDay.setIconTint(buttonStateColors(PAGE_TEXT, <span class="string">"#9AAF9F"</span>));
-<span class="lineno"> 1313 </span>     previousDay.setContentDescription(<span class="string">"Previous day"</span>);
-<span class="lineno"> 1314 </span>     previousDay.setEnabled(habitDate.isAfter(LocalDate.now()));
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1313</span>: <span class="message">Use <code>AppCompatResources.getDrawable()</code></span><br /><pre class="errorlines">
+<span class="lineno"> 1310 </span>     pageHeader(<span class="string">"Habits"</span>, <span class="string">"Keep a simple routine. Plan for today or choose a day ahead."</span>);
+<span class="lineno"> 1311 </span>     LinearLayout dateControls = row();
+<span class="lineno"> 1312 </span>     MaterialButton previousDay = outlinedButton();
+<span class="caretline"><span class="lineno"> 1313 </span>     previousDay.setIcon(<span class="warning">getDrawable(R.drawable.ic_action_chevron_left)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 1314 </span>     previousDay.setIconTint(buttonStateColors(PAGE_TEXT, <span class="string">"#9AAF9F"</span>));
+<span class="lineno"> 1315 </span>     previousDay.setContentDescription(<span class="string">"Previous day"</span>);
+<span class="lineno"> 1316 </span>     previousDay.setEnabled(habitDate.isAfter(LocalDate.now()));
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1343</span>: <span class="message">Use <code>AppCompatResources.getDrawable()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 1340 </span>            picker.show();
-<span class="lineno"> 1341 </span>        });
-<span class="lineno"> 1342 </span>        MaterialButton nextDay = outlinedButton();
-<span class="caretline"><span class="lineno"> 1343 </span>        nextDay.setIcon(<span class="warning">getDrawable(R.drawable.ic_action_chevron_right)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 1344 </span>        nextDay.setIconTint(buttonStateColors(PAGE_TEXT, <span class="string">"#9AAF9F"</span>));
-<span class="lineno"> 1345 </span>        nextDay.setContentDescription(<span class="string">"Next day"</span>);
-<span class="lineno"> 1346 </span>        nextDay.setEnabled(<span class="keyword">true</span>);
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1345</span>: <span class="message">Use <code>AppCompatResources.getDrawable()</code></span><br /><pre class="errorlines">
+<span class="lineno"> 1342 </span>            picker.show();
+<span class="lineno"> 1343 </span>        });
+<span class="lineno"> 1344 </span>        MaterialButton nextDay = outlinedButton();
+<span class="caretline"><span class="lineno"> 1345 </span>        nextDay.setIcon(<span class="warning">getDrawable(R.drawable.ic_action_chevron_right)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 1346 </span>        nextDay.setIconTint(buttonStateColors(PAGE_TEXT, <span class="string">"#9AAF9F"</span>));
+<span class="lineno"> 1347 </span>        nextDay.setContentDescription(<span class="string">"Next day"</span>);
+<span class="lineno"> 1348 </span>        nextDay.setEnabled(<span class="keyword">true</span>);
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1450</span>: <span class="message">Use <code>AppCompatResources.getDrawable()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 1447 </span>        LocalDate monday = habitWeekStart;
-<span class="lineno"> 1448 </span>        LinearLayout controls = row();
-<span class="lineno"> 1449 </span>        MaterialButton previousWeek = outlinedButton();
-<span class="caretline"><span class="lineno"> 1450 </span>        previousWeek.setIcon(<span class="warning">getDrawable(R.drawable.ic_action_chevron_left)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 1451 </span>        previousWeek.setIconTint(buttonStateColors(PAGE_TEXT, <span class="string">"#9AAF9F"</span>));
-<span class="lineno"> 1452 </span>        previousWeek.setContentDescription(<span class="string">"Previous week"</span>);
-<span class="lineno"> 1453 </span>        previousWeek.setEnabled(<span class="keyword">true</span>);
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1452</span>: <span class="message">Use <code>AppCompatResources.getDrawable()</code></span><br /><pre class="errorlines">
+<span class="lineno"> 1449 </span>        LocalDate monday = habitWeekStart;
+<span class="lineno"> 1450 </span>        LinearLayout controls = row();
+<span class="lineno"> 1451 </span>        MaterialButton previousWeek = outlinedButton();
+<span class="caretline"><span class="lineno"> 1452 </span>        previousWeek.setIcon(<span class="warning">getDrawable(R.drawable.ic_action_chevron_left)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 1453 </span>        previousWeek.setIconTint(buttonStateColors(PAGE_TEXT, <span class="string">"#9AAF9F"</span>));
+<span class="lineno"> 1454 </span>        previousWeek.setContentDescription(<span class="string">"Previous week"</span>);
+<span class="lineno"> 1455 </span>        previousWeek.setEnabled(<span class="keyword">true</span>);
 </pre>
 
 <button class="mdl-button mdl-js-button mdl-button--primary" id="UseCompatLoadingForDrawablesDivLink" onclick="reveal('UseCompatLoadingForDrawablesDiv');" />+ 8 More Occurrences...</button>
 <div id="UseCompatLoadingForDrawablesDiv" style="display: none">
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1467</span>: <span class="message">Use <code>AppCompatResources.getDrawable()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 1464 </span>        controls.addView(weekLabel, <span class="keyword">new</span> LinearLayout.LayoutParams(<span class="number">0</span>,
-<span class="lineno"> 1465 </span>                dp(<span class="number">48</span>), <span class="number">1</span>));
-<span class="lineno"> 1466 </span>        MaterialButton nextWeek = outlinedButton();
-<span class="caretline"><span class="lineno"> 1467 </span>        nextWeek.setIcon(<span class="warning">getDrawable(R.drawable.ic_action_chevron_right)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 1468 </span>        nextWeek.setIconTint(buttonStateColors(PAGE_TEXT, <span class="string">"#9AAF9F"</span>));
-<span class="lineno"> 1469 </span>        nextWeek.setContentDescription(<span class="string">"Next week"</span>);
-<span class="lineno"> 1470 </span>        nextWeek.setEnabled(monday.isBefore(LocalDate.now().with(DayOfWeek.MONDAY)));
-</pre>
-
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1891</span>: <span class="message">Use <code>AppCompatResources.getDrawable()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 1888 </span>                : alarmRinging ? <span class="string">"Dismiss focus timer alarm"</span> : stopwatchMode
-<span class="lineno"> 1889 </span>                    ? <span class="string">"Start stopwatch"</span> : <span class="string">"Start focus timer"</span>);
-<span class="lineno"> 1890 </span>        <span class="keyword">if</span> (timerRunning) {
-<span class="caretline"><span class="lineno"> 1891 </span>            timerActionButton.setIcon(<span class="warning">getDrawable(R.drawable.ic_action_check)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 1892 </span>        } <span class="keyword">else</span> {
-<span class="lineno"> 1893 </span>            timerActionButton.setIcon(getDrawable(R.drawable.ic_tab_sessions));
-<span class="lineno"> 1894 </span>        }
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1469</span>: <span class="message">Use <code>AppCompatResources.getDrawable()</code></span><br /><pre class="errorlines">
+<span class="lineno"> 1466 </span>        controls.addView(weekLabel, <span class="keyword">new</span> LinearLayout.LayoutParams(<span class="number">0</span>,
+<span class="lineno"> 1467 </span>                dp(<span class="number">48</span>), <span class="number">1</span>));
+<span class="lineno"> 1468 </span>        MaterialButton nextWeek = outlinedButton();
+<span class="caretline"><span class="lineno"> 1469 </span>        nextWeek.setIcon(<span class="warning">getDrawable(R.drawable.ic_action_chevron_right)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 1470 </span>        nextWeek.setIconTint(buttonStateColors(PAGE_TEXT, <span class="string">"#9AAF9F"</span>));
+<span class="lineno"> 1471 </span>        nextWeek.setContentDescription(<span class="string">"Next week"</span>);
+<span class="lineno"> 1472 </span>        nextWeek.setEnabled(monday.isBefore(LocalDate.now().with(DayOfWeek.MONDAY)));
 </pre>
 
 <span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1893</span>: <span class="message">Use <code>AppCompatResources.getDrawable()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 1890 </span>        <span class="keyword">if</span> (timerRunning) {
-<span class="lineno"> 1891 </span>            timerActionButton.setIcon(getDrawable(R.drawable.ic_action_check));
-<span class="lineno"> 1892 </span>        } <span class="keyword">else</span> {
-<span class="caretline"><span class="lineno"> 1893 </span>            timerActionButton.setIcon(<span class="warning">getDrawable(R.drawable.ic_tab_sessions)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 1894 </span>        }
-<span class="lineno"> 1895 </span>        timerActionButton.setIconTint(android.content.res.ColorStateList.valueOf(
-<span class="lineno"> 1896 </span>                Color.parseColor(BUTTON_DARK)));
+<span class="lineno"> 1890 </span>                : alarmRinging ? <span class="string">"Dismiss focus timer alarm"</span> : stopwatchMode
+<span class="lineno"> 1891 </span>                    ? <span class="string">"Start stopwatch"</span> : <span class="string">"Start focus timer"</span>);
+<span class="lineno"> 1892 </span>        <span class="keyword">if</span> (timerRunning) {
+<span class="caretline"><span class="lineno"> 1893 </span>            timerActionButton.setIcon(<span class="warning">getDrawable(R.drawable.ic_action_check)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 1894 </span>        } <span class="keyword">else</span> {
+<span class="lineno"> 1895 </span>            timerActionButton.setIcon(getDrawable(R.drawable.ic_tab_sessions));
+<span class="lineno"> 1896 </span>        }
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:3423</span>: <span class="message">Use <code>AppCompatResources.getDrawable()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 3420 </span>        pageHeader(<span class="string">"Review"</span>, <span class="string">"Look back at what you did, then choose what comes next."</span>);
-<span class="lineno"> 3421 </span>        LinearLayout period = row();
-<span class="lineno"> 3422 </span>        MaterialButton previous = outlinedButton();
-<span class="caretline"><span class="lineno"> 3423 </span>        previous.setIcon(<span class="warning">getDrawable(R.drawable.ic_action_chevron_left)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 3424 </span>        previous.setIconTint(buttonStateColors(PAGE_TEXT, <span class="string">"#9AAF9F"</span>));
-<span class="lineno"> 3425 </span>        previous.setContentDescription(<span class="string">"Previous week"</span>);
-<span class="lineno"> 3426 </span>        period.addView(previous, <span class="keyword">new</span> LinearLayout.LayoutParams(dp(<span class="number">48</span>), dp(<span class="number">48</span>)));
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1895</span>: <span class="message">Use <code>AppCompatResources.getDrawable()</code></span><br /><pre class="errorlines">
+<span class="lineno"> 1892 </span>        <span class="keyword">if</span> (timerRunning) {
+<span class="lineno"> 1893 </span>            timerActionButton.setIcon(getDrawable(R.drawable.ic_action_check));
+<span class="lineno"> 1894 </span>        } <span class="keyword">else</span> {
+<span class="caretline"><span class="lineno"> 1895 </span>            timerActionButton.setIcon(<span class="warning">getDrawable(R.drawable.ic_tab_sessions)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 1896 </span>        }
+<span class="lineno"> 1897 </span>        timerActionButton.setIconTint(android.content.res.ColorStateList.valueOf(
+<span class="lineno"> 1898 </span>                Color.parseColor(BUTTON_DARK)));
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:3435</span>: <span class="message">Use <code>AppCompatResources.getDrawable()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 3432 </span>        periodLabel.setGravity(Gravity.CENTER);
-<span class="lineno"> 3433 </span>        period.addView(periodLabel, <span class="keyword">new</span> LinearLayout.LayoutParams(<span class="number">0</span>, dp(<span class="number">48</span>), <span class="number">1</span>));
-<span class="lineno"> 3434 </span>        MaterialButton next = outlinedButton();
-<span class="caretline"><span class="lineno"> 3435 </span>        next.setIcon(<span class="warning">getDrawable(R.drawable.ic_action_chevron_right)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 3436 </span>        next.setIconTint(buttonStateColors(PAGE_TEXT, <span class="string">"#9AAF9F"</span>));
-<span class="lineno"> 3437 </span>        next.setContentDescription(<span class="string">"Next week"</span>);
-<span class="lineno"> 3438 </span>        next.setEnabled(reviewWeekStart.isBefore(LocalDate.now().with(DayOfWeek.MONDAY)));
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:3425</span>: <span class="message">Use <code>AppCompatResources.getDrawable()</code></span><br /><pre class="errorlines">
+<span class="lineno"> 3422 </span>        pageHeader(<span class="string">"Review"</span>, <span class="string">"Look back at what you did, then choose what comes next."</span>);
+<span class="lineno"> 3423 </span>        LinearLayout period = row();
+<span class="lineno"> 3424 </span>        MaterialButton previous = outlinedButton();
+<span class="caretline"><span class="lineno"> 3425 </span>        previous.setIcon(<span class="warning">getDrawable(R.drawable.ic_action_chevron_left)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 3426 </span>        previous.setIconTint(buttonStateColors(PAGE_TEXT, <span class="string">"#9AAF9F"</span>));
+<span class="lineno"> 3427 </span>        previous.setContentDescription(<span class="string">"Previous week"</span>);
+<span class="lineno"> 3428 </span>        period.addView(previous, <span class="keyword">new</span> LinearLayout.LayoutParams(dp(<span class="number">48</span>), dp(<span class="number">48</span>)));
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:3564</span>: <span class="message">Use <code>AppCompatResources.getDrawable()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 3561 </span>        removeMonthlyRows();
-<span class="lineno"> 3562 </span>        LinearLayout monthControls = row();
-<span class="lineno"> 3563 </span>        MaterialButton previous = outlinedButton();
-<span class="caretline"><span class="lineno"> 3564 </span>        previous.setIcon(<span class="warning">getDrawable(R.drawable.ic_action_chevron_left)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 3565 </span>        previous.setIconTint(buttonStateColors(PAGE_TEXT, <span class="string">"#9AAF9F"</span>));
-<span class="lineno"> 3566 </span>        previous.setContentDescription(<span class="string">"Previous month"</span>);
-<span class="lineno"> 3567 </span>        monthControls.addView(previous, <span class="keyword">new</span> LinearLayout.LayoutParams(dp(<span class="number">48</span>), dp(<span class="number">48</span>)));
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:3437</span>: <span class="message">Use <code>AppCompatResources.getDrawable()</code></span><br /><pre class="errorlines">
+<span class="lineno"> 3434 </span>        periodLabel.setGravity(Gravity.CENTER);
+<span class="lineno"> 3435 </span>        period.addView(periodLabel, <span class="keyword">new</span> LinearLayout.LayoutParams(<span class="number">0</span>, dp(<span class="number">48</span>), <span class="number">1</span>));
+<span class="lineno"> 3436 </span>        MaterialButton next = outlinedButton();
+<span class="caretline"><span class="lineno"> 3437 </span>        next.setIcon(<span class="warning">getDrawable(R.drawable.ic_action_chevron_right)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 3438 </span>        next.setIconTint(buttonStateColors(PAGE_TEXT, <span class="string">"#9AAF9F"</span>));
+<span class="lineno"> 3439 </span>        next.setContentDescription(<span class="string">"Next week"</span>);
+<span class="lineno"> 3440 </span>        next.setEnabled(reviewWeekStart.isBefore(LocalDate.now().with(DayOfWeek.MONDAY)));
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:3578</span>: <span class="message">Use <code>AppCompatResources.getDrawable()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 3575 </span>        monthLabel.setGravity(Gravity.CENTER);
-<span class="lineno"> 3576 </span>        monthControls.addView(monthLabel, <span class="keyword">new</span> LinearLayout.LayoutParams(<span class="number">0</span>, dp(<span class="number">48</span>), <span class="number">1</span>));
-<span class="lineno"> 3577 </span>        MaterialButton next = outlinedButton();
-<span class="caretline"><span class="lineno"> 3578 </span>        next.setIcon(<span class="warning">getDrawable(R.drawable.ic_action_chevron_right)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 3579 </span>        next.setIconTint(buttonStateColors(PAGE_TEXT, <span class="string">"#9AAF9F"</span>));
-<span class="lineno"> 3580 </span>        next.setContentDescription(<span class="string">"Next month"</span>);
-<span class="lineno"> 3581 </span>        next.setEnabled(month.isBefore(YearMonth.now()));
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:3566</span>: <span class="message">Use <code>AppCompatResources.getDrawable()</code></span><br /><pre class="errorlines">
+<span class="lineno"> 3563 </span>        removeMonthlyRows();
+<span class="lineno"> 3564 </span>        LinearLayout monthControls = row();
+<span class="lineno"> 3565 </span>        MaterialButton previous = outlinedButton();
+<span class="caretline"><span class="lineno"> 3566 </span>        previous.setIcon(<span class="warning">getDrawable(R.drawable.ic_action_chevron_left)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 3567 </span>        previous.setIconTint(buttonStateColors(PAGE_TEXT, <span class="string">"#9AAF9F"</span>));
+<span class="lineno"> 3568 </span>        previous.setContentDescription(<span class="string">"Previous month"</span>);
+<span class="lineno"> 3569 </span>        monthControls.addView(previous, <span class="keyword">new</span> LinearLayout.LayoutParams(dp(<span class="number">48</span>), dp(<span class="number">48</span>)));
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:4176</span>: <span class="message">Use <code>AppCompatResources.getDrawable()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 4173 </span>    <span class="keyword">private</span> <span class="keyword">void</span> addPrimaryButton(LinearLayout parent, String label, Runnable action) {
-<span class="lineno"> 4174 </span>        MaterialButton button = primaryButton();
-<span class="lineno"> 4175 </span>        button.setText(label);
-<span class="caretline"><span class="lineno"> 4176 </span>        button.setIcon(<span class="warning">getDrawable(R.drawable.ic_action_add)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 4177 </span>        button.setIconTint(android.content.res.ColorStateList.valueOf(
-<span class="lineno"> 4178 </span>                Color.parseColor(BUTTON_DARK)));
-<span class="lineno"> 4179 </span>        button.setIconSize(dp(<span class="number">20</span>));
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:3580</span>: <span class="message">Use <code>AppCompatResources.getDrawable()</code></span><br /><pre class="errorlines">
+<span class="lineno"> 3577 </span>        monthLabel.setGravity(Gravity.CENTER);
+<span class="lineno"> 3578 </span>        monthControls.addView(monthLabel, <span class="keyword">new</span> LinearLayout.LayoutParams(<span class="number">0</span>, dp(<span class="number">48</span>), <span class="number">1</span>));
+<span class="lineno"> 3579 </span>        MaterialButton next = outlinedButton();
+<span class="caretline"><span class="lineno"> 3580 </span>        next.setIcon(<span class="warning">getDrawable(R.drawable.ic_action_chevron_right)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 3581 </span>        next.setIconTint(buttonStateColors(PAGE_TEXT, <span class="string">"#9AAF9F"</span>));
+<span class="lineno"> 3582 </span>        next.setContentDescription(<span class="string">"Next month"</span>);
+<span class="lineno"> 3583 </span>        next.setEnabled(month.isBefore(YearMonth.now()));
+</pre>
+
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:4178</span>: <span class="message">Use <code>AppCompatResources.getDrawable()</code></span><br /><pre class="errorlines">
+<span class="lineno"> 4175 </span>    <span class="keyword">private</span> <span class="keyword">void</span> addPrimaryButton(LinearLayout parent, String label, Runnable action) {
+<span class="lineno"> 4176 </span>        MaterialButton button = primaryButton();
+<span class="lineno"> 4177 </span>        button.setText(label);
+<span class="caretline"><span class="lineno"> 4178 </span>        button.setIcon(<span class="warning">getDrawable(R.drawable.ic_action_add)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 4179 </span>        button.setIconTint(android.content.res.ColorStateList.valueOf(
+<span class="lineno"> 4180 </span>                Color.parseColor(BUTTON_DARK)));
+<span class="lineno"> 4181 </span>        button.setIconSize(dp(<span class="number">20</span>));
 </pre>
 
 </div>
@@ -660,34 +760,34 @@ Dismiss</button>            </div>
               <div class="mdl-card__supporting-text">
 <div class="issue">
 <div class="warningslist">
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:4230</span>: <span class="message">Use <code>TextViewCompat.setCompoundDrawableTintList()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 4227 </span>            field.setHintTextColor(getColor(R.color.text_muted));
-<span class="lineno"> 4228 </span>            field.setBackgroundTintList(android.content.res.ColorStateList.valueOf(
-<span class="lineno"> 4229 </span>                    getColor(R.color.outline)));
-<span class="caretline"><span class="lineno"> 4230 </span>            <span class="warning">field.setCompoundDrawableTintList(android.content.res.ColorStateList.valueOf(</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 4231 </span>                    getColor(R.color.primary)));
-<span class="lineno"> 4232 </span>        } <span class="keyword">else</span> <span class="keyword">if</span> (view <span class="keyword">instanceof</span> MaterialButton) {
-<span class="lineno"> 4233 </span>            MaterialButton button = (MaterialButton) view;
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:4232</span>: <span class="message">Use <code>TextViewCompat.setCompoundDrawableTintList()</code></span><br /><pre class="errorlines">
+<span class="lineno"> 4229 </span>            field.setHintTextColor(getColor(R.color.text_muted));
+<span class="lineno"> 4230 </span>            field.setBackgroundTintList(android.content.res.ColorStateList.valueOf(
+<span class="lineno"> 4231 </span>                    getColor(R.color.outline)));
+<span class="caretline"><span class="lineno"> 4232 </span>            <span class="warning">field.setCompoundDrawableTintList(android.content.res.ColorStateList.valueOf(</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 4233 </span>                    getColor(R.color.primary)));
+<span class="lineno"> 4234 </span>        } <span class="keyword">else</span> <span class="keyword">if</span> (view <span class="keyword">instanceof</span> MaterialButton) {
+<span class="lineno"> 4235 </span>            MaterialButton button = (MaterialButton) view;
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:4388</span>: <span class="message">Use <code>TextViewCompat.setCompoundDrawableTintList()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 4385 </span>        field.setContentDescription(label + <span class="string">". Tap to choose a date."</span>);
-<span class="lineno"> 4386 </span>        field.setCompoundDrawablesWithIntrinsicBounds(<span class="number">0</span>, <span class="number">0</span>, R.drawable.ic_tab_today, <span class="number">0</span>);
-<span class="lineno"> 4387 </span>        field.setCompoundDrawablePadding(dp(<span class="number">8</span>));
-<span class="caretline"><span class="lineno"> 4388 </span>        <span class="warning">field.setCompoundDrawableTintList(android.content.res.ColorStateList.valueOf(</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 4389 </span>                Color.parseColor(GREEN)));
-<span class="lineno"> 4390 </span>        field.setOnClickListener(view -> {
-<span class="lineno"> 4391 </span>            LocalDate saved = safeDate(field.getText().toString().trim());
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:4390</span>: <span class="message">Use <code>TextViewCompat.setCompoundDrawableTintList()</code></span><br /><pre class="errorlines">
+<span class="lineno"> 4387 </span>        field.setContentDescription(label + <span class="string">". Tap to choose a date."</span>);
+<span class="lineno"> 4388 </span>        field.setCompoundDrawablesWithIntrinsicBounds(<span class="number">0</span>, <span class="number">0</span>, R.drawable.ic_tab_today, <span class="number">0</span>);
+<span class="lineno"> 4389 </span>        field.setCompoundDrawablePadding(dp(<span class="number">8</span>));
+<span class="caretline"><span class="lineno"> 4390 </span>        <span class="warning">field.setCompoundDrawableTintList(android.content.res.ColorStateList.valueOf(</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 4391 </span>                Color.parseColor(GREEN)));
+<span class="lineno"> 4392 </span>        field.setOnClickListener(view -> {
+<span class="lineno"> 4393 </span>            LocalDate saved = safeDate(field.getText().toString().trim());
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:4413</span>: <span class="message">Use <code>TextViewCompat.setCompoundDrawableTintList()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 4410 </span>       field.setContentDescription(label + <span class="string">". Tap to choose a time."</span>);
-<span class="lineno"> 4411 </span>       field.setCompoundDrawablesWithIntrinsicBounds(<span class="number">0</span>, <span class="number">0</span>, R.drawable.ic_tab_sessions, <span class="number">0</span>);
-<span class="lineno"> 4412 </span>       field.setCompoundDrawablePadding(dp(<span class="number">8</span>));
-<span class="caretline"><span class="lineno"> 4413 </span>       <span class="warning">field.setCompoundDrawableTintList(android.content.res.ColorStateList.valueOf(</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 4414 </span>               Color.parseColor(GREEN)));
-<span class="lineno"> 4415 </span>       field.setOnClickListener(view -> {
-<span class="lineno"> 4416 </span>           LocalTime saved;
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:4415</span>: <span class="message">Use <code>TextViewCompat.setCompoundDrawableTintList()</code></span><br /><pre class="errorlines">
+<span class="lineno"> 4412 </span>       field.setContentDescription(label + <span class="string">". Tap to choose a time."</span>);
+<span class="lineno"> 4413 </span>       field.setCompoundDrawablesWithIntrinsicBounds(<span class="number">0</span>, <span class="number">0</span>, R.drawable.ic_tab_sessions, <span class="number">0</span>);
+<span class="lineno"> 4414 </span>       field.setCompoundDrawablePadding(dp(<span class="number">8</span>));
+<span class="caretline"><span class="lineno"> 4415 </span>       <span class="warning">field.setCompoundDrawableTintList(android.content.res.ColorStateList.valueOf(</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 4416 </span>               Color.parseColor(GREEN)));
+<span class="lineno"> 4417 </span>       field.setOnClickListener(view -> {
+<span class="lineno"> 4418 </span>           LocalTime saved;
 </pre>
 
 </div>
@@ -832,14 +932,14 @@ Dismiss</button>            </div>
               <div class="mdl-card__supporting-text">
 <div class="issue">
 <div class="warningslist">
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:3992</span>: <span class="message">Avoid object allocations during draw/layout operations (preallocate and reuse instead)</span><br /><pre class="errorlines">
-<span class="lineno"> 3989 </span>            }
-<span class="lineno"> 3990 </span>
-<span class="lineno"> 3991 </span>            <span class="keyword">if</span> (habitCount > <span class="number">0</span>) {
-<span class="caretline"><span class="lineno"> 3992 </span>                Path completionLine = <span class="warning"><span class="keyword">new</span> Path()</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 3993 </span>                <span class="keyword">boolean</span> started = <span class="keyword">false</span>;
-<span class="lineno"> 3994 </span>                <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; daysConsidered; i++) {
-<span class="lineno"> 3995 </span>                    <span class="keyword">float</span> rate = (<span class="keyword">float</span>) completedHabits[i] / habitCount;
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:3994</span>: <span class="message">Avoid object allocations during draw/layout operations (preallocate and reuse instead)</span><br /><pre class="errorlines">
+<span class="lineno"> 3991 </span>            }
+<span class="lineno"> 3992 </span>
+<span class="lineno"> 3993 </span>            <span class="keyword">if</span> (habitCount > <span class="number">0</span>) {
+<span class="caretline"><span class="lineno"> 3994 </span>                Path completionLine = <span class="warning"><span class="keyword">new</span> Path()</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 3995 </span>                <span class="keyword">boolean</span> started = <span class="keyword">false</span>;
+<span class="lineno"> 3996 </span>                <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; daysConsidered; i++) {
+<span class="lineno"> 3997 </span>                    <span class="keyword">float</span> rate = (<span class="keyword">float</span>) completedHabits[i] / habitCount;
 </pre>
 
 </div>
@@ -1320,362 +1420,362 @@ Dismiss</button>            </div>
 <span class="caretline"><span class="lineno">  473 </span>       headerLocation.setText(<span class="warning"><span class="string">"Finding your area…"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 <span class="lineno">  474 </span>       LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 <span class="lineno">  475 </span>       <span class="keyword">if</span> (manager == <span class="keyword">null</span> || !manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-<span class="lineno">  476 </span>           headerLocation.setText(<span class="string">"Location services are off · tap to retry"</span>);
+<span class="lineno">  476 </span>           headerLocation.setText(<span class="string">"Location off · tap to retry"</span>);
 </pre>
 
 <span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:476</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
 <span class="lineno">  473 </span>   headerLocation.setText(<span class="string">"Finding your area…"</span>);
 <span class="lineno">  474 </span>   LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 <span class="lineno">  475 </span>   <span class="keyword">if</span> (manager == <span class="keyword">null</span> || !manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-<span class="caretline"><span class="lineno">  476 </span>       headerLocation.setText(<span class="warning"><span class="string">"Location services are off · tap to retry"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="caretline"><span class="lineno">  476 </span>       headerLocation.setText(<span class="warning"><span class="string">"Location off · tap to retry"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 <span class="lineno">  477 </span>       <span class="keyword">return</span>;
 <span class="lineno">  478 </span>   }
 <span class="lineno">  479 </span>   <span class="keyword">try</span> {
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:488</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
-<span class="lineno">  485 </span>          showLocationName(location);
-<span class="lineno">  486 </span>      }
-<span class="lineno">  487 </span>      <span class="annotation">@Override</span> <span class="keyword">public</span> <span class="keyword">void</span> onProviderDisabled(String provider) {
-<span class="caretline"><span class="lineno">  488 </span>          <span class="keyword">if</span> (headerLocation != <span class="keyword">null</span>) headerLocation.setText(<span class="warning"><span class="string">"Location unavailable · tap to retry"</span></span>);</span>
-<span class="lineno">  489 </span>      }
-<span class="lineno">  490 </span>  };
-<span class="lineno">  491 </span>  manager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER,
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:489</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
+<span class="lineno">  486 </span>                }
+<span class="lineno">  487 </span>                <span class="annotation">@Override</span> <span class="keyword">public</span> <span class="keyword">void</span> onProviderDisabled(String provider) {
+<span class="lineno">  488 </span>                    <span class="keyword">if</span> (headerLocation != <span class="keyword">null</span>) {
+<span class="caretline"><span class="lineno">  489 </span>                        headerLocation.setText(<span class="warning"><span class="string">"Location off · tap to retry"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  490 </span>                    }
+<span class="lineno">  491 </span>                }
+<span class="lineno">  492 </span>            };
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:495</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
-<span class="lineno">  492 </span>          locationListener, Looper.getMainLooper());
-<span class="lineno">  493 </span>  handler.postDelayed(() -> {
-<span class="lineno">  494 </span>      <span class="keyword">if</span> (headerLocation != <span class="keyword">null</span> &amp;&amp; <span class="string">"Finding your area…"</span>.contentEquals(headerLocation.getText())) {
-<span class="caretline"><span class="lineno">  495 </span>          headerLocation.setText(<span class="warning"><span class="string">"Area unavailable · tap to retry"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno">  496 </span>          removeLocationUpdates();
-<span class="lineno">  497 </span>      }
-<span class="lineno">  498 </span>  }, <span class="number">12000</span>);
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:497</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
+<span class="lineno">  494 </span>          locationListener, Looper.getMainLooper());
+<span class="lineno">  495 </span>  handler.postDelayed(() -> {
+<span class="lineno">  496 </span>      <span class="keyword">if</span> (headerLocation != <span class="keyword">null</span> &amp;&amp; <span class="string">"Finding your area…"</span>.contentEquals(headerLocation.getText())) {
+<span class="caretline"><span class="lineno">  497 </span>          headerLocation.setText(<span class="warning"><span class="string">"Area unavailable · retry"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  498 </span>          removeLocationUpdates();
+<span class="lineno">  499 </span>      }
+<span class="lineno">  500 </span>  }, <span class="number">12000</span>);
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:500</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
-<span class="lineno">  497 </span>                }
-<span class="lineno">  498 </span>            }, <span class="number">12000</span>);
-<span class="lineno">  499 </span>        } <span class="keyword">catch</span> (SecurityException exception) {
-<span class="caretline"><span class="lineno">  500 </span>            headerLocation.setText(<span class="warning"><span class="string">"Location permission needed · tap to allow"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno">  501 </span>        }
-<span class="lineno">  502 </span>    }
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:502</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
+<span class="lineno">  499 </span>                }
+<span class="lineno">  500 </span>            }, <span class="number">12000</span>);
+<span class="lineno">  501 </span>        } <span class="keyword">catch</span> (SecurityException exception) {
+<span class="caretline"><span class="lineno">  502 </span>            headerLocation.setText(<span class="warning"><span class="string">"Permission needed · tap to allow"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  503 </span>        }
+<span class="lineno">  504 </span>    }
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:529</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
-<span class="lineno">  526 </span>            handler.post(() -> {
-<span class="lineno">  527 </span>                <span class="keyword">if</span> (headerLocation == <span class="keyword">null</span>) <span class="keyword">return</span>;
-<span class="lineno">  528 </span>                <span class="keyword">if</span> (result != <span class="keyword">null</span>) headerLocation.setText(result);
-<span class="caretline"><span class="lineno">  529 </span>                <span class="keyword">else</span> headerLocation.setText(<span class="warning"><span class="string">"Location active · area name unavailable"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno">  530 </span>            });
-<span class="lineno">  531 </span>        }, <span class="string">"study-tracker-geocoder"</span>);
-<span class="lineno">  532 </span>        geocoderThread.start();
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:531</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
+<span class="lineno">  528 </span>            handler.post(() -> {
+<span class="lineno">  529 </span>                <span class="keyword">if</span> (headerLocation == <span class="keyword">null</span>) <span class="keyword">return</span>;
+<span class="lineno">  530 </span>                <span class="keyword">if</span> (result != <span class="keyword">null</span>) headerLocation.setText(result);
+<span class="caretline"><span class="lineno">  531 </span>                <span class="keyword">else</span> headerLocation.setText(<span class="warning"><span class="string">"Location active · name unavailable"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  532 </span>            });
+<span class="lineno">  533 </span>        }, <span class="string">"study-tracker-geocoder"</span>);
+<span class="lineno">  534 </span>        geocoderThread.start();
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:735</span>: <span class="message">Do not concatenate text displayed with <code>setText</code>. Use resource string with placeholders.</span><br /><pre class="errorlines">
-<span class="lineno">  732 </span>                LinearLayout body = addCardBody(content, Color.parseColor(
-<span class="lineno">  733 </span>                        habit.core ? AMBER : GREEN));
-<span class="lineno">  734 </span>                CheckBox check = <span class="keyword">new</span> CheckBox(<span class="keyword">this</span>);
-<span class="caretline"><span class="lineno">  735 </span>                check.setText(<span class="warning">habit.name + (habit.core ? <span class="string">"  ·  Core"</span> : <span class="string">""</span>)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno">  736 </span>                styleCheckBox(check);
-<span class="lineno">  737 </span>                check.setChecked(checks != <span class="keyword">null</span>
-<span class="lineno">  738 </span>                        &amp;&amp; Boolean.TRUE.equals(checks.get(habit.id)));
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:737</span>: <span class="message">Do not concatenate text displayed with <code>setText</code>. Use resource string with placeholders.</span><br /><pre class="errorlines">
+<span class="lineno">  734 </span>                LinearLayout body = addCardBody(content, Color.parseColor(
+<span class="lineno">  735 </span>                        habit.core ? AMBER : GREEN));
+<span class="lineno">  736 </span>                CheckBox check = <span class="keyword">new</span> CheckBox(<span class="keyword">this</span>);
+<span class="caretline"><span class="lineno">  737 </span>                check.setText(<span class="warning">habit.name + (habit.core ? <span class="string">"  ·  Core"</span> : <span class="string">""</span>)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  738 </span>                styleCheckBox(check);
+<span class="lineno">  739 </span>                check.setChecked(checks != <span class="keyword">null</span>
+<span class="lineno">  740 </span>                        &amp;&amp; Boolean.TRUE.equals(checks.get(habit.id)));
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1549</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
-<span class="lineno"> 1546 </span>        EditText name = input(<span class="string">"Habit name"</span>, InputType.TYPE_CLASS_TEXT);
-<span class="lineno"> 1547 </span>        <span class="keyword">if</span> (habit != <span class="keyword">null</span>) name.setText(habit.name);
-<span class="lineno"> 1548 </span>        CheckBox core = <span class="keyword">new</span> CheckBox(<span class="keyword">this</span>);
-<span class="caretline"><span class="lineno"> 1549 </span>        core.setText(<span class="warning"><span class="string">"Core habit (track streak)"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 1550 </span>        styleCheckBox(core);
-<span class="lineno"> 1551 </span>        <span class="keyword">if</span> (habit != <span class="keyword">null</span>) core.setChecked(habit.core);
-<span class="lineno"> 1552 </span>        form.addView(name);
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1551</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
+<span class="lineno"> 1548 </span>        EditText name = input(<span class="string">"Habit name"</span>, InputType.TYPE_CLASS_TEXT);
+<span class="lineno"> 1549 </span>        <span class="keyword">if</span> (habit != <span class="keyword">null</span>) name.setText(habit.name);
+<span class="lineno"> 1550 </span>        CheckBox core = <span class="keyword">new</span> CheckBox(<span class="keyword">this</span>);
+<span class="caretline"><span class="lineno"> 1551 </span>        core.setText(<span class="warning"><span class="string">"Core habit (track streak)"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 1552 </span>        styleCheckBox(core);
+<span class="lineno"> 1553 </span>        <span class="keyword">if</span> (habit != <span class="keyword">null</span>) core.setChecked(habit.core);
+<span class="lineno"> 1554 </span>        form.addView(name);
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1729</span>: <span class="message">Number formatting does not take into account locale settings. Consider using <code>String.format</code> instead.</span><br /><pre class="errorlines">
-<span class="lineno"> 1726 </span>        renderTimerAlarmControls();
-<span class="lineno"> 1727 </span>        LinearLayout timerCard = addCardBody(content, getColor(R.color.timer_accent));
-<span class="lineno"> 1728 </span>        timerMinutes = input(<span class="string">"Minutes"</span>, InputType.TYPE_CLASS_NUMBER);
-<span class="caretline"><span class="lineno"> 1729 </span>        timerMinutes.setText(<span class="warning">Integer.toString(</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 1730 </span>                timerDurationSeconds > <span class="number">0</span> ? Math.max(<span class="number">1</span>, timerDurationSeconds / <span class="number">60</span>) : <span class="number">25</span>));
-<span class="lineno"> 1731 </span>        durationIntro = text(stopwatchMode ? <span class="string">"Count your focus time"</span>
-<span class="lineno"> 1732 </span>                : <span class="string">"Choose your focus time"</span>, <span class="number">16</span>, <span class="keyword">true</span>);
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1731</span>: <span class="message">Number formatting does not take into account locale settings. Consider using <code>String.format</code> instead.</span><br /><pre class="errorlines">
+<span class="lineno"> 1728 </span>        renderTimerAlarmControls();
+<span class="lineno"> 1729 </span>        LinearLayout timerCard = addCardBody(content, getColor(R.color.timer_accent));
+<span class="lineno"> 1730 </span>        timerMinutes = input(<span class="string">"Minutes"</span>, InputType.TYPE_CLASS_NUMBER);
+<span class="caretline"><span class="lineno"> 1731 </span>        timerMinutes.setText(<span class="warning">Integer.toString(</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 1732 </span>                timerDurationSeconds > <span class="number">0</span> ? Math.max(<span class="number">1</span>, timerDurationSeconds / <span class="number">60</span>) : <span class="number">25</span>));
+<span class="lineno"> 1733 </span>        durationIntro = text(stopwatchMode ? <span class="string">"Count your focus time"</span>
+<span class="lineno"> 1734 </span>                : <span class="string">"Choose your focus time"</span>, <span class="number">16</span>, <span class="keyword">true</span>);
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1741</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
-<span class="lineno"> 1738 </span>        timerPresets = row();
-<span class="lineno"> 1739 </span>        MaterialButton preset25 = miniButton(<span class="string">"25 min"</span>);
-<span class="lineno"> 1740 </span>        preset25.setContentDescription(<span class="string">"Set focus timer to 25 minutes"</span>);
-<span class="caretline"><span class="lineno"> 1741 </span>        preset25.setOnClickListener(view -> timerMinutes.setText(<span class="warning"><span class="string">"25"</span></span>));&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 1742 </span>        timerPresets.addView(preset25, <span class="keyword">new</span> LinearLayout.LayoutParams(
-<span class="lineno"> 1743 </span>                <span class="number">0</span>, dp(<span class="number">48</span>), <span class="number">1</span>));
-<span class="lineno"> 1744 </span>        MaterialButton preset50 = miniButton(<span class="string">"50 min"</span>);
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1743</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
+<span class="lineno"> 1740 </span>        timerPresets = row();
+<span class="lineno"> 1741 </span>        MaterialButton preset25 = miniButton(<span class="string">"25 min"</span>);
+<span class="lineno"> 1742 </span>        preset25.setContentDescription(<span class="string">"Set focus timer to 25 minutes"</span>);
+<span class="caretline"><span class="lineno"> 1743 </span>        preset25.setOnClickListener(view -> timerMinutes.setText(<span class="warning"><span class="string">"25"</span></span>));&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 1744 </span>        timerPresets.addView(preset25, <span class="keyword">new</span> LinearLayout.LayoutParams(
+<span class="lineno"> 1745 </span>                <span class="number">0</span>, dp(<span class="number">48</span>), <span class="number">1</span>));
+<span class="lineno"> 1746 </span>        MaterialButton preset50 = miniButton(<span class="string">"50 min"</span>);
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1746</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
-<span class="lineno"> 1743 </span>                <span class="number">0</span>, dp(<span class="number">48</span>), <span class="number">1</span>));
-<span class="lineno"> 1744 </span>        MaterialButton preset50 = miniButton(<span class="string">"50 min"</span>);
-<span class="lineno"> 1745 </span>        preset50.setContentDescription(<span class="string">"Set focus timer to 50 minutes"</span>);
-<span class="caretline"><span class="lineno"> 1746 </span>        preset50.setOnClickListener(view -> timerMinutes.setText(<span class="warning"><span class="string">"50"</span></span>));&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 1747 </span>        LinearLayout.LayoutParams preset50Params = <span class="keyword">new</span> LinearLayout.LayoutParams(
-<span class="lineno"> 1748 </span>                <span class="number">0</span>, dp(<span class="number">48</span>), <span class="number">1</span>);
-<span class="lineno"> 1749 </span>        preset50Params.setMarginStart(dp(<span class="number">8</span>));
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1748</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
+<span class="lineno"> 1745 </span>                <span class="number">0</span>, dp(<span class="number">48</span>), <span class="number">1</span>));
+<span class="lineno"> 1746 </span>        MaterialButton preset50 = miniButton(<span class="string">"50 min"</span>);
+<span class="lineno"> 1747 </span>        preset50.setContentDescription(<span class="string">"Set focus timer to 50 minutes"</span>);
+<span class="caretline"><span class="lineno"> 1748 </span>        preset50.setOnClickListener(view -> timerMinutes.setText(<span class="warning"><span class="string">"50"</span></span>));&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 1749 </span>        LinearLayout.LayoutParams preset50Params = <span class="keyword">new</span> LinearLayout.LayoutParams(
+<span class="lineno"> 1750 </span>                <span class="number">0</span>, dp(<span class="number">48</span>), <span class="number">1</span>);
+<span class="lineno"> 1751 </span>        preset50Params.setMarginStart(dp(<span class="number">8</span>));
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1757</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
-<span class="lineno"> 1754 </span>        MaterialButton countdownMode = outlinedButton();
-<span class="lineno"> 1755 </span>        styleModeButton(countdownMode, !stopwatchMode);
-<span class="lineno"> 1756 </span>        countdownMode.setEnabled(!timerRunning);
-<span class="caretline"><span class="lineno"> 1757 </span>        countdownMode.setText(<span class="warning"><span class="string">"Countdown"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 1758 </span>        countdownMode.setOnClickListener(view -> setStopwatchMode(<span class="keyword">false</span>));
-<span class="lineno"> 1759 </span>        timerModes.addView(countdownMode, <span class="keyword">new</span> LinearLayout.LayoutParams(
-<span class="lineno"> 1760 </span>                <span class="number">0</span>, LinearLayout.LayoutParams.WRAP_CONTENT, <span class="number">1</span>));
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1759</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
+<span class="lineno"> 1756 </span>        MaterialButton countdownMode = outlinedButton();
+<span class="lineno"> 1757 </span>        styleModeButton(countdownMode, !stopwatchMode);
+<span class="lineno"> 1758 </span>        countdownMode.setEnabled(!timerRunning);
+<span class="caretline"><span class="lineno"> 1759 </span>        countdownMode.setText(<span class="warning"><span class="string">"Countdown"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 1760 </span>        countdownMode.setOnClickListener(view -> setStopwatchMode(<span class="keyword">false</span>));
+<span class="lineno"> 1761 </span>        timerModes.addView(countdownMode, <span class="keyword">new</span> LinearLayout.LayoutParams(
+<span class="lineno"> 1762 </span>                <span class="number">0</span>, LinearLayout.LayoutParams.WRAP_CONTENT, <span class="number">1</span>));
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1764</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
-<span class="lineno"> 1761 </span>        MaterialButton stopwatch = outlinedButton();
-<span class="lineno"> 1762 </span>        styleModeButton(stopwatch, stopwatchMode);
-<span class="lineno"> 1763 </span>        stopwatch.setEnabled(!timerRunning);
-<span class="caretline"><span class="lineno"> 1764 </span>        stopwatch.setText(<span class="warning"><span class="string">"Stopwatch"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 1765 </span>        stopwatch.setOnClickListener(view -> setStopwatchMode(<span class="keyword">true</span>));
-<span class="lineno"> 1766 </span>        LinearLayout.LayoutParams stopwatchParams = <span class="keyword">new</span> LinearLayout.LayoutParams(
-<span class="lineno"> 1767 </span>                <span class="number">0</span>, LinearLayout.LayoutParams.WRAP_CONTENT, <span class="number">1</span>);
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1766</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
+<span class="lineno"> 1763 </span>        MaterialButton stopwatch = outlinedButton();
+<span class="lineno"> 1764 </span>        styleModeButton(stopwatch, stopwatchMode);
+<span class="lineno"> 1765 </span>        stopwatch.setEnabled(!timerRunning);
+<span class="caretline"><span class="lineno"> 1766 </span>        stopwatch.setText(<span class="warning"><span class="string">"Stopwatch"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 1767 </span>        stopwatch.setOnClickListener(view -> setStopwatchMode(<span class="keyword">true</span>));
+<span class="lineno"> 1768 </span>        LinearLayout.LayoutParams stopwatchParams = <span class="keyword">new</span> LinearLayout.LayoutParams(
+<span class="lineno"> 1769 </span>                <span class="number">0</span>, LinearLayout.LayoutParams.WRAP_CONTENT, <span class="number">1</span>);
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1779</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
-<span class="lineno"> 1776 </span>        TextView topicLabel = fieldLabel(timerRunning ? <span class="string">"SESSION TOPIC"</span> : <span class="string">"STUDY TOPIC"</span>);
-<span class="lineno"> 1777 </span>        timerCard.addView(topicLabel);
-<span class="lineno"> 1778 </span>        timerInterrupted = <span class="keyword">new</span> CheckBox(<span class="keyword">this</span>);
-<span class="caretline"><span class="lineno"> 1779 </span>        timerInterrupted.setText(<span class="warning"><span class="string">"Interrupted"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 1780 </span>        styleCheckBox(timerInterrupted);
-<span class="lineno"> 1781 </span>        timerInterrupted.setChecked(timerInterruptedValue);
-<span class="lineno"> 1782 </span>        timerInterrupted.setEnabled(!timerRunning);
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1781</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
+<span class="lineno"> 1778 </span>        TextView topicLabel = fieldLabel(timerRunning ? <span class="string">"SESSION TOPIC"</span> : <span class="string">"STUDY TOPIC"</span>);
+<span class="lineno"> 1779 </span>        timerCard.addView(topicLabel);
+<span class="lineno"> 1780 </span>        timerInterrupted = <span class="keyword">new</span> CheckBox(<span class="keyword">this</span>);
+<span class="caretline"><span class="lineno"> 1781 </span>        timerInterrupted.setText(<span class="warning"><span class="string">"Interrupted"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 1782 </span>        styleCheckBox(timerInterrupted);
+<span class="lineno"> 1783 </span>        timerInterrupted.setChecked(timerInterruptedValue);
+<span class="lineno"> 1784 </span>        timerInterrupted.setEnabled(!timerRunning);
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1793</span>: <span class="message">Do not concatenate text displayed with <code>setText</code>. Use resource string with placeholders.</span><br /><pre class="errorlines">
-<span class="lineno"> 1790 </span>        Uri displayedTimerSound = timerSound == <span class="keyword">null</span>
-<span class="lineno"> 1791 </span>                ? RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM) : timerSound;
-<span class="lineno"> 1792 </span>        MaterialButton timerSoundButton = outlinedButton();
-<span class="caretline"><span class="lineno"> 1793 </span>        timerSoundButton.setText(<span class="warning"><span class="string">"Alarm sound: "</span> + getRingtoneTitle(displayedTimerSound)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 1794 </span>        timerSoundButton.setOnClickListener(view -> chooseTimerSound(timerSound));
-<span class="lineno"> 1795 </span>        timerCard.addView(timerSoundButton);
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1795</span>: <span class="message">Do not concatenate text displayed with <code>setText</code>. Use resource string with placeholders.</span><br /><pre class="errorlines">
+<span class="lineno"> 1792 </span>        Uri displayedTimerSound = timerSound == <span class="keyword">null</span>
+<span class="lineno"> 1793 </span>                ? RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM) : timerSound;
+<span class="lineno"> 1794 </span>        MaterialButton timerSoundButton = outlinedButton();
+<span class="caretline"><span class="lineno"> 1795 </span>        timerSoundButton.setText(<span class="warning"><span class="string">"Alarm sound: "</span> + getRingtoneTitle(displayedTimerSound)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 1796 </span>        timerSoundButton.setOnClickListener(view -> chooseTimerSound(timerSound));
+<span class="lineno"> 1797 </span>        timerCard.addView(timerSoundButton);
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1793</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
-<span class="lineno"> 1790 </span>        Uri displayedTimerSound = timerSound == <span class="keyword">null</span>
-<span class="lineno"> 1791 </span>                ? RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM) : timerSound;
-<span class="lineno"> 1792 </span>        MaterialButton timerSoundButton = outlinedButton();
-<span class="caretline"><span class="lineno"> 1793 </span>        timerSoundButton.setText(<span class="warning"><span class="string">"Alarm sound: "</span></span> + getRingtoneTitle(displayedTimerSound));&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 1794 </span>        timerSoundButton.setOnClickListener(view -> chooseTimerSound(timerSound));
-<span class="lineno"> 1795 </span>        timerCard.addView(timerSoundButton);
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1795</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
+<span class="lineno"> 1792 </span>        Uri displayedTimerSound = timerSound == <span class="keyword">null</span>
+<span class="lineno"> 1793 </span>                ? RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM) : timerSound;
+<span class="lineno"> 1794 </span>        MaterialButton timerSoundButton = outlinedButton();
+<span class="caretline"><span class="lineno"> 1795 </span>        timerSoundButton.setText(<span class="warning"><span class="string">"Alarm sound: "</span></span> + getRingtoneTitle(displayedTimerSound));&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 1796 </span>        timerSoundButton.setOnClickListener(view -> chooseTimerSound(timerSound));
+<span class="lineno"> 1797 </span>        timerCard.addView(timerSoundButton);
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1871</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
-<span class="lineno"> 1868 </span>        } <span class="keyword">else</span> {
-<span class="lineno"> 1869 </span>            <span class="keyword">boolean</span> ringing = isTimerAlarmRinging();
-<span class="lineno"> 1870 </span>            <span class="keyword">if</span> (ringing) {
-<span class="caretline"><span class="lineno"> 1871 </span>                timerStatus.setText(<span class="warning"><span class="string">"Time's up · dismiss or snooze below"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 1872 </span>                timerCountdown.setText(<span class="string">"Done"</span>);
-<span class="lineno"> 1873 </span>            } <span class="keyword">else</span> {
-<span class="lineno"> 1874 </span>                timerProgress.setProgress(<span class="number">0</span>);
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1873</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
+<span class="lineno"> 1870 </span>        } <span class="keyword">else</span> {
+<span class="lineno"> 1871 </span>            <span class="keyword">boolean</span> ringing = isTimerAlarmRinging();
+<span class="lineno"> 1872 </span>            <span class="keyword">if</span> (ringing) {
+<span class="caretline"><span class="lineno"> 1873 </span>                timerStatus.setText(<span class="warning"><span class="string">"Time's up · dismiss or snooze below"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 1874 </span>                timerCountdown.setText(<span class="string">"Done"</span>);
+<span class="lineno"> 1875 </span>            } <span class="keyword">else</span> {
+<span class="lineno"> 1876 </span>                timerProgress.setProgress(<span class="number">0</span>);
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1872</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
-<span class="lineno"> 1869 </span>            <span class="keyword">boolean</span> ringing = isTimerAlarmRinging();
-<span class="lineno"> 1870 </span>            <span class="keyword">if</span> (ringing) {
-<span class="lineno"> 1871 </span>                timerStatus.setText(<span class="string">"Time's up · dismiss or snooze below"</span>);
-<span class="caretline"><span class="lineno"> 1872 </span>                timerCountdown.setText(<span class="warning"><span class="string">"Done"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 1873 </span>            } <span class="keyword">else</span> {
-<span class="lineno"> 1874 </span>                timerProgress.setProgress(<span class="number">0</span>);
-<span class="lineno"> 1875 </span>            }
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1874</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
+<span class="lineno"> 1871 </span>            <span class="keyword">boolean</span> ringing = isTimerAlarmRinging();
+<span class="lineno"> 1872 </span>            <span class="keyword">if</span> (ringing) {
+<span class="lineno"> 1873 </span>                timerStatus.setText(<span class="string">"Time's up · dismiss or snooze below"</span>);
+<span class="caretline"><span class="lineno"> 1874 </span>                timerCountdown.setText(<span class="warning"><span class="string">"Done"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 1875 </span>            } <span class="keyword">else</span> {
+<span class="lineno"> 1876 </span>                timerProgress.setProgress(<span class="number">0</span>);
+<span class="lineno"> 1877 </span>            }
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1940</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
-<span class="lineno"> 1937 </span>        <span class="keyword">if</span> (timerRunning &amp;&amp; timerStopwatch) {
-<span class="lineno"> 1938 </span>            MaterialButton discard = outlinedButton();
-<span class="lineno"> 1939 </span>            stylePageOutlinedButton(discard);
-<span class="caretline"><span class="lineno"> 1940 </span>            discard.setText(<span class="warning"><span class="string">"Discard stopwatch"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 1941 </span>            discard.setOnClickListener(view -> confirmDiscardStopwatch());
-<span class="lineno"> 1942 </span>            timerCard.addView(discard);
-<span class="lineno"> 1943 </span>        }
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1942</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
+<span class="lineno"> 1939 </span>        <span class="keyword">if</span> (timerRunning &amp;&amp; timerStopwatch) {
+<span class="lineno"> 1940 </span>            MaterialButton discard = outlinedButton();
+<span class="lineno"> 1941 </span>            stylePageOutlinedButton(discard);
+<span class="caretline"><span class="lineno"> 1942 </span>            discard.setText(<span class="warning"><span class="string">"Discard stopwatch"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 1943 </span>            discard.setOnClickListener(view -> confirmDiscardStopwatch());
+<span class="lineno"> 1944 </span>            timerCard.addView(discard);
+<span class="lineno"> 1945 </span>        }
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1983</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
-<span class="lineno"> 1980 </span>       MaterialAutoCompleteTextView topic = topicDropdown(<span class="string">"Choose a study topic"</span>, <span class="string">""</span>, <span class="string">""</span>);
-<span class="lineno"> 1981 </span>       addFieldLabel(manualForm, <span class="string">"STUDY TOPIC"</span>);
-<span class="lineno"> 1982 </span>       CheckBox interrupted = <span class="keyword">new</span> CheckBox(<span class="keyword">this</span>);
-<span class="caretline"><span class="lineno"> 1983 </span>       interrupted.setText(<span class="warning"><span class="string">"Interrupted"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 1984 </span>       styleCheckBox(interrupted);
-<span class="lineno"> 1985 </span>       manualForm.addView(topic);
-<span class="lineno"> 1986 </span>       manualForm.addView(interrupted);
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:1985</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
+<span class="lineno"> 1982 </span>       MaterialAutoCompleteTextView topic = topicDropdown(<span class="string">"Choose a study topic"</span>, <span class="string">""</span>, <span class="string">""</span>);
+<span class="lineno"> 1983 </span>       addFieldLabel(manualForm, <span class="string">"STUDY TOPIC"</span>);
+<span class="lineno"> 1984 </span>       CheckBox interrupted = <span class="keyword">new</span> CheckBox(<span class="keyword">this</span>);
+<span class="caretline"><span class="lineno"> 1985 </span>       interrupted.setText(<span class="warning"><span class="string">"Interrupted"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 1986 </span>       styleCheckBox(interrupted);
+<span class="lineno"> 1987 </span>       manualForm.addView(topic);
+<span class="lineno"> 1988 </span>       manualForm.addView(interrupted);
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:2076</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
-<span class="lineno"> 2073 </span>        filters.addView(dateRange);
-<span class="lineno"> 2074 </span>
-<span class="lineno"> 2075 </span>        CheckBox interruptedOnly = <span class="keyword">new</span> CheckBox(<span class="keyword">this</span>);
-<span class="caretline"><span class="lineno"> 2076 </span>        interruptedOnly.setText(<span class="warning"><span class="string">"Interrupted sessions only"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 2077 </span>        styleCheckBox(interruptedOnly);
-<span class="lineno"> 2078 </span>        filters.addView(interruptedOnly);
-<span class="lineno"> 2079 </span>        LinearLayout quickFilters = row();
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:2078</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
+<span class="lineno"> 2075 </span>        filters.addView(dateRange);
+<span class="lineno"> 2076 </span>
+<span class="lineno"> 2077 </span>        CheckBox interruptedOnly = <span class="keyword">new</span> CheckBox(<span class="keyword">this</span>);
+<span class="caretline"><span class="lineno"> 2078 </span>        interruptedOnly.setText(<span class="warning"><span class="string">"Interrupted sessions only"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 2079 </span>        styleCheckBox(interruptedOnly);
+<span class="lineno"> 2080 </span>        filters.addView(interruptedOnly);
+<span class="lineno"> 2081 </span>        LinearLayout quickFilters = row();
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:2208</span>: <span class="message">Do not concatenate text displayed with <code>setText</code>. Use resource string with placeholders.</span><br /><pre class="errorlines">
-<span class="lineno"> 2205 </span>        <span class="keyword">if</span> (shown &lt; matches.size()) {
-<span class="lineno"> 2206 </span>            MaterialButton showAll = outlinedButton();
-<span class="lineno"> 2207 </span>            stylePageOutlinedButton(showAll);
-<span class="caretline"><span class="lineno"> 2208 </span>            showAll.setText(<span class="warning"><span class="string">"Show all "</span> + matches.size() + <span class="string">" sessions"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 2209 </span>            showAll.setOnClickListener(view -> {
-<span class="lineno"> 2210 </span>                sessionHistoryLimit = matches.size();
-<span class="lineno"> 2211 </span>                displaySessionHistory(query, from, to, interruptedOnly);
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:2210</span>: <span class="message">Do not concatenate text displayed with <code>setText</code>. Use resource string with placeholders.</span><br /><pre class="errorlines">
+<span class="lineno"> 2207 </span>        <span class="keyword">if</span> (shown &lt; matches.size()) {
+<span class="lineno"> 2208 </span>            MaterialButton showAll = outlinedButton();
+<span class="lineno"> 2209 </span>            stylePageOutlinedButton(showAll);
+<span class="caretline"><span class="lineno"> 2210 </span>            showAll.setText(<span class="warning"><span class="string">"Show all "</span> + matches.size() + <span class="string">" sessions"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 2211 </span>            showAll.setOnClickListener(view -> {
+<span class="lineno"> 2212 </span>                sessionHistoryLimit = matches.size();
+<span class="lineno"> 2213 </span>                displaySessionHistory(query, from, to, interruptedOnly);
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:2208</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
-<span class="lineno"> 2205 </span>        <span class="keyword">if</span> (shown &lt; matches.size()) {
-<span class="lineno"> 2206 </span>            MaterialButton showAll = outlinedButton();
-<span class="lineno"> 2207 </span>            stylePageOutlinedButton(showAll);
-<span class="caretline"><span class="lineno"> 2208 </span>            showAll.setText(<span class="warning"><span class="string">"Show all "</span></span> + matches.size() + <span class="string">" sessions"</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 2209 </span>            showAll.setOnClickListener(view -> {
-<span class="lineno"> 2210 </span>                sessionHistoryLimit = matches.size();
-<span class="lineno"> 2211 </span>                displaySessionHistory(query, from, to, interruptedOnly);
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:2210</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
+<span class="lineno"> 2207 </span>        <span class="keyword">if</span> (shown &lt; matches.size()) {
+<span class="lineno"> 2208 </span>            MaterialButton showAll = outlinedButton();
+<span class="lineno"> 2209 </span>            stylePageOutlinedButton(showAll);
+<span class="caretline"><span class="lineno"> 2210 </span>            showAll.setText(<span class="warning"><span class="string">"Show all "</span></span> + matches.size() + <span class="string">" sessions"</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 2211 </span>            showAll.setOnClickListener(view -> {
+<span class="lineno"> 2212 </span>                sessionHistoryLimit = matches.size();
+<span class="lineno"> 2213 </span>                displaySessionHistory(query, from, to, interruptedOnly);
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:2208</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
-<span class="lineno"> 2205 </span>        <span class="keyword">if</span> (shown &lt; matches.size()) {
-<span class="lineno"> 2206 </span>            MaterialButton showAll = outlinedButton();
-<span class="lineno"> 2207 </span>            stylePageOutlinedButton(showAll);
-<span class="caretline"><span class="lineno"> 2208 </span>            showAll.setText(<span class="string">"Show all "</span> + matches.size() + <span class="warning"><span class="string">" sessions"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 2209 </span>            showAll.setOnClickListener(view -> {
-<span class="lineno"> 2210 </span>                sessionHistoryLimit = matches.size();
-<span class="lineno"> 2211 </span>                displaySessionHistory(query, from, to, interruptedOnly);
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:2210</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
+<span class="lineno"> 2207 </span>        <span class="keyword">if</span> (shown &lt; matches.size()) {
+<span class="lineno"> 2208 </span>            MaterialButton showAll = outlinedButton();
+<span class="lineno"> 2209 </span>            stylePageOutlinedButton(showAll);
+<span class="caretline"><span class="lineno"> 2210 </span>            showAll.setText(<span class="string">"Show all "</span> + matches.size() + <span class="warning"><span class="string">" sessions"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 2211 </span>            showAll.setOnClickListener(view -> {
+<span class="lineno"> 2212 </span>                sessionHistoryLimit = matches.size();
+<span class="lineno"> 2213 </span>                displaySessionHistory(query, from, to, interruptedOnly);
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:2226</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
-<span class="lineno"> 2223 </span>            timerCountdown.setTextSize(<span class="number">32</span>);
-<span class="lineno"> 2224 </span>            timerProgress.setMax(<span class="number">3600</span>);
-<span class="lineno"> 2225 </span>            timerProgress.setProgress(<span class="number">0</span>);
-<span class="caretline"><span class="lineno"> 2226 </span>            timerStatus.setText(<span class="warning"><span class="string">"Ready when you are"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 2227 </span>            <span class="keyword">return</span>;
-<span class="lineno"> 2228 </span>        }
-<span class="lineno"> 2229 </span>        <span class="keyword">try</span> {
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:2228</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
+<span class="lineno"> 2225 </span>            timerCountdown.setTextSize(<span class="number">32</span>);
+<span class="lineno"> 2226 </span>            timerProgress.setMax(<span class="number">3600</span>);
+<span class="lineno"> 2227 </span>            timerProgress.setProgress(<span class="number">0</span>);
+<span class="caretline"><span class="lineno"> 2228 </span>            timerStatus.setText(<span class="warning"><span class="string">"Ready when you are"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 2229 </span>            <span class="keyword">return</span>;
+<span class="lineno"> 2230 </span>        }
+<span class="lineno"> 2231 </span>        <span class="keyword">try</span> {
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:2237</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
-<span class="lineno"> 2234 </span>            timerCountdown.setContentDescription(<span class="string">"Timer set for "</span> + minutes + <span class="string">" minutes"</span>);
-<span class="lineno"> 2235 </span>            timerProgress.setMax(seconds);
-<span class="lineno"> 2236 </span>            timerProgress.setProgress(<span class="number">0</span>);
-<span class="caretline"><span class="lineno"> 2237 </span>            timerStatus.setText(<span class="warning"><span class="string">"Ready when you are"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 2238 </span>        } <span class="keyword">catch</span> (NumberFormatException ignored) {
-<span class="lineno"> 2239 </span>            <span class="comment">// Partial numeric input is validated when the timer starts.</span>
-<span class="lineno"> 2240 </span>        }
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:2239</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
+<span class="lineno"> 2236 </span>            timerCountdown.setContentDescription(<span class="string">"Timer set for "</span> + minutes + <span class="string">" minutes"</span>);
+<span class="lineno"> 2237 </span>            timerProgress.setMax(seconds);
+<span class="lineno"> 2238 </span>            timerProgress.setProgress(<span class="number">0</span>);
+<span class="caretline"><span class="lineno"> 2239 </span>            timerStatus.setText(<span class="warning"><span class="string">"Ready when you are"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 2240 </span>        } <span class="keyword">catch</span> (NumberFormatException ignored) {
+<span class="lineno"> 2241 </span>            <span class="comment">// Partial numeric input is validated when the timer starts.</span>
+<span class="lineno"> 2242 </span>        }
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:2319</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
-<span class="lineno"> 2316 </span>        form.addView(topic);
-<span class="lineno"> 2317 </span>
-<span class="lineno"> 2318 </span>        EditText minutes = input(<span class="string">"Minutes read"</span>, InputType.TYPE_CLASS_NUMBER);
-<span class="caretline"><span class="lineno"> 2319 </span>        minutes.setText(<span class="warning"><span class="string">"20"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 2320 </span>        addFieldLabel(form, <span class="string">"TIME SPENT · MINUTES"</span>);
-<span class="lineno"> 2321 </span>        form.addView(minutes);
-<span class="lineno"> 2322 </span>        LinearLayout durationPresets = row();
-</pre>
-
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:2323</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
-<span class="lineno"> 2320 </span>        addFieldLabel(form, <span class="string">"TIME SPENT · MINUTES"</span>);
-<span class="lineno"> 2321 </span>        form.addView(minutes);
-<span class="lineno"> 2322 </span>        LinearLayout durationPresets = row();
-<span class="caretline"><span class="lineno"> 2323 </span>        addSecondaryButton(durationPresets, <span class="string">"15 min"</span>, () -> minutes.setText(<span class="warning"><span class="string">"15"</span></span>));&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 2324 </span>        addSecondaryButton(durationPresets, <span class="string">"30 min"</span>, () -> minutes.setText(<span class="string">"30"</span>));
-<span class="lineno"> 2325 </span>        addSecondaryButton(durationPresets, <span class="string">"45 min"</span>, () -> minutes.setText(<span class="string">"45"</span>));
-<span class="lineno"> 2326 </span>        form.addView(durationPresets);
-</pre>
-
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:2324</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
-<span class="lineno"> 2321 </span>        form.addView(minutes);
-<span class="lineno"> 2322 </span>        LinearLayout durationPresets = row();
-<span class="lineno"> 2323 </span>        addSecondaryButton(durationPresets, <span class="string">"15 min"</span>, () -> minutes.setText(<span class="string">"15"</span>));
-<span class="caretline"><span class="lineno"> 2324 </span>        addSecondaryButton(durationPresets, <span class="string">"30 min"</span>, () -> minutes.setText(<span class="warning"><span class="string">"30"</span></span>));&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 2325 </span>        addSecondaryButton(durationPresets, <span class="string">"45 min"</span>, () -> minutes.setText(<span class="string">"45"</span>));
-<span class="lineno"> 2326 </span>        form.addView(durationPresets);
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:2321</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
+<span class="lineno"> 2318 </span>        form.addView(topic);
+<span class="lineno"> 2319 </span>
+<span class="lineno"> 2320 </span>        EditText minutes = input(<span class="string">"Minutes read"</span>, InputType.TYPE_CLASS_NUMBER);
+<span class="caretline"><span class="lineno"> 2321 </span>        minutes.setText(<span class="warning"><span class="string">"20"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 2322 </span>        addFieldLabel(form, <span class="string">"TIME SPENT · MINUTES"</span>);
+<span class="lineno"> 2323 </span>        form.addView(minutes);
+<span class="lineno"> 2324 </span>        LinearLayout durationPresets = row();
 </pre>
 
 <span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:2325</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
-<span class="lineno"> 2322 </span>        LinearLayout durationPresets = row();
-<span class="lineno"> 2323 </span>        addSecondaryButton(durationPresets, <span class="string">"15 min"</span>, () -> minutes.setText(<span class="string">"15"</span>));
-<span class="lineno"> 2324 </span>        addSecondaryButton(durationPresets, <span class="string">"30 min"</span>, () -> minutes.setText(<span class="string">"30"</span>));
-<span class="caretline"><span class="lineno"> 2325 </span>        addSecondaryButton(durationPresets, <span class="string">"45 min"</span>, () -> minutes.setText(<span class="warning"><span class="string">"45"</span></span>));&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 2326 </span>        form.addView(durationPresets);
-<span class="lineno"> 2327 </span>
-<span class="lineno"> 2328 </span>        EditText pagesRead = input(<span class="string">"Pages read (optional)"</span>, InputType.TYPE_CLASS_NUMBER);
+<span class="lineno"> 2322 </span>        addFieldLabel(form, <span class="string">"TIME SPENT · MINUTES"</span>);
+<span class="lineno"> 2323 </span>        form.addView(minutes);
+<span class="lineno"> 2324 </span>        LinearLayout durationPresets = row();
+<span class="caretline"><span class="lineno"> 2325 </span>        addSecondaryButton(durationPresets, <span class="string">"15 min"</span>, () -> minutes.setText(<span class="warning"><span class="string">"15"</span></span>));&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 2326 </span>        addSecondaryButton(durationPresets, <span class="string">"30 min"</span>, () -> minutes.setText(<span class="string">"30"</span>));
+<span class="lineno"> 2327 </span>        addSecondaryButton(durationPresets, <span class="string">"45 min"</span>, () -> minutes.setText(<span class="string">"45"</span>));
+<span class="lineno"> 2328 </span>        form.addView(durationPresets);
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:2568</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
-<span class="lineno"> 2565 </span>        addFieldLabel(form, <span class="string">"TOPIC"</span>);
-<span class="lineno"> 2566 </span>        form.addView(topic);
-<span class="lineno"> 2567 </span>        CheckBox interrupted = <span class="keyword">new</span> CheckBox(<span class="keyword">this</span>);
-<span class="caretline"><span class="lineno"> 2568 </span>        interrupted.setText(<span class="warning"><span class="string">"This session was interrupted"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 2569 </span>        styleCheckBox(interrupted);
-<span class="lineno"> 2570 </span>        interrupted.setChecked(<span class="string">"true"</span>.equals(session.interrupted));
-<span class="lineno"> 2571 </span>        form.addView(interrupted);
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:2326</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
+<span class="lineno"> 2323 </span>        form.addView(minutes);
+<span class="lineno"> 2324 </span>        LinearLayout durationPresets = row();
+<span class="lineno"> 2325 </span>        addSecondaryButton(durationPresets, <span class="string">"15 min"</span>, () -> minutes.setText(<span class="string">"15"</span>));
+<span class="caretline"><span class="lineno"> 2326 </span>        addSecondaryButton(durationPresets, <span class="string">"30 min"</span>, () -> minutes.setText(<span class="warning"><span class="string">"30"</span></span>));&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 2327 </span>        addSecondaryButton(durationPresets, <span class="string">"45 min"</span>, () -> minutes.setText(<span class="string">"45"</span>));
+<span class="lineno"> 2328 </span>        form.addView(durationPresets);
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:2649</span>: <span class="message">Number formatting does not take into account locale settings. Consider using <code>String.format</code> instead.</span><br /><pre class="errorlines">
-<span class="lineno"> 2646 </span>        addFieldLabel(form, <span class="string">"TOPIC"</span>);
-<span class="lineno"> 2647 </span>        form.addView(topic);
-<span class="lineno"> 2648 </span>        EditText minutes = input(<span class="string">"Minutes read"</span>, InputType.TYPE_CLASS_NUMBER);
-<span class="caretline"><span class="lineno"> 2649 </span>        minutes.setText(<span class="warning">Integer.toString(entry.durationMinutes)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 2650 </span>        addFieldLabel(form, <span class="string">"TIME SPENT · MINUTES"</span>);
-<span class="lineno"> 2651 </span>        form.addView(minutes);
-<span class="lineno"> 2652 </span>        EditText pagesRead = input(<span class="string">"Pages read (optional)"</span>, InputType.TYPE_CLASS_NUMBER);
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:2327</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
+<span class="lineno"> 2324 </span>        LinearLayout durationPresets = row();
+<span class="lineno"> 2325 </span>        addSecondaryButton(durationPresets, <span class="string">"15 min"</span>, () -> minutes.setText(<span class="string">"15"</span>));
+<span class="lineno"> 2326 </span>        addSecondaryButton(durationPresets, <span class="string">"30 min"</span>, () -> minutes.setText(<span class="string">"30"</span>));
+<span class="caretline"><span class="lineno"> 2327 </span>        addSecondaryButton(durationPresets, <span class="string">"45 min"</span>, () -> minutes.setText(<span class="warning"><span class="string">"45"</span></span>));&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 2328 </span>        form.addView(durationPresets);
+<span class="lineno"> 2329 </span>
+<span class="lineno"> 2330 </span>        EditText pagesRead = input(<span class="string">"Pages read (optional)"</span>, InputType.TYPE_CLASS_NUMBER);
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:2653</span>: <span class="message">Number formatting does not take into account locale settings. Consider using <code>String.format</code> instead.</span><br /><pre class="errorlines">
-<span class="lineno"> 2650 </span>        addFieldLabel(form, <span class="string">"TIME SPENT · MINUTES"</span>);
-<span class="lineno"> 2651 </span>        form.addView(minutes);
-<span class="lineno"> 2652 </span>        EditText pagesRead = input(<span class="string">"Pages read (optional)"</span>, InputType.TYPE_CLASS_NUMBER);
-<span class="caretline"><span class="lineno"> 2653 </span>        <span class="keyword">if</span> (entry.pagesRead > <span class="number">0</span>) pagesRead.setText(<span class="warning">Integer.toString(entry.pagesRead)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 2654 </span>        addFieldLabel(form, <span class="string">"PAGES READ · OPTIONAL"</span>);
-<span class="lineno"> 2655 </span>        form.addView(pagesRead);
-<span class="lineno"> 2656 </span>        EditText notes = input(<span class="string">"Chapter, pages, or takeaway"</span>, InputType.TYPE_CLASS_TEXT
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:2570</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
+<span class="lineno"> 2567 </span>        addFieldLabel(form, <span class="string">"TOPIC"</span>);
+<span class="lineno"> 2568 </span>        form.addView(topic);
+<span class="lineno"> 2569 </span>        CheckBox interrupted = <span class="keyword">new</span> CheckBox(<span class="keyword">this</span>);
+<span class="caretline"><span class="lineno"> 2570 </span>        interrupted.setText(<span class="warning"><span class="string">"This session was interrupted"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 2571 </span>        styleCheckBox(interrupted);
+<span class="lineno"> 2572 </span>        interrupted.setChecked(<span class="string">"true"</span>.equals(session.interrupted));
+<span class="lineno"> 2573 </span>        form.addView(interrupted);
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:3221</span>: <span class="message">Do not concatenate text displayed with <code>setText</code>. Use resource string with placeholders.</span><br /><pre class="errorlines">
-<span class="lineno"> 3218 </span>                    || !<span class="string">"Your progress"</span>.contentEquals(
-<span class="lineno"> 3219 </span>                        ((TextView) body.getChildAt(<span class="number">0</span>)).getText())) <span class="keyword">continue</span>;
-<span class="lineno"> 3220 </span>            TextView progressText = (TextView) body.getChildAt(<span class="number">1</span>);
-<span class="caretline"><span class="lineno"> 3221 </span>            progressText.setText(<span class="warning">completedItems + <span class="string">" of "</span> + totalItems</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 3222 </span>                    + <span class="string">" steps done · "</span> + String.format(Locale.getDefault(), <span class="string">"%.0f%%"</span>,
-<span class="lineno"> 3223 </span>                    totalItems == <span class="number">0</span> ? <span class="number">0f</span> : completedItems * <span class="number">100f</span> / totalItems));
-<span class="lineno"> 3224 </span>            <span class="keyword">if</span> (body.getChildAt(<span class="number">2</span>) <span class="keyword">instanceof</span> LinearProgressIndicator) {
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:2651</span>: <span class="message">Number formatting does not take into account locale settings. Consider using <code>String.format</code> instead.</span><br /><pre class="errorlines">
+<span class="lineno"> 2648 </span>        addFieldLabel(form, <span class="string">"TOPIC"</span>);
+<span class="lineno"> 2649 </span>        form.addView(topic);
+<span class="lineno"> 2650 </span>        EditText minutes = input(<span class="string">"Minutes read"</span>, InputType.TYPE_CLASS_NUMBER);
+<span class="caretline"><span class="lineno"> 2651 </span>        minutes.setText(<span class="warning">Integer.toString(entry.durationMinutes)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 2652 </span>        addFieldLabel(form, <span class="string">"TIME SPENT · MINUTES"</span>);
+<span class="lineno"> 2653 </span>        form.addView(minutes);
+<span class="lineno"> 2654 </span>        EditText pagesRead = input(<span class="string">"Pages read (optional)"</span>, InputType.TYPE_CLASS_NUMBER);
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:3221</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
-<span class="lineno"> 3218 </span>                    || !<span class="string">"Your progress"</span>.contentEquals(
-<span class="lineno"> 3219 </span>                        ((TextView) body.getChildAt(<span class="number">0</span>)).getText())) <span class="keyword">continue</span>;
-<span class="lineno"> 3220 </span>            TextView progressText = (TextView) body.getChildAt(<span class="number">1</span>);
-<span class="caretline"><span class="lineno"> 3221 </span>            progressText.setText(completedItems + <span class="warning"><span class="string">" of "</span></span> + totalItems&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 3222 </span>                    + <span class="string">" steps done · "</span> + String.format(Locale.getDefault(), <span class="string">"%.0f%%"</span>,
-<span class="lineno"> 3223 </span>                    totalItems == <span class="number">0</span> ? <span class="number">0f</span> : completedItems * <span class="number">100f</span> / totalItems));
-<span class="lineno"> 3224 </span>            <span class="keyword">if</span> (body.getChildAt(<span class="number">2</span>) <span class="keyword">instanceof</span> LinearProgressIndicator) {
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:2655</span>: <span class="message">Number formatting does not take into account locale settings. Consider using <code>String.format</code> instead.</span><br /><pre class="errorlines">
+<span class="lineno"> 2652 </span>        addFieldLabel(form, <span class="string">"TIME SPENT · MINUTES"</span>);
+<span class="lineno"> 2653 </span>        form.addView(minutes);
+<span class="lineno"> 2654 </span>        EditText pagesRead = input(<span class="string">"Pages read (optional)"</span>, InputType.TYPE_CLASS_NUMBER);
+<span class="caretline"><span class="lineno"> 2655 </span>        <span class="keyword">if</span> (entry.pagesRead > <span class="number">0</span>) pagesRead.setText(<span class="warning">Integer.toString(entry.pagesRead)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 2656 </span>        addFieldLabel(form, <span class="string">"PAGES READ · OPTIONAL"</span>);
+<span class="lineno"> 2657 </span>        form.addView(pagesRead);
+<span class="lineno"> 2658 </span>        EditText notes = input(<span class="string">"Chapter, pages, or takeaway"</span>, InputType.TYPE_CLASS_TEXT
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:3222</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
-<span class="lineno"> 3219 </span>                        ((TextView) body.getChildAt(<span class="number">0</span>)).getText())) <span class="keyword">continue</span>;
-<span class="lineno"> 3220 </span>            TextView progressText = (TextView) body.getChildAt(<span class="number">1</span>);
-<span class="lineno"> 3221 </span>            progressText.setText(completedItems + <span class="string">" of "</span> + totalItems
-<span class="caretline"><span class="lineno"> 3222 </span>                    + <span class="warning"><span class="string">" steps done · "</span></span> + String.format(Locale.getDefault(), <span class="string">"%.0f%%"</span>,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 3223 </span>                    totalItems == <span class="number">0</span> ? <span class="number">0f</span> : completedItems * <span class="number">100f</span> / totalItems));
-<span class="lineno"> 3224 </span>            <span class="keyword">if</span> (body.getChildAt(<span class="number">2</span>) <span class="keyword">instanceof</span> LinearProgressIndicator) {
-<span class="lineno"> 3225 </span>                LinearProgressIndicator progressBar =
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:3223</span>: <span class="message">Do not concatenate text displayed with <code>setText</code>. Use resource string with placeholders.</span><br /><pre class="errorlines">
+<span class="lineno"> 3220 </span>                    || !<span class="string">"Your progress"</span>.contentEquals(
+<span class="lineno"> 3221 </span>                        ((TextView) body.getChildAt(<span class="number">0</span>)).getText())) <span class="keyword">continue</span>;
+<span class="lineno"> 3222 </span>            TextView progressText = (TextView) body.getChildAt(<span class="number">1</span>);
+<span class="caretline"><span class="lineno"> 3223 </span>            progressText.setText(<span class="warning">completedItems + <span class="string">" of "</span> + totalItems</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 3224 </span>                    + <span class="string">" steps done · "</span> + String.format(Locale.getDefault(), <span class="string">"%.0f%%"</span>,
+<span class="lineno"> 3225 </span>                    totalItems == <span class="number">0</span> ? <span class="number">0f</span> : completedItems * <span class="number">100f</span> / totalItems));
+<span class="lineno"> 3226 </span>            <span class="keyword">if</span> (body.getChildAt(<span class="number">2</span>) <span class="keyword">instanceof</span> LinearProgressIndicator) {
 </pre>
 
-<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:3278</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
-<span class="lineno"> 3275 </span>            checklistDescription.setPadding(dp(<span class="number">6</span>), dp(<span class="number">2</span>), dp(<span class="number">6</span>), dp(<span class="number">4</span>));
-<span class="lineno"> 3276 </span>            form.addView(checklistDescription);
-<span class="lineno"> 3277 </span>            manageSteps = outlinedButton();
-<span class="caretline"><span class="lineno"> 3278 </span>            manageSteps.setText(<span class="warning"><span class="string">"Manage steps"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 3279 </span>            form.addView(manageSteps);
-<span class="lineno"> 3280 </span>        }
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:3223</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
+<span class="lineno"> 3220 </span>                    || !<span class="string">"Your progress"</span>.contentEquals(
+<span class="lineno"> 3221 </span>                        ((TextView) body.getChildAt(<span class="number">0</span>)).getText())) <span class="keyword">continue</span>;
+<span class="lineno"> 3222 </span>            TextView progressText = (TextView) body.getChildAt(<span class="number">1</span>);
+<span class="caretline"><span class="lineno"> 3223 </span>            progressText.setText(completedItems + <span class="warning"><span class="string">" of "</span></span> + totalItems&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 3224 </span>                    + <span class="string">" steps done · "</span> + String.format(Locale.getDefault(), <span class="string">"%.0f%%"</span>,
+<span class="lineno"> 3225 </span>                    totalItems == <span class="number">0</span> ? <span class="number">0f</span> : completedItems * <span class="number">100f</span> / totalItems));
+<span class="lineno"> 3226 </span>            <span class="keyword">if</span> (body.getChildAt(<span class="number">2</span>) <span class="keyword">instanceof</span> LinearProgressIndicator) {
+</pre>
+
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:3224</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
+<span class="lineno"> 3221 </span>                        ((TextView) body.getChildAt(<span class="number">0</span>)).getText())) <span class="keyword">continue</span>;
+<span class="lineno"> 3222 </span>            TextView progressText = (TextView) body.getChildAt(<span class="number">1</span>);
+<span class="lineno"> 3223 </span>            progressText.setText(completedItems + <span class="string">" of "</span> + totalItems
+<span class="caretline"><span class="lineno"> 3224 </span>                    + <span class="warning"><span class="string">" steps done · "</span></span> + String.format(Locale.getDefault(), <span class="string">"%.0f%%"</span>,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 3225 </span>                    totalItems == <span class="number">0</span> ? <span class="number">0f</span> : completedItems * <span class="number">100f</span> / totalItems));
+<span class="lineno"> 3226 </span>            <span class="keyword">if</span> (body.getChildAt(<span class="number">2</span>) <span class="keyword">instanceof</span> LinearProgressIndicator) {
+<span class="lineno"> 3227 </span>                LinearProgressIndicator progressBar =
+</pre>
+
+<span class="location"><a href="../../src/com/personal/studytracker/MainActivity.java">../../src/com/personal/studytracker/MainActivity.java</a>:3280</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
+<span class="lineno"> 3277 </span>            checklistDescription.setPadding(dp(<span class="number">6</span>), dp(<span class="number">2</span>), dp(<span class="number">6</span>), dp(<span class="number">4</span>));
+<span class="lineno"> 3278 </span>            form.addView(checklistDescription);
+<span class="lineno"> 3279 </span>            manageSteps = outlinedButton();
+<span class="caretline"><span class="lineno"> 3280 </span>            manageSteps.setText(<span class="warning"><span class="string">"Manage steps"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 3281 </span>            form.addView(manageSteps);
+<span class="lineno"> 3282 </span>        }
 </pre>
 
 </div>

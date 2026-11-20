@@ -30,6 +30,14 @@ adb install -r android-app/build/StudyTracker.apk
 adb shell am start -n com.personal.studytracker/.MainActivity
 ```
 
+The build script runs Android lint before assembling the debug APK. To install
+the APK after a successful build without uninstalling the existing app or
+removing its data, pass `--install`:
+
+```sh
+./android-app/build.sh --install
+```
+
 The Gradle wrapper can also build directly from `android-app/`. It
 uses the local Android SDK selected by `ANDROID_SDK_ROOT` or `ANDROID_HOME`.
 The app compiles against Android 35 and Material Components 1.12.0.

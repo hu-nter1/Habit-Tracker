@@ -13,7 +13,7 @@
         errorLine2="                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="2859"
+            line="2861"
             column="46"/>
     </issue>
 
@@ -98,6 +98,40 @@
     </issue>
 
     <issue
+        id="LockedOrientationActivity"
+        severity="Warning"
+        message="Expecting `android:screenOrientation=&quot;unspecified&quot;` or `&quot;fullSensor&quot;` for this activity so the user can use the application in any orientation and provide a great experience on Chrome OS devices"
+        category="Correctness"
+        priority="4"
+        summary="Incompatible screenOrientation value"
+        explanation="The `&lt;activity>` element should not be locked to any orientation so that users can take advantage of the multi-window environments and larger screens available on Android. To fix the issue, consider declaring the corresponding activity element with `screenOrientation=&quot;unspecified&quot;`or `fullSensor` attribute."
+        url="https://developer.android.com/topic/arc/window-management"
+        urls="https://developer.android.com/topic/arc/window-management"
+        errorLine1="            android:screenOrientation=&quot;portrait&quot;>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="/home/king/Desktop/Tracker/android-app/AndroidManifest.xml"
+            line="21"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="DiscouragedApi"
+        severity="Warning"
+        message="Should not restrict activity to fixed orientation. This may not be suitable for different form factors, causing the app to be letterboxed."
+        category="Correctness"
+        priority="2"
+        summary="Using discouraged APIs"
+        explanation="Discouraged APIs are allowed and are not deprecated, but they may be unfit for common use (e.g. due to slow performance or subtle behavior)."
+        errorLine1="            android:screenOrientation=&quot;portrait&quot;>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="/home/king/Desktop/Tracker/android-app/AndroidManifest.xml"
+            line="21"
+            column="13"/>
+    </issue>
+
+    <issue
         id="UseCompatLoadingForDrawables"
         severity="Warning"
         message="Use `AppCompatResources.getDrawable()`"
@@ -125,7 +159,7 @@
         errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="694"
+            line="696"
             column="29"/>
     </issue>
 
@@ -141,7 +175,7 @@
         errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="1311"
+            line="1313"
             column="29"/>
     </issue>
 
@@ -157,7 +191,7 @@
         errorLine2="                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="1343"
+            line="1345"
             column="25"/>
     </issue>
 
@@ -173,7 +207,7 @@
         errorLine2="                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="1450"
+            line="1452"
             column="30"/>
     </issue>
 
@@ -189,7 +223,7 @@
         errorLine2="                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="1467"
+            line="1469"
             column="26"/>
     </issue>
 
@@ -205,7 +239,7 @@
         errorLine2="                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="1891"
+            line="1893"
             column="39"/>
     </issue>
 
@@ -221,7 +255,7 @@
         errorLine2="                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="1893"
+            line="1895"
             column="39"/>
     </issue>
 
@@ -237,7 +271,7 @@
         errorLine2="                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="3423"
+            line="3425"
             column="26"/>
     </issue>
 
@@ -253,7 +287,7 @@
         errorLine2="                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="3435"
+            line="3437"
             column="22"/>
     </issue>
 
@@ -269,7 +303,7 @@
         errorLine2="                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="3564"
+            line="3566"
             column="26"/>
     </issue>
 
@@ -285,7 +319,7 @@
         errorLine2="                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="3578"
+            line="3580"
             column="22"/>
     </issue>
 
@@ -301,7 +335,7 @@
         errorLine2="                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="4176"
+            line="4178"
             column="24"/>
     </issue>
 
@@ -317,7 +351,7 @@
         errorLine2="            ^">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="4230"
+            line="4232"
             column="13"/>
     </issue>
 
@@ -333,7 +367,7 @@
         errorLine2="        ^">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="4388"
+            line="4390"
             column="9"/>
     </issue>
 
@@ -349,7 +383,7 @@
         errorLine2="        ^">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="4413"
+            line="4415"
             column="9"/>
     </issue>
 
@@ -399,7 +433,7 @@
         errorLine2="                                      ~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="3992"
+            line="3994"
             column="39"/>
     </issue>
 
@@ -905,8 +939,8 @@
         explanation="When calling `TextView#setText`&#xA;* Never call `Number#toString()` to format numbers; it will not handle fraction separators and locale-specific digits properly. Consider using `String#format` with proper format specifications (`%d` or `%f`) instead.&#xA;* Do not pass a string literal (e.g. &quot;Hello&quot;) to display text. Hardcoded text can not be properly translated to other languages. Consider using Android resource strings instead.&#xA;* Do not build messages by concatenating text chunks. Such messages can not be properly translated."
         url="https://developer.android.com/guide/topics/resources/localization.html"
         urls="https://developer.android.com/guide/topics/resources/localization.html"
-        errorLine1="            headerLocation.setText(&quot;Location services are off · tap to retry&quot;);"
-        errorLine2="                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        errorLine1="            headerLocation.setText(&quot;Location off · tap to retry&quot;);"
+        errorLine2="                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
             line="476"
@@ -923,12 +957,12 @@
         explanation="When calling `TextView#setText`&#xA;* Never call `Number#toString()` to format numbers; it will not handle fraction separators and locale-specific digits properly. Consider using `String#format` with proper format specifications (`%d` or `%f`) instead.&#xA;* Do not pass a string literal (e.g. &quot;Hello&quot;) to display text. Hardcoded text can not be properly translated to other languages. Consider using Android resource strings instead.&#xA;* Do not build messages by concatenating text chunks. Such messages can not be properly translated."
         url="https://developer.android.com/guide/topics/resources/localization.html"
         urls="https://developer.android.com/guide/topics/resources/localization.html"
-        errorLine1="                    if (headerLocation != null) headerLocation.setText(&quot;Location unavailable · tap to retry&quot;);"
-        errorLine2="                                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        errorLine1="                        headerLocation.setText(&quot;Location off · tap to retry&quot;);"
+        errorLine2="                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="488"
-            column="72"/>
+            line="489"
+            column="48"/>
     </issue>
 
     <issue
@@ -941,11 +975,11 @@
         explanation="When calling `TextView#setText`&#xA;* Never call `Number#toString()` to format numbers; it will not handle fraction separators and locale-specific digits properly. Consider using `String#format` with proper format specifications (`%d` or `%f`) instead.&#xA;* Do not pass a string literal (e.g. &quot;Hello&quot;) to display text. Hardcoded text can not be properly translated to other languages. Consider using Android resource strings instead.&#xA;* Do not build messages by concatenating text chunks. Such messages can not be properly translated."
         url="https://developer.android.com/guide/topics/resources/localization.html"
         urls="https://developer.android.com/guide/topics/resources/localization.html"
-        errorLine1="                    headerLocation.setText(&quot;Area unavailable · tap to retry&quot;);"
-        errorLine2="                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        errorLine1="                    headerLocation.setText(&quot;Area unavailable · retry&quot;);"
+        errorLine2="                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="495"
+            line="497"
             column="44"/>
     </issue>
 
@@ -959,11 +993,11 @@
         explanation="When calling `TextView#setText`&#xA;* Never call `Number#toString()` to format numbers; it will not handle fraction separators and locale-specific digits properly. Consider using `String#format` with proper format specifications (`%d` or `%f`) instead.&#xA;* Do not pass a string literal (e.g. &quot;Hello&quot;) to display text. Hardcoded text can not be properly translated to other languages. Consider using Android resource strings instead.&#xA;* Do not build messages by concatenating text chunks. Such messages can not be properly translated."
         url="https://developer.android.com/guide/topics/resources/localization.html"
         urls="https://developer.android.com/guide/topics/resources/localization.html"
-        errorLine1="            headerLocation.setText(&quot;Location permission needed · tap to allow&quot;);"
-        errorLine2="                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        errorLine1="            headerLocation.setText(&quot;Permission needed · tap to allow&quot;);"
+        errorLine2="                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="500"
+            line="502"
             column="36"/>
     </issue>
 
@@ -977,11 +1011,11 @@
         explanation="When calling `TextView#setText`&#xA;* Never call `Number#toString()` to format numbers; it will not handle fraction separators and locale-specific digits properly. Consider using `String#format` with proper format specifications (`%d` or `%f`) instead.&#xA;* Do not pass a string literal (e.g. &quot;Hello&quot;) to display text. Hardcoded text can not be properly translated to other languages. Consider using Android resource strings instead.&#xA;* Do not build messages by concatenating text chunks. Such messages can not be properly translated."
         url="https://developer.android.com/guide/topics/resources/localization.html"
         urls="https://developer.android.com/guide/topics/resources/localization.html"
-        errorLine1="                else headerLocation.setText(&quot;Location active · area name unavailable&quot;);"
-        errorLine2="                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        errorLine1="                else headerLocation.setText(&quot;Location active · name unavailable&quot;);"
+        errorLine2="                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="529"
+            line="531"
             column="45"/>
     </issue>
 
@@ -999,7 +1033,7 @@
         errorLine2="                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="735"
+            line="737"
             column="31"/>
     </issue>
 
@@ -1017,7 +1051,7 @@
         errorLine2="                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="1549"
+            line="1551"
             column="22"/>
     </issue>
 
@@ -1035,7 +1069,7 @@
         errorLine2="                             ^">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="1729"
+            line="1731"
             column="30"/>
     </issue>
 
@@ -1053,7 +1087,7 @@
         errorLine2="                                                                 ~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="1741"
+            line="1743"
             column="66"/>
     </issue>
 
@@ -1071,7 +1105,7 @@
         errorLine2="                                                                 ~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="1746"
+            line="1748"
             column="66"/>
     </issue>
 
@@ -1089,7 +1123,7 @@
         errorLine2="                              ~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="1757"
+            line="1759"
             column="31"/>
     </issue>
 
@@ -1107,7 +1141,7 @@
         errorLine2="                          ~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="1764"
+            line="1766"
             column="27"/>
     </issue>
 
@@ -1125,7 +1159,7 @@
         errorLine2="                                 ~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="1779"
+            line="1781"
             column="34"/>
     </issue>
 
@@ -1143,7 +1177,7 @@
         errorLine2="                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="1793"
+            line="1795"
             column="34"/>
     </issue>
 
@@ -1161,7 +1195,7 @@
         errorLine2="                                 ~~~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="1793"
+            line="1795"
             column="34"/>
     </issue>
 
@@ -1179,7 +1213,7 @@
         errorLine2="                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="1871"
+            line="1873"
             column="37"/>
     </issue>
 
@@ -1197,7 +1231,7 @@
         errorLine2="                                       ~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="1872"
+            line="1874"
             column="40"/>
     </issue>
 
@@ -1215,7 +1249,7 @@
         errorLine2="                            ~~~~~~~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="1940"
+            line="1942"
             column="29"/>
     </issue>
 
@@ -1233,7 +1267,7 @@
         errorLine2="                            ~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="1983"
+            line="1985"
             column="29"/>
     </issue>
 
@@ -1251,7 +1285,7 @@
         errorLine2="                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="2076"
+            line="2078"
             column="33"/>
     </issue>
 
@@ -1269,7 +1303,7 @@
         errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="2208"
+            line="2210"
             column="29"/>
     </issue>
 
@@ -1287,7 +1321,7 @@
         errorLine2="                            ~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="2208"
+            line="2210"
             column="29"/>
     </issue>
 
@@ -1305,7 +1339,7 @@
         errorLine2="                                                           ~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="2208"
+            line="2210"
             column="60"/>
     </issue>
 
@@ -1323,7 +1357,7 @@
         errorLine2="                                ~~~~~~~~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="2226"
+            line="2228"
             column="33"/>
     </issue>
 
@@ -1341,7 +1375,7 @@
         errorLine2="                                ~~~~~~~~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="2237"
+            line="2239"
             column="33"/>
     </issue>
 
@@ -1359,7 +1393,7 @@
         errorLine2="                        ~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="2319"
+            line="2321"
             column="25"/>
     </issue>
 
@@ -1377,7 +1411,7 @@
         errorLine2="                                                                            ~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="2323"
+            line="2325"
             column="77"/>
     </issue>
 
@@ -1395,7 +1429,7 @@
         errorLine2="                                                                            ~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="2324"
+            line="2326"
             column="77"/>
     </issue>
 
@@ -1413,7 +1447,7 @@
         errorLine2="                                                                            ~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="2325"
+            line="2327"
             column="77"/>
     </issue>
 
@@ -1431,7 +1465,7 @@
         errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="2568"
+            line="2570"
             column="29"/>
     </issue>
 
@@ -1449,7 +1483,7 @@
         errorLine2="                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="2649"
+            line="2651"
             column="25"/>
     </issue>
 
@@ -1467,7 +1501,7 @@
         errorLine2="                                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="2653"
+            line="2655"
             column="52"/>
     </issue>
 
@@ -1485,7 +1519,7 @@
         errorLine2="                                 ^">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="3221"
+            line="3223"
             column="34"/>
     </issue>
 
@@ -1503,7 +1537,7 @@
         errorLine2="                                                  ~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="3221"
+            line="3223"
             column="51"/>
     </issue>
 
@@ -1521,7 +1555,7 @@
         errorLine2="                      ~~~~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="3222"
+            line="3224"
             column="23"/>
     </issue>
 
@@ -1539,7 +1573,7 @@
         errorLine2="                                ~~~~~~~~~~~~~~">
         <location
             file="/home/king/Desktop/Tracker/android-app/src/com/personal/studytracker/MainActivity.java"
-            line="3278"
+            line="3280"
             column="33"/>
     </issue>
 

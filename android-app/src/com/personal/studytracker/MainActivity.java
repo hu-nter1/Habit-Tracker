@@ -473,7 +473,7 @@ public final class MainActivity extends AppCompatActivity {
         headerLocation.setText("Finding your area…");
         LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (manager == null || !manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-            headerLocation.setText("Location services are off · tap to retry");
+            headerLocation.setText("Location off · tap to retry");
             return;
         }
         try {
@@ -485,19 +485,21 @@ public final class MainActivity extends AppCompatActivity {
                     showLocationName(location);
                 }
                 @Override public void onProviderDisabled(String provider) {
-                    if (headerLocation != null) headerLocation.setText("Location unavailable · tap to retry");
+                    if (headerLocation != null) {
+                        headerLocation.setText("Location off · tap to retry");
+                    }
                 }
             };
             manager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER,
                     locationListener, Looper.getMainLooper());
             handler.postDelayed(() -> {
                 if (headerLocation != null && "Finding your area…".contentEquals(headerLocation.getText())) {
-                    headerLocation.setText("Area unavailable · tap to retry");
+                    headerLocation.setText("Area unavailable · retry");
                     removeLocationUpdates();
                 }
             }, 12000);
         } catch (SecurityException exception) {
-            headerLocation.setText("Location permission needed · tap to allow");
+            headerLocation.setText("Permission needed · tap to allow");
         }
     }
 
@@ -526,7 +528,7 @@ public final class MainActivity extends AppCompatActivity {
             handler.post(() -> {
                 if (headerLocation == null) return;
                 if (result != null) headerLocation.setText(result);
-                else headerLocation.setText("Location active · area name unavailable");
+                else headerLocation.setText("Location active · name unavailable");
             });
         }, "study-tracker-geocoder");
         geocoderThread.start();

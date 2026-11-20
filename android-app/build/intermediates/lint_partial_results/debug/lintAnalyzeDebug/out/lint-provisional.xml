@@ -8,12 +8,12 @@
         <fix-data minSdk="fffffffffe000000" requiresApi="ffffffffc0000000"/>
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="2859"
+            line="2861"
             column="46"
-            startOffset="138155"
-            endLine="2859"
+            startOffset="138161"
+            endLine="2861"
             endColumn="90"
-            endOffset="138199"/>
+            endOffset="138205"/>
         <map>
             <entry
                 name="message"
@@ -44,6 +44,30 @@
             endLine="122"
             endColumn="97"
             endOffset="6637"/>
+    </incident>
+
+    <incident
+        id="LockedOrientationActivity"
+        severity="warning"
+        message="Expecting `android:screenOrientation=&quot;unspecified&quot;` or `&quot;fullSensor&quot;` for this activity so the user can use the application in any orientation and provide a great experience on Chrome OS devices">
+        <fix-attribute
+            description="Set screenOrientation=&quot;fullSensor&quot;"
+            robot="true"
+            independent="true"
+            namespace="http://schemas.android.com/apk/res/android"
+            attribute="screenOrientation"
+            value="fullSensor"/>
+        <location
+            file="${:*debug*MAIN*sourceProvider*0*manifest*0}"
+            line="21"
+            column="13"
+            startOffset="1083"
+            endLine="21"
+            endColumn="49"
+            endOffset="1119"/>
+        <map>
+            <condition library="false"/>
+        </map>
     </incident>
 
 </incidents>

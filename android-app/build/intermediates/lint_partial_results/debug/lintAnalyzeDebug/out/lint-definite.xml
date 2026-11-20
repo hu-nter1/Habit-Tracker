@@ -96,6 +96,20 @@
     </incident>
 
     <incident
+        id="DiscouragedApi"
+        severity="warning"
+        message="Should not restrict activity to fixed orientation. This may not be suitable for different form factors, causing the app to be letterboxed.">
+        <location
+            file="${:*debug*MAIN*sourceProvider*0*manifest*0}"
+            line="21"
+            column="13"
+            startOffset="1083"
+            endLine="21"
+            endColumn="49"
+            endOffset="1119"/>
+    </incident>
+
+    <incident
         id="UseCompatLoadingForDrawables"
         severity="warning"
         message="Use `AppCompatResources.getDrawable()`">
@@ -115,12 +129,12 @@
         message="Use `AppCompatResources.getDrawable()`">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="694"
+            line="696"
             column="29"
-            startOffset="31347"
-            endLine="694"
+            startOffset="31353"
+            endLine="696"
             endColumn="68"
-            endOffset="31386"/>
+            endOffset="31392"/>
     </incident>
 
     <incident
@@ -129,12 +143,12 @@
         message="Use `AppCompatResources.getDrawable()`">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="1311"
+            line="1313"
             column="29"
-            startOffset="62919"
-            endLine="1311"
+            startOffset="62925"
+            endLine="1313"
             endColumn="75"
-            endOffset="62965"/>
+            endOffset="62971"/>
     </incident>
 
     <incident
@@ -143,12 +157,12 @@
         message="Use `AppCompatResources.getDrawable()`">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="1343"
+            line="1345"
             column="25"
-            startOffset="64792"
-            endLine="1343"
+            startOffset="64798"
+            endLine="1345"
             endColumn="72"
-            endOffset="64839"/>
+            endOffset="64845"/>
     </incident>
 
     <incident
@@ -157,12 +171,12 @@
         message="Use `AppCompatResources.getDrawable()`">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="1450"
+            line="1452"
             column="30"
-            startOffset="70217"
-            endLine="1450"
+            startOffset="70223"
+            endLine="1452"
             endColumn="76"
-            endOffset="70263"/>
+            endOffset="70269"/>
     </incident>
 
     <incident
@@ -171,26 +185,12 @@
         message="Use `AppCompatResources.getDrawable()`">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="1467"
+            line="1469"
             column="26"
-            startOffset="71156"
-            endLine="1467"
+            startOffset="71162"
+            endLine="1469"
             endColumn="73"
-            endOffset="71203"/>
-    </incident>
-
-    <incident
-        id="UseCompatLoadingForDrawables"
-        severity="warning"
-        message="Use `AppCompatResources.getDrawable()`">
-        <location
-            file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="1891"
-            column="39"
-            startOffset="93083"
-            endLine="1891"
-            endColumn="78"
-            endOffset="93122"/>
+            endOffset="71209"/>
     </incident>
 
     <incident
@@ -201,10 +201,10 @@
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
             line="1893"
             column="39"
-            startOffset="93180"
+            startOffset="93089"
             endLine="1893"
             endColumn="78"
-            endOffset="93219"/>
+            endOffset="93128"/>
     </incident>
 
     <incident
@@ -213,12 +213,26 @@
         message="Use `AppCompatResources.getDrawable()`">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="3423"
+            line="1895"
+            column="39"
+            startOffset="93186"
+            endLine="1895"
+            endColumn="78"
+            endOffset="93225"/>
+    </incident>
+
+    <incident
+        id="UseCompatLoadingForDrawables"
+        severity="warning"
+        message="Use `AppCompatResources.getDrawable()`">
+        <location
+            file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
+            line="3425"
             column="26"
-            startOffset="166268"
-            endLine="3423"
+            startOffset="166274"
+            endLine="3425"
             endColumn="72"
-            endOffset="166314"/>
+            endOffset="166320"/>
     </incident>
 
     <incident
@@ -227,12 +241,12 @@
         message="Use `AppCompatResources.getDrawable()`">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="3435"
+            line="3437"
             column="22"
-            startOffset="166932"
-            endLine="3435"
+            startOffset="166938"
+            endLine="3437"
             endColumn="69"
-            endOffset="166979"/>
+            endOffset="166985"/>
     </incident>
 
     <incident
@@ -241,12 +255,12 @@
         message="Use `AppCompatResources.getDrawable()`">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="3564"
+            line="3566"
             column="26"
-            startOffset="173951"
-            endLine="3564"
+            startOffset="173957"
+            endLine="3566"
             endColumn="72"
-            endOffset="173997"/>
+            endOffset="174003"/>
     </incident>
 
     <incident
@@ -255,12 +269,12 @@
         message="Use `AppCompatResources.getDrawable()`">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="3578"
+            line="3580"
             column="22"
-            startOffset="174757"
-            endLine="3578"
+            startOffset="174763"
+            endLine="3580"
             endColumn="69"
-            endOffset="174804"/>
+            endOffset="174810"/>
     </incident>
 
     <incident
@@ -269,12 +283,12 @@
         message="Use `AppCompatResources.getDrawable()`">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="4176"
+            line="4178"
             column="24"
-            startOffset="202114"
-            endLine="4176"
+            startOffset="202120"
+            endLine="4178"
             endColumn="61"
-            endOffset="202151"/>
+            endOffset="202157"/>
     </incident>
 
     <incident
@@ -283,12 +297,12 @@
         message="Use `TextViewCompat.setCompoundDrawableTintList()`">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="4230"
+            line="4232"
             column="13"
-            startOffset="204549"
-            endLine="4231"
+            startOffset="204555"
+            endLine="4233"
             endColumn="48"
-            endOffset="204674"/>
+            endOffset="204680"/>
     </incident>
 
     <incident
@@ -297,12 +311,12 @@
         message="Use `TextViewCompat.setCompoundDrawableTintList()`">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="4388"
+            line="4390"
             column="9"
-            startOffset="211566"
-            endLine="4389"
+            startOffset="211572"
+            endLine="4391"
             endColumn="42"
-            endOffset="211685"/>
+            endOffset="211691"/>
     </incident>
 
     <incident
@@ -311,12 +325,12 @@
         message="Use `TextViewCompat.setCompoundDrawableTintList()`">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="4413"
+            line="4415"
             column="9"
-            startOffset="212894"
-            endLine="4414"
+            startOffset="212900"
+            endLine="4416"
             endColumn="42"
-            endOffset="213013"/>
+            endOffset="213019"/>
     </incident>
 
     <incident
@@ -351,12 +365,12 @@
         message="Avoid object allocations during draw/layout operations (preallocate and reuse instead)">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="3992"
+            line="3994"
             column="39"
-            startOffset="194350"
-            endLine="3992"
+            startOffset="194356"
+            endLine="3994"
             endColumn="49"
-            endOffset="194360"/>
+            endOffset="194366"/>
     </incident>
 
     <incident
@@ -668,8 +682,8 @@
             column="36"
             startOffset="21073"
             endLine="476"
-            endColumn="78"
-            endOffset="21115"/>
+            endColumn="65"
+            endOffset="21102"/>
     </incident>
 
     <incident
@@ -678,26 +692,12 @@
         message="String literal in `setText` can not be translated. Use Android resources instead.">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="488"
-            column="72"
-            startOffset="21699"
-            endLine="488"
-            endColumn="109"
-            endOffset="21736"/>
-    </incident>
-
-    <incident
-        id="SetTextI18n"
-        severity="warning"
-        message="String literal in `setText` can not be translated. Use Android resources instead.">
-        <location
-            file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="495"
-            column="44"
-            startOffset="22102"
-            endLine="495"
+            line="489"
+            column="48"
+            startOffset="21712"
+            endLine="489"
             endColumn="77"
-            endOffset="22135"/>
+            endOffset="21741"/>
     </incident>
 
     <incident
@@ -706,12 +706,26 @@
         message="String literal in `setText` can not be translated. Use Android resources instead.">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="500"
+            line="497"
+            column="44"
+            startOffset="22129"
+            endLine="497"
+            endColumn="70"
+            endOffset="22155"/>
+    </incident>
+
+    <incident
+        id="SetTextI18n"
+        severity="warning"
+        message="String literal in `setText` can not be translated. Use Android resources instead.">
+        <location
+            file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
+            line="502"
             column="36"
-            startOffset="22307"
-            endLine="500"
-            endColumn="79"
-            endOffset="22350"/>
+            startOffset="22327"
+            endLine="502"
+            endColumn="70"
+            endOffset="22361"/>
     </incident>
 
     <incident
@@ -720,12 +734,12 @@
         message="String literal in `setText` can not be translated. Use Android resources instead.">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="529"
+            line="531"
             column="45"
-            startOffset="23804"
-            endLine="529"
-            endColumn="86"
-            endOffset="23845"/>
+            startOffset="23815"
+            endLine="531"
+            endColumn="81"
+            endOffset="23851"/>
     </incident>
 
     <incident
@@ -734,12 +748,12 @@
         message="Do not concatenate text displayed with `setText`. Use resource string with placeholders.">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="735"
+            line="737"
             column="31"
-            startOffset="33476"
-            endLine="735"
+            startOffset="33482"
+            endLine="737"
             endColumn="75"
-            endOffset="33520"/>
+            endOffset="33526"/>
     </incident>
 
     <incident
@@ -748,12 +762,12 @@
         message="String literal in `setText` can not be translated. Use Android resources instead.">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="1549"
+            line="1551"
             column="22"
-            startOffset="75383"
-            endLine="1549"
+            startOffset="75389"
+            endLine="1551"
             endColumn="49"
-            endOffset="75410"/>
+            endOffset="75416"/>
     </incident>
 
     <incident
@@ -762,12 +776,12 @@
         message="Number formatting does not take into account locale settings. Consider using `String.format` instead.">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="1729"
+            line="1731"
             column="30"
-            startOffset="83990"
-            endLine="1730"
+            startOffset="83996"
+            endLine="1732"
             endColumn="88"
-            endOffset="84095"/>
+            endOffset="84101"/>
     </incident>
 
     <incident
@@ -776,12 +790,12 @@
         message="String literal in `setText` can not be translated. Use Android resources instead.">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="1741"
+            line="1743"
             column="66"
-            startOffset="84680"
-            endLine="1741"
+            startOffset="84686"
+            endLine="1743"
             endColumn="70"
-            endOffset="84684"/>
+            endOffset="84690"/>
     </incident>
 
     <incident
@@ -790,12 +804,12 @@
         message="String literal in `setText` can not be translated. Use Android resources instead.">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="1746"
+            line="1748"
             column="66"
-            startOffset="84984"
-            endLine="1746"
+            startOffset="84990"
+            endLine="1748"
             endColumn="70"
-            endOffset="84988"/>
+            endOffset="84994"/>
     </incident>
 
     <incident
@@ -804,12 +818,12 @@
         message="String literal in `setText` can not be translated. Use Android resources instead.">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="1757"
+            line="1759"
             column="31"
-            startOffset="85482"
-            endLine="1757"
+            startOffset="85488"
+            endLine="1759"
             endColumn="42"
-            endOffset="85493"/>
+            endOffset="85499"/>
     </incident>
 
     <incident
@@ -818,12 +832,12 @@
         message="String literal in `setText` can not be translated. Use Android resources instead.">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="1764"
+            line="1766"
             column="27"
-            startOffset="85883"
-            endLine="1764"
+            startOffset="85889"
+            endLine="1766"
             endColumn="38"
-            endOffset="85894"/>
+            endOffset="85900"/>
     </incident>
 
     <incident
@@ -832,12 +846,12 @@
         message="String literal in `setText` can not be translated. Use Android resources instead.">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="1779"
+            line="1781"
             column="34"
-            startOffset="86719"
-            endLine="1779"
+            startOffset="86725"
+            endLine="1781"
             endColumn="47"
-            endOffset="86732"/>
+            endOffset="86738"/>
     </incident>
 
     <incident
@@ -846,12 +860,12 @@
         message="Do not concatenate text displayed with `setText`. Use resource string with placeholders.">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="1793"
+            line="1795"
             column="34"
-            startOffset="87602"
-            endLine="1793"
+            startOffset="87608"
+            endLine="1795"
             endColumn="89"
-            endOffset="87657"/>
+            endOffset="87663"/>
     </incident>
 
     <incident
@@ -860,12 +874,12 @@
         message="String literal in `setText` can not be translated. Use Android resources instead.">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="1793"
+            line="1795"
             column="34"
-            startOffset="87602"
-            endLine="1793"
+            startOffset="87608"
+            endLine="1795"
             endColumn="49"
-            endOffset="87617"/>
+            endOffset="87623"/>
     </incident>
 
     <incident
@@ -874,12 +888,12 @@
         message="String literal in `setText` can not be translated. Use Android resources instead.">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="1871"
+            line="1873"
             column="37"
-            startOffset="92159"
-            endLine="1871"
+            startOffset="92165"
+            endLine="1873"
             endColumn="74"
-            endOffset="92196"/>
+            endOffset="92202"/>
     </incident>
 
     <incident
@@ -888,12 +902,12 @@
         message="String literal in `setText` can not be translated. Use Android resources instead.">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="1872"
+            line="1874"
             column="40"
-            startOffset="92238"
-            endLine="1872"
+            startOffset="92244"
+            endLine="1874"
             endColumn="46"
-            endOffset="92244"/>
+            endOffset="92250"/>
     </incident>
 
     <incident
@@ -902,12 +916,12 @@
         message="String literal in `setText` can not be translated. Use Android resources instead.">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="1940"
+            line="1942"
             column="29"
-            startOffset="95531"
-            endLine="1940"
+            startOffset="95537"
+            endLine="1942"
             endColumn="48"
-            endOffset="95550"/>
+            endOffset="95556"/>
     </incident>
 
     <incident
@@ -916,12 +930,12 @@
         message="String literal in `setText` can not be translated. Use Android resources instead.">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="1983"
+            line="1985"
             column="29"
-            startOffset="97667"
-            endLine="1983"
+            startOffset="97673"
+            endLine="1985"
             endColumn="42"
-            endOffset="97680"/>
+            endOffset="97686"/>
     </incident>
 
     <incident
@@ -930,12 +944,12 @@
         message="String literal in `setText` can not be translated. Use Android resources instead.">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="2076"
+            line="2078"
             column="33"
-            startOffset="102031"
-            endLine="2076"
+            startOffset="102037"
+            endLine="2078"
             endColumn="60"
-            endOffset="102058"/>
+            endOffset="102064"/>
     </incident>
 
     <incident
@@ -944,12 +958,12 @@
         message="Do not concatenate text displayed with `setText`. Use resource string with placeholders.">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="2208"
+            line="2210"
             column="29"
-            startOffset="108353"
-            endLine="2208"
+            startOffset="108359"
+            endLine="2210"
             endColumn="71"
-            endOffset="108395"/>
+            endOffset="108401"/>
     </incident>
 
     <incident
@@ -958,12 +972,12 @@
         message="String literal in `setText` can not be translated. Use Android resources instead.">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="2208"
+            line="2210"
             column="29"
-            startOffset="108353"
-            endLine="2208"
+            startOffset="108359"
+            endLine="2210"
             endColumn="40"
-            endOffset="108364"/>
+            endOffset="108370"/>
     </incident>
 
     <incident
@@ -972,12 +986,12 @@
         message="String literal in `setText` can not be translated. Use Android resources instead.">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="2208"
+            line="2210"
             column="60"
-            startOffset="108384"
-            endLine="2208"
+            startOffset="108390"
+            endLine="2210"
             endColumn="71"
-            endOffset="108395"/>
+            endOffset="108401"/>
     </incident>
 
     <incident
@@ -986,12 +1000,12 @@
         message="String literal in `setText` can not be translated. Use Android resources instead.">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="2226"
+            line="2228"
             column="33"
-            startOffset="109137"
-            endLine="2226"
+            startOffset="109143"
+            endLine="2228"
             endColumn="53"
-            endOffset="109157"/>
+            endOffset="109163"/>
     </incident>
 
     <incident
@@ -1000,12 +1014,12 @@
         message="String literal in `setText` can not be translated. Use Android resources instead.">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="2237"
+            line="2239"
             column="33"
-            startOffset="109650"
-            endLine="2237"
+            startOffset="109656"
+            endLine="2239"
             endColumn="53"
-            endOffset="109670"/>
+            endOffset="109676"/>
     </incident>
 
     <incident
@@ -1014,40 +1028,12 @@
         message="String literal in `setText` can not be translated. Use Android resources instead.">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="2319"
+            line="2321"
             column="25"
-            startOffset="113291"
-            endLine="2319"
+            startOffset="113297"
+            endLine="2321"
             endColumn="29"
-            endOffset="113295"/>
-    </incident>
-
-    <incident
-        id="SetTextI18n"
-        severity="warning"
-        message="String literal in `setText` can not be translated. Use Android resources instead.">
-        <location
-            file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="2323"
-            column="77"
-            startOffset="113504"
-            endLine="2323"
-            endColumn="81"
-            endOffset="113508"/>
-    </incident>
-
-    <incident
-        id="SetTextI18n"
-        severity="warning"
-        message="String literal in `setText` can not be translated. Use Android resources instead.">
-        <location
-            file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="2324"
-            column="77"
-            startOffset="113588"
-            endLine="2324"
-            endColumn="81"
-            endOffset="113592"/>
+            endOffset="113301"/>
     </incident>
 
     <incident
@@ -1058,10 +1044,10 @@
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
             line="2325"
             column="77"
-            startOffset="113672"
+            startOffset="113510"
             endLine="2325"
             endColumn="81"
-            endOffset="113676"/>
+            endOffset="113514"/>
     </incident>
 
     <incident
@@ -1070,12 +1056,40 @@
         message="String literal in `setText` can not be translated. Use Android resources instead.">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="2568"
+            line="2326"
+            column="77"
+            startOffset="113594"
+            endLine="2326"
+            endColumn="81"
+            endOffset="113598"/>
+    </incident>
+
+    <incident
+        id="SetTextI18n"
+        severity="warning"
+        message="String literal in `setText` can not be translated. Use Android resources instead.">
+        <location
+            file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
+            line="2327"
+            column="77"
+            startOffset="113678"
+            endLine="2327"
+            endColumn="81"
+            endOffset="113682"/>
+    </incident>
+
+    <incident
+        id="SetTextI18n"
+        severity="warning"
+        message="String literal in `setText` can not be translated. Use Android resources instead.">
+        <location
+            file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
+            line="2570"
             column="29"
-            startOffset="124859"
-            endLine="2568"
+            startOffset="124865"
+            endLine="2570"
             endColumn="59"
-            endOffset="124889"/>
+            endOffset="124895"/>
     </incident>
 
     <incident
@@ -1084,12 +1098,12 @@
         message="Number formatting does not take into account locale settings. Consider using `String.format` instead.">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="2649"
+            line="2651"
             column="25"
-            startOffset="128634"
-            endLine="2649"
+            startOffset="128640"
+            endLine="2651"
             endColumn="64"
-            endOffset="128673"/>
+            endOffset="128679"/>
     </incident>
 
     <incident
@@ -1098,12 +1112,12 @@
         message="Number formatting does not take into account locale settings. Consider using `String.format` instead.">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="2653"
+            line="2655"
             column="52"
-            startOffset="128901"
-            endLine="2653"
+            startOffset="128907"
+            endLine="2655"
             endColumn="85"
-            endOffset="128934"/>
+            endOffset="128940"/>
     </incident>
 
     <incident
@@ -1112,12 +1126,12 @@
         message="Do not concatenate text displayed with `setText`. Use resource string with placeholders.">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="3221"
+            line="3223"
             column="34"
-            startOffset="156930"
-            endLine="3223"
+            startOffset="156936"
+            endLine="3225"
             endColumn="79"
-            endOffset="157131"/>
+            endOffset="157137"/>
     </incident>
 
     <incident
@@ -1126,12 +1140,12 @@
         message="String literal in `setText` can not be translated. Use Android resources instead.">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="3221"
+            line="3223"
             column="51"
-            startOffset="156947"
-            endLine="3221"
+            startOffset="156953"
+            endLine="3223"
             endColumn="57"
-            endOffset="156953"/>
+            endOffset="156959"/>
     </incident>
 
     <incident
@@ -1140,12 +1154,12 @@
         message="String literal in `setText` can not be translated. Use Android resources instead.">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="3222"
+            line="3224"
             column="23"
-            startOffset="156989"
-            endLine="3222"
+            startOffset="156995"
+            endLine="3224"
             endColumn="39"
-            endOffset="157005"/>
+            endOffset="157011"/>
     </incident>
 
     <incident
@@ -1154,12 +1168,12 @@
         message="String literal in `setText` can not be translated. Use Android resources instead.">
         <location
             file="${:*debug*MAIN*sourceProvider*0*javaDir*0}/com/personal/studytracker/MainActivity.java"
-            line="3278"
+            line="3280"
             column="33"
-            startOffset="159724"
-            endLine="3278"
+            startOffset="159730"
+            endLine="3280"
             endColumn="47"
-            endOffset="159738"/>
+            endOffset="159744"/>
     </incident>
 
 </incidents>
