@@ -31,6 +31,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -107,6 +108,8 @@ public final class MainActivity extends AppCompatActivity {
     private boolean remindersExpanded;
     private String pendingReminderKind;
     private boolean timerRunning;
+    private boolean timerStopwatch;
+    private boolean stopwatchMode;
     private boolean resetScrollOnRender;
     private long timerStartMillis;
     private long timerEndMillis;
@@ -126,6 +129,9 @@ public final class MainActivity extends AppCompatActivity {
     private FocusSproutView focusSprout;
     private TextView headerDateTime;
     private TextView headerLocation;
+    private TextView durationIntro;
+    private TextView durationLabel;
+    private LinearLayout timerPresets;
     private LocationListener locationListener;
     private final Handler handler = new Handler();
     private static final int REQUEST_LOCATION = 4101;
@@ -182,9 +188,66 @@ public final class MainActivity extends AppCompatActivity {
         render();
     }
 
+    private void snoozeTimerAlarm() {
+        getSharedPreferences(TimerAlarmScheduler.PREFS, MODE_PRIVATE).edit()
+                .putBoolean(TimerAlarmScheduler.KEY_ALARM_RINGING, false)
+                .apply();
+        TimerAlarmScheduler.scheduleSnooze(this);
+        AlarmSoundService.stop(this);
+        Toast.makeText(this, "Focus alarm snoozed for 5 minutes.",
+                Toast.LENGTH_SHORT).show();
+        render();
+    }
+
+    private boolean isTimerAlarmRinging() {
+        return getSharedPreferences(TimerAlarmScheduler.PREFS, MODE_PRIVATE)
+                .getBoolean(TimerAlarmScheduler.KEY_ALARM_RINGING, false);
+    }
+
+    private void renderTimerAlarmControls() {
+        if (!isTimerAlarmRinging()) return;
+        LinearLayout alarmCard = addCardBody(content, Color.parseColor(AMBER));
+        alarmCard.addView(text("Your focus session is complete", 16, true));
+        addCardHintTo(alarmCard, "Stop the sound now or snooze it for five minutes.");
+        LinearLayout actions = row();
+        MaterialButton dismiss = primaryButton();
+        dismiss.setText("Dismiss alarm");
+        dismiss.setOnClickListener(view -> dismissAlarm());
+        actions.addView(dismiss, new LinearLayout.LayoutParams(
+                0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+        MaterialButton snooze = outlinedButton();
+        styleLightOutlinedButton(snooze);
+        snooze.setText("Snooze 5 min");
+        LinearLayout.LayoutParams snoozeParams = new LinearLayout.LayoutParams(
+                0, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
+        snoozeParams.setMarginStart(dp(8));
+        actions.addView(snooze, snoozeParams);
+        snooze.setOnClickListener(view -> snoozeTimerAlarm());
+        alarmCard.addView(actions);
+    }
+
     private final Runnable timerTick = new Runnable() {
         @Override public void run() {
             if (!timerRunning || timerStatus == null) return;
+            if (timerStopwatch) {
+                long elapsed = Math.max(0,
+                        (System.currentTimeMillis() - timerStartMillis) / 1000);
+                if (timerStatus != null) timerStatus.setText("Stopwatch in progress");
+                if (timerCountdown != null) {
+                    String elapsedLabel = formatStopwatchTime(elapsed);
+                    timerCountdown.setText(elapsedLabel);
+                    timerCountdown.setContentDescription("Elapsed time " + elapsedLabel);
+                }
+                if (timerProgress != null) {
+                    timerProgress.setMax(3600);
+                    timerProgress.setProgress((int) (elapsed % 3600));
+                }
+                if (focusSprout != null) {
+                    focusSprout.setProgress(Math.min(1f, elapsed / 1500f));
+                }
+                handler.postDelayed(this, 1000);
+                return;
+            }
             long remaining = Math.max(0,
                     (timerEndMillis - System.currentTimeMillis() + 999) / 1000);
             if (remaining == 0) {
@@ -474,11 +537,13 @@ public final class MainActivity extends AppCompatActivity {
         timerToken = prefs.getString(TimerAlarmScheduler.KEY_TOKEN, "");
         timerTopicValue = prefs.getString(TimerAlarmScheduler.KEY_TOPIC, "");
         timerTopicIdValue = prefs.getString(TimerAlarmScheduler.KEY_TOPIC_ID, "");
+        timerStopwatch = prefs.getBoolean(TimerAlarmScheduler.KEY_STOPWATCH, false);
+        stopwatchMode = prefs.getBoolean(TimerAlarmScheduler.KEY_STOPWATCH_MODE, false);
         if (timerTopicIdValue.isEmpty()) {
             timerTopicIdValue = topicIdForName(timerTopicValue);
         }
         timerInterruptedValue = prefs.getBoolean(TimerAlarmScheduler.KEY_INTERRUPTED, false);
-        if (timerRunning && !timerToken.isEmpty()) {
+        if (timerRunning && !timerStopwatch && !timerToken.isEmpty()) {
             long dueAt = Math.max(System.currentTimeMillis(), timerEndMillis);
             TimerAlarmScheduler.scheduleTimer(this, dueAt, timerToken);
         }
@@ -526,14 +591,32 @@ public final class MainActivity extends AppCompatActivity {
             case "Learn": renderTopics(); break;
             default: renderToday();
         }
-        if (resetScroll || "Today".equals(activeTab)) scroll.post(() -> scroll.scrollTo(0, 0));
-        else scroll.post(() -> scroll.scrollTo(0, previousScroll));
+        if (resetScroll) {
+            scroll.post(() -> scroll.scrollTo(0, 0));
+        } else {
+            restoreScrollAfterLayout(previousScroll);
+        }
+    }
+
+    private void restoreScrollAfterLayout(int scrollY) {
+        ViewTreeObserver observer = scroll.getViewTreeObserver();
+        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override public void onGlobalLayout() {
+                ViewTreeObserver currentObserver = scroll.getViewTreeObserver();
+                if (currentObserver.isAlive()) {
+                    currentObserver.removeOnGlobalLayoutListener(this);
+                }
+                scroll.scrollTo(0, scrollY);
+            }
+        });
+        scroll.requestLayout();
     }
 
     private void renderToday() {
         LocalDate today = LocalDate.now();
         pageHeader(greeting() + ",", today.format(
                 DateTimeFormatter.ofPattern("EEEE, MMMM d", Locale.getDefault())));
+        renderTimerAlarmControls();
 
         List<TrackerStore.Habit> habits = store.getHabits();
         Map<String, Boolean> checks = store.getChecks().get(today.toString());
@@ -1572,19 +1655,42 @@ public final class MainActivity extends AppCompatActivity {
 
     private void renderSessions() {
         addFocusHero();
+        renderTimerAlarmControls();
         LinearLayout timerCard = addCardBody(content, getColor(R.color.timer_accent));
         timerMinutes = input("Minutes", InputType.TYPE_CLASS_NUMBER);
         timerMinutes.setText(Integer.toString(
                 timerDurationSeconds > 0 ? Math.max(1, timerDurationSeconds / 60) : 25));
-        TextView durationIntro = text("Choose your focus time", 16, true);
+        durationIntro = text(stopwatchMode ? "Count your focus time"
+                : "Choose your focus time", 16, true);
         durationIntro.setPadding(0, 0, 0, dp(4));
         timerCard.addView(durationIntro);
-        addFieldLabel(timerCard, "DURATION IN MINUTES");
+        durationLabel = fieldLabel("DURATION IN MINUTES");
+        timerCard.addView(durationLabel);
         timerCard.addView(timerMinutes);
-        LinearLayout presets = row();
-        addSecondaryButton(presets, "25 min", () -> timerMinutes.setText("25"));
-        addSecondaryButton(presets, "50 min", () -> timerMinutes.setText("50"));
-        timerCard.addView(presets);
+        timerPresets = row();
+        addSecondaryButton(timerPresets, "25 min", () -> timerMinutes.setText("25"));
+        addSecondaryButton(timerPresets, "50 min", () -> timerMinutes.setText("50"));
+        timerCard.addView(timerPresets);
+
+        LinearLayout timerModes = row();
+        MaterialButton countdownMode = outlinedButton();
+        styleModeButton(countdownMode, !stopwatchMode);
+        countdownMode.setEnabled(!timerRunning);
+        countdownMode.setText("Countdown");
+        countdownMode.setOnClickListener(view -> setStopwatchMode(false));
+        timerModes.addView(countdownMode, new LinearLayout.LayoutParams(
+                0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+        MaterialButton stopwatch = outlinedButton();
+        styleModeButton(stopwatch, stopwatchMode);
+        stopwatch.setEnabled(!timerRunning);
+        stopwatch.setText("Stopwatch");
+        stopwatch.setOnClickListener(view -> setStopwatchMode(true));
+        LinearLayout.LayoutParams stopwatchParams = new LinearLayout.LayoutParams(
+                0, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
+        stopwatchParams.setMarginStart(dp(8));
+        timerModes.addView(stopwatch, stopwatchParams);
+        timerCard.addView(timerModes);
+        updateTimerModeVisibility();
 
         timerTopic = topicDropdown("Choose a study topic", timerTopicIdValue, timerTopicValue);
         timerTopic.setEnabled(!timerRunning);
@@ -1593,6 +1699,7 @@ public final class MainActivity extends AppCompatActivity {
         timerInterrupted.setText("Interrupted");
         styleCheckBox(timerInterrupted);
         timerInterrupted.setChecked(timerInterruptedValue);
+        timerInterrupted.setEnabled(!timerRunning);
         timerCard.addView(timerTopic);
         timerCard.addView(timerInterrupted);
 
@@ -1618,14 +1725,22 @@ public final class MainActivity extends AppCompatActivity {
         LinearLayout timerLabels = vertical();
         timerLabels.setGravity(Gravity.CENTER);
         timerCountdown = text(timerRunning
-                ? formatClock((int) Math.max(0, (timerEndMillis - System.currentTimeMillis() + 999) / 1000))
-                : formatClock(timerDurationSeconds > 0 ? timerDurationSeconds : 25 * 60), 38, true);
+                ? (timerStopwatch
+                    ? formatStopwatchTime((System.currentTimeMillis() - timerStartMillis) / 1000)
+                    : formatClock((int) Math.max(0,
+                        (timerEndMillis - System.currentTimeMillis() + 999) / 1000)))
+                : stopwatchMode ? formatStopwatchTime(0)
+                    : formatClock(timerDurationSeconds > 0 ? timerDurationSeconds : 25 * 60),
+                38, true);
         timerCountdown.setTextColor(getColor(R.color.timer_accent));
         timerCountdown.setTypeface(android.graphics.Typeface.create(
                 "sans-serif-medium", android.graphics.Typeface.NORMAL));
-        timerCountdown.setContentDescription("Time remaining " + timerCountdown.getText());
-        timerCountdown.setTextSize(40);
-        timerStatus = text(timerRunning ? "Focus session in progress"
+        timerCountdown.setContentDescription(timerStopwatch || stopwatchMode
+                ? "Elapsed time " + timerCountdown.getText()
+                : "Time remaining " + timerCountdown.getText());
+        timerCountdown.setTextSize(timerStopwatch || stopwatchMode ? 32 : 40);
+        timerStatus = text(timerRunning
+                ? (timerStopwatch ? "Stopwatch in progress" : "Focus session in progress")
                 : "Ready when you are", 12, false);
         timerLabels.addView(timerCountdown);
         timerLabels.addView(timerStatus);
@@ -1647,17 +1762,16 @@ public final class MainActivity extends AppCompatActivity {
         timerCard.addView(timerFace, faceParams);
         updateTimerPreview();
 
-        if (timerRunning) {
+        if (timerRunning && !timerStopwatch) {
             long remaining = Math.max(0, (timerEndMillis - System.currentTimeMillis()) / 1000);
             timerProgress.setMax(Math.max(1, timerDurationSeconds));
             timerProgress.setProgress(Math.max(0, timerDurationSeconds - (int) remaining));
             focusSprout.setProgress(1f - (float) remaining
                     / Math.max(1, timerDurationSeconds));
         } else {
-            boolean ringing = getSharedPreferences(TimerAlarmScheduler.PREFS, MODE_PRIVATE)
-                    .getBoolean(TimerAlarmScheduler.KEY_ALARM_RINGING, false);
+            boolean ringing = isTimerAlarmRinging();
             if (ringing) {
-                timerStatus.setText("Time's up · stop or snooze from the alarm notification");
+                timerStatus.setText("Time's up · dismiss or snooze below");
                 timerCountdown.setText("Done");
             } else {
                 timerProgress.setProgress(0);
@@ -1666,16 +1780,25 @@ public final class MainActivity extends AppCompatActivity {
         }
 
         timerActionButton = primaryButton();
-        boolean alarmRinging = getSharedPreferences(TimerAlarmScheduler.PREFS, MODE_PRIVATE)
-                .getBoolean(TimerAlarmScheduler.KEY_ALARM_RINGING, false);
-        timerActionButton.setText(timerRunning ? "End session & save"
-                : alarmRinging ? "Dismiss alarm" : "Start focus timer");
+        boolean alarmRinging = isTimerAlarmRinging();
+        timerActionButton.setText(timerRunning
+                ? (timerStopwatch ? "Finish stopwatch & save" : "End session & save")
+                : alarmRinging ? "Dismiss alarm" : stopwatchMode
+                    ? "Start stopwatch" : "Start focus timer");
         timerActionButton.setOnClickListener(view -> {
             if (timerRunning) stopTimer();
             else if (alarmRinging) dismissAlarm();
             else startTimer();
         });
+        if (alarmRinging) timerActionButton.setVisibility(View.GONE);
         timerCard.addView(timerActionButton);
+        if (timerRunning && timerStopwatch) {
+            MaterialButton discard = outlinedButton();
+            styleLightOutlinedButton(discard);
+            discard.setText("Discard stopwatch");
+            discard.setOnClickListener(view -> confirmDiscardStopwatch());
+            timerCard.addView(discard);
+        }
         if (timerRunning) {
             handler.removeCallbacks(timerTick);
             handler.post(timerTick);
@@ -1951,6 +2074,15 @@ public final class MainActivity extends AppCompatActivity {
     private void updateTimerPreview() {
         if (timerRunning || timerMinutes == null || timerCountdown == null
                 || timerProgress == null) return;
+        if (stopwatchMode) {
+            timerCountdown.setText(formatStopwatchTime(0));
+            timerCountdown.setContentDescription("Stopwatch ready");
+            timerCountdown.setTextSize(32);
+            timerProgress.setMax(3600);
+            timerProgress.setProgress(0);
+            timerStatus.setText("Ready when you are");
+            return;
+        }
         try {
             int minutes = Integer.parseInt(timerMinutes.getText().toString().trim());
             if (minutes < 1 || minutes > 720) return;
@@ -1963,6 +2095,59 @@ public final class MainActivity extends AppCompatActivity {
         } catch (NumberFormatException ignored) {
             // Partial numeric input is validated when the timer starts.
         }
+    }
+
+    private void setStopwatchMode(boolean enabled) {
+        if (timerRunning) return;
+        stopwatchMode = enabled;
+        getSharedPreferences(TimerAlarmScheduler.PREFS, MODE_PRIVATE).edit()
+                .putBoolean(TimerAlarmScheduler.KEY_STOPWATCH_MODE, enabled)
+                .apply();
+        render();
+    }
+
+    private void updateTimerModeVisibility() {
+        int visibility = stopwatchMode ? View.GONE : View.VISIBLE;
+        durationIntro.setVisibility(visibility);
+        durationLabel.setVisibility(visibility);
+        timerMinutes.setVisibility(visibility);
+        timerPresets.setVisibility(visibility);
+        timerMinutes.setEnabled(!timerRunning && !stopwatchMode);
+        timerPresets.setEnabled(!timerRunning && !stopwatchMode);
+    }
+
+    private void styleModeButton(MaterialButton button, boolean selected) {
+        button.setBackgroundTintList(android.content.res.ColorStateList.valueOf(
+                getColor(selected ? R.color.primary : R.color.surface)));
+        button.setTextColor(getColor(selected ? R.color.surface : R.color.text_primary));
+    }
+
+    private void confirmDiscardStopwatch() {
+        new AlertDialog.Builder(this)
+                .setTitle("Discard stopwatch session?")
+                .setMessage("The elapsed time will not be added to your study history.")
+                .setNegativeButton("Keep timing", null)
+                .setPositiveButton("Discard", (dialog, which) -> discardStopwatch())
+                .show();
+    }
+
+    private void discardStopwatch() {
+        TimerAlarmScheduler.cancelTimer(this);
+        TimerAlarmScheduler.cancelSnooze(this);
+        getSharedPreferences(TimerAlarmScheduler.PREFS, MODE_PRIVATE).edit()
+                .putBoolean(TimerAlarmScheduler.KEY_RUNNING, false)
+                .putBoolean(TimerAlarmScheduler.KEY_STOPWATCH, false)
+                .putBoolean(TimerAlarmScheduler.KEY_ALARM_RINGING, false)
+                .remove(TimerAlarmScheduler.KEY_TOKEN)
+                .apply();
+        timerRunning = false;
+        timerStopwatch = false;
+        timerStartMillis = 0L;
+        timerEndMillis = 0L;
+        timerDurationSeconds = 0;
+        handler.removeCallbacks(timerTick);
+        Toast.makeText(this, "Stopwatch discarded.", Toast.LENGTH_SHORT).show();
+        render();
     }
 
     private void renderReadingLogForm() {
@@ -2451,6 +2636,10 @@ public final class MainActivity extends AppCompatActivity {
             return;
         }
         timerTopicValue = timerTopic.getText().toString().trim();
+        if (stopwatchMode) {
+            startStopwatch();
+            return;
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
                 && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -2491,6 +2680,7 @@ public final class MainActivity extends AppCompatActivity {
         }
 
         timerDurationSeconds = minutes * 60;
+        timerStopwatch = false;
         TimerAlarmScheduler.cancelSnooze(this);
         timerStartMillis = System.currentTimeMillis();
         timerEndMillis = timerStartMillis + timerDurationSeconds * 1000L;
@@ -2500,6 +2690,7 @@ public final class MainActivity extends AppCompatActivity {
         timerRunning = true;
         getSharedPreferences(TimerAlarmScheduler.PREFS, MODE_PRIVATE).edit()
                 .putBoolean(TimerAlarmScheduler.KEY_RUNNING, true)
+                .putBoolean(TimerAlarmScheduler.KEY_STOPWATCH, false)
                 .putBoolean(TimerAlarmScheduler.KEY_ALARM_RINGING, false)
                 .putString(TimerAlarmScheduler.KEY_TOKEN, timerToken)
                 .putLong(TimerAlarmScheduler.KEY_START_MILLIS, timerStartMillis)
@@ -2515,6 +2706,34 @@ public final class MainActivity extends AppCompatActivity {
         handler.post(timerTick);
     }
 
+    private void startStopwatch() {
+        timerStopwatch = true;
+        timerDurationSeconds = 0;
+        TimerAlarmScheduler.cancelTimer(this);
+        TimerAlarmScheduler.cancelSnooze(this);
+        timerStartMillis = System.currentTimeMillis();
+        timerEndMillis = 0L;
+        timerTopicValue = timerTopic.getText().toString().trim();
+        timerInterruptedValue = timerInterrupted.isChecked();
+        timerToken = UUID.randomUUID().toString();
+        timerRunning = true;
+        getSharedPreferences(TimerAlarmScheduler.PREFS, MODE_PRIVATE).edit()
+                .putBoolean(TimerAlarmScheduler.KEY_RUNNING, true)
+                .putBoolean(TimerAlarmScheduler.KEY_STOPWATCH, true)
+                .putBoolean(TimerAlarmScheduler.KEY_ALARM_RINGING, false)
+                .putString(TimerAlarmScheduler.KEY_TOKEN, timerToken)
+                .putLong(TimerAlarmScheduler.KEY_START_MILLIS, timerStartMillis)
+                .putLong(TimerAlarmScheduler.KEY_END_MILLIS, 0L)
+                .putInt(TimerAlarmScheduler.KEY_DURATION_SECONDS, 0)
+                .putString(TimerAlarmScheduler.KEY_TOPIC, timerTopicValue)
+                .putString(TimerAlarmScheduler.KEY_TOPIC_ID, timerTopicIdValue)
+                .putBoolean(TimerAlarmScheduler.KEY_INTERRUPTED, timerInterruptedValue)
+                .apply();
+        render();
+        handler.removeCallbacks(timerTick);
+        handler.post(timerTick);
+    }
+
     private void stopTimer() {
         android.content.SharedPreferences prefs = getSharedPreferences(
                 TimerAlarmScheduler.PREFS, MODE_PRIVATE);
@@ -2524,9 +2743,10 @@ public final class MainActivity extends AppCompatActivity {
             return;
         }
         long startMillis = timerStartMillis;
-        int seconds = (int) Math.max(1,
-                Math.min(timerDurationSeconds,
-                        (System.currentTimeMillis() - timerStartMillis) / 1000));
+        int elapsedSeconds = (int) Math.min(Integer.MAX_VALUE,
+                Math.max(0, (System.currentTimeMillis() - timerStartMillis) / 1000));
+        int seconds = timerStopwatch ? Math.max(1, elapsedSeconds)
+                : Math.max(1, Math.min(timerDurationSeconds, elapsedSeconds));
         LocalDateTime start = LocalDateTime.ofInstant(
                 Instant.ofEpochMilli(startMillis), ZoneId.systemDefault());
         LocalDateTime end = LocalDateTime.now();
@@ -2539,9 +2759,11 @@ public final class MainActivity extends AppCompatActivity {
                     seconds, timerTopicIdValue, timerTopicValue, timerInterruptedValue);
             prefs.edit()
                     .putBoolean(TimerAlarmScheduler.KEY_RUNNING, false)
+                    .putBoolean(TimerAlarmScheduler.KEY_STOPWATCH, false)
                     .putBoolean(TimerAlarmScheduler.KEY_ALARM_RINGING, false)
                     .apply();
             timerRunning = false;
+            timerStopwatch = false;
             handler.removeCallbacks(timerTick);
             Toast.makeText(this, "Session saved: " + formatDuration(seconds),
                     Toast.LENGTH_SHORT).show();
@@ -2676,6 +2898,18 @@ public final class MainActivity extends AppCompatActivity {
                 check.setOnCheckedChangeListener((button, checked) ->
                         runStoreAction(() -> {
                             store.setTopicItemDone(topic.id, item.id, checked);
+                            item.done = checked;
+                            int completedItems = 0;
+                            for (TrackerStore.TopicItem topicItem : topic.items) {
+                                if (topicItem.done) completedItems++;
+                            }
+                            int topicProgress = topic.items.isEmpty() ? 0
+                                    : completedItems * 100 / topic.items.size();
+                            progressText.setText(topic.items.isEmpty() ? "Add your first step"
+                                    : completedItems + " of " + topic.items.size()
+                                        + " steps · " + topicProgress + "%");
+                            progressBar.setProgress(topicProgress);
+                            updateCurriculumProgressSummary();
                             render();
                         }));
                 itemRow.addView(check);
@@ -2700,6 +2934,40 @@ public final class MainActivity extends AppCompatActivity {
     private void toggleTopic(TrackerStore.Topic topic) {
         if (!expandedTopics.add(topic.id)) expandedTopics.remove(topic.id);
         render();
+    }
+
+    private void updateCurriculumProgressSummary() {
+        int completedItems = 0;
+        int totalItems = 0;
+        for (TrackerStore.Topic topic : store.getTopics()) {
+            for (TrackerStore.TopicItem item : topic.items) {
+                totalItems++;
+                if (item.done) completedItems++;
+            }
+        }
+        for (int i = 0; i < content.getChildCount(); i++) {
+            View child = content.getChildAt(i);
+            if (!(child instanceof MaterialCardView)) continue;
+            MaterialCardView card = (MaterialCardView) child;
+            if (!(card.getChildAt(0) instanceof LinearLayout)) continue;
+            LinearLayout frame = (LinearLayout) card.getChildAt(0);
+            if (!(frame.getChildAt(1) instanceof LinearLayout)) continue;
+            LinearLayout body = (LinearLayout) frame.getChildAt(1);
+            if (body.getChildCount() < 3
+                    || !(body.getChildAt(0) instanceof TextView)
+                    || !"Your progress".contentEquals(
+                        ((TextView) body.getChildAt(0)).getText())) continue;
+            TextView progressText = (TextView) body.getChildAt(1);
+            progressText.setText(completedItems + " of " + totalItems
+                    + " steps done · " + String.format(Locale.getDefault(), "%.0f%%",
+                    totalItems == 0 ? 0f : completedItems * 100f / totalItems));
+            if (body.getChildAt(2) instanceof LinearProgressIndicator) {
+                LinearProgressIndicator progressBar =
+                        (LinearProgressIndicator) body.getChildAt(2);
+                progressBar.setProgress(totalItems == 0 ? 0 : completedItems * 100 / totalItems);
+            }
+            return;
+        }
     }
 
     private void editTopic(TrackerStore.Topic topic) {
@@ -3715,10 +3983,14 @@ public final class MainActivity extends AppCompatActivity {
     }
 
     private void addFieldLabel(LinearLayout parent, String label) {
+        parent.addView(fieldLabel(label));
+    }
+
+    private TextView fieldLabel(String label) {
         TextView view = text(label, 12, true);
         view.setTextColor(Color.parseColor(MUTED));
         view.setPadding(dp(6), dp(6), dp(6), 0);
-        parent.addView(view);
+        return view;
     }
 
     private void makeDatePicker(EditText field, String label, boolean notAfterToday) {
@@ -3850,6 +4122,12 @@ public final class MainActivity extends AppCompatActivity {
         int safeSeconds = Math.max(seconds, 0);
         return String.format(Locale.getDefault(), "%02d:%02d",
                 safeSeconds / 60, safeSeconds % 60);
+    }
+
+    private String formatStopwatchTime(long seconds) {
+        long safeSeconds = Math.max(0L, seconds);
+        return String.format(Locale.getDefault(), "%02d:%02d:%02d",
+                safeSeconds / 3600, (safeSeconds / 60) % 60, safeSeconds % 60);
     }
 
     private void runStoreAction(IoAction action) {

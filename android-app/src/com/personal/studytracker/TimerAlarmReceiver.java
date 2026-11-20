@@ -31,6 +31,7 @@ public final class TimerAlarmReceiver extends BroadcastReceiver {
         String expectedToken = intent == null ? "" :
                 intent.getStringExtra(TimerAlarmScheduler.EXTRA_TOKEN);
         if (!prefs.getBoolean(TimerAlarmScheduler.KEY_RUNNING, false)
+                || prefs.getBoolean(TimerAlarmScheduler.KEY_STOPWATCH, false)
                 || expectedToken == null
                 || !expectedToken.equals(prefs.getString(TimerAlarmScheduler.KEY_TOKEN, ""))) {
             return;

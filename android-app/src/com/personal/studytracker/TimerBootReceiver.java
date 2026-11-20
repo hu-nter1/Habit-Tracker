@@ -20,7 +20,8 @@ public final class TimerBootReceiver extends BroadcastReceiver {
         PlanReminderScheduler.scheduleAll(context);
         SharedPreferences prefs = context.getSharedPreferences(
                 TimerAlarmScheduler.PREFS, Context.MODE_PRIVATE);
-        if (!prefs.getBoolean(TimerAlarmScheduler.KEY_RUNNING, false)) return;
+        if (!prefs.getBoolean(TimerAlarmScheduler.KEY_RUNNING, false)
+                || prefs.getBoolean(TimerAlarmScheduler.KEY_STOPWATCH, false)) return;
         String token = prefs.getString(TimerAlarmScheduler.KEY_TOKEN, "");
         long endAt = prefs.getLong(TimerAlarmScheduler.KEY_END_MILLIS, 0L);
         if (token.isEmpty() || endAt <= 0L) {

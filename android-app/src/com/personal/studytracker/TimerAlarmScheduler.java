@@ -11,6 +11,8 @@ final class TimerAlarmScheduler {
     private static final String TAG = "StudyTrackerAlarm";
     static final String PREFS = "focus_timer";
     static final String KEY_RUNNING = "running";
+    static final String KEY_STOPWATCH = "stopwatch";
+    static final String KEY_STOPWATCH_MODE = "stopwatch_mode";
     static final String KEY_ALARM_RINGING = "alarm_ringing";
     static final String KEY_TOKEN = "token";
     static final String KEY_START_MILLIS = "start_millis";

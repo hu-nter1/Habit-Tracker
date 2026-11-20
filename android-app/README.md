@@ -77,9 +77,12 @@ with a checklist and progress indicator for each topic.
 ## Focus timer and device context
 
 The Study tab includes a countdown timer (1–720 minutes) with 25- and
-50-minute presets and requires selecting a curriculum topic. When it ends, the
-app logs the session to the existing `<sessions>` XML section, then plays the
-device alarm sound and vibration. You can also save a separate reading log with
+50-minute presets and a count-up stopwatch; both require selecting a
+curriculum topic and can be discarded before saving when using the stopwatch.
+When the countdown ends, the app logs the session to the existing `<sessions>`
+XML section, then plays the device alarm sound and vibration. Dismiss and
+five-minute snooze controls are available both in the notification and inside
+the app on Today and Study. You can also save a separate reading log with
 date, topic, minutes, and optional notes; it appears in Reading history and
 optional pages read; it appears in Reading history and contributes to
 study-time totals without pretending it was a timed focus session.
