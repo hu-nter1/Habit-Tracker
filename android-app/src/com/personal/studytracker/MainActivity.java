@@ -3,7 +3,9 @@ package com.personal.studytracker;
 import android.app.AlertDialog;
 import android.Manifest;
 import android.content.Context;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.app.AlarmManager;
 import android.app.TimePickerDialog;
@@ -116,6 +118,7 @@ public final class MainActivity extends AppCompatActivity {
     private boolean timerStopwatch;
     private boolean stopwatchMode;
     private boolean resetScrollOnRender;
+    private boolean focusTimerReceiverRegistered;
     private long timerStartMillis;
     private long timerSessionStartMillis;
     private long timerEndMillis;
@@ -142,6 +145,14 @@ public final class MainActivity extends AppCompatActivity {
     private LinearLayout timerPresets;
     private LocationListener locationListener;
     private final Handler handler = new Handler();
+    private final BroadcastReceiver focusTimerStateReceiver = new BroadcastReceiver() {
+        @Override public void onReceive(Context context, Intent intent) {
+            restoreTimerState();
+            if (!timerRunning || timerPaused) handler.removeCallbacks(timerTick);
+            else if ("Study".equals(activeTab)) handler.post(timerTick);
+            if ("Study".equals(activeTab) || "Today".equals(activeTab)) render();
+        }
+    };
     private static final int REQUEST_LOCATION = 4101;
     private static final int REQUEST_NOTIFICATIONS = 4102;
     private static final int REQUEST_REMINDER_NOTIFICATIONS = 4103;
@@ -184,6 +195,26 @@ public final class MainActivity extends AppCompatActivity {
         } catch (RuntimeException exception) {
             Log.e(TAG, "Could not open alarm notification settings", exception);
             Toast.makeText(this, "Open Day by Day's notification settings to enable alarms.",
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void openFocusTimerNotificationSettings() {
+        Intent settings;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            settings = new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
+                    .putExtra(Settings.EXTRA_APP_PACKAGE, getPackageName())
+                    .putExtra(Settings.EXTRA_CHANNEL_ID,
+                            FocusTimerNotificationService.CHANNEL_ID);
+        } else {
+            settings = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                    .putExtra(Settings.EXTRA_APP_PACKAGE, getPackageName());
+        }
+        try {
+            startActivity(settings);
+        } catch (RuntimeException exception) {
+            Log.e(TAG, "Could not open focus timer notification settings", exception);
+            Toast.makeText(this, "Open Day by Day's notification settings to enable timer notifications.",
                     Toast.LENGTH_LONG).show();
         }
     }
@@ -308,6 +339,7 @@ public final class MainActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_main);
         AlarmSoundService.ensureNotificationChannel(this);
+        FocusTimerNotificationService.ensureNotificationChannel(this);
         PlanReminderReceiver.ensureNotificationChannel(this);
         content = findViewById(R.id.content);
         tabs = findViewById(R.id.tabs);
@@ -353,6 +385,15 @@ public final class MainActivity extends AppCompatActivity {
 
     @Override protected void onResume() {
         super.onResume();
+        if (!focusTimerReceiverRegistered) {
+            IntentFilter filter = new IntentFilter(FocusTimerActionReceiver.ACTION_STATE_CHANGED);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                registerReceiver(focusTimerStateReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
+            } else {
+                registerReceiver(focusTimerStateReceiver, filter);
+            }
+            focusTimerReceiverRegistered = true;
+        }
         if (headerDateTime != null) {
             handler.removeCallbacks(clockTick);
             clockTick.run();
@@ -375,6 +416,10 @@ public final class MainActivity extends AppCompatActivity {
     @Override protected void onPause() {
         handler.removeCallbacks(clockTick);
         handler.removeCallbacks(timerTick);
+        if (focusTimerReceiverRegistered) {
+            unregisterReceiver(focusTimerStateReceiver);
+            focusTimerReceiverRegistered = false;
+        }
         removeLocationUpdates();
         super.onPause();
     }
@@ -393,7 +438,7 @@ public final class MainActivity extends AppCompatActivity {
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             startTimer();
         } else if (requestCode == REQUEST_NOTIFICATIONS) {
-            Toast.makeText(this, "Allow notifications to use focus timer alarms.",
+            Toast.makeText(this, "Allow notifications to see and control your focus timer.",
                     Toast.LENGTH_LONG).show();
         } else if (requestCode == REQUEST_REMINDER_NOTIFICATIONS) {
             if (grantResults.length > 0
@@ -574,6 +619,8 @@ public final class MainActivity extends AppCompatActivity {
             long dueAt = Math.max(System.currentTimeMillis(), timerEndMillis);
             TimerAlarmScheduler.scheduleTimer(this, dueAt, timerToken);
         }
+        if (timerRunning) FocusTimerNotificationService.showOrUpdate(this);
+        else FocusTimerNotificationService.stop(this);
     }
 
     private void reloadStore() {
@@ -2282,6 +2329,7 @@ public final class MainActivity extends AppCompatActivity {
     private void discardStopwatch() {
         TimerAlarmScheduler.cancelTimer(this);
         TimerAlarmScheduler.cancelSnooze(this);
+        FocusTimerNotificationService.stop(this);
         getSharedPreferences(TimerAlarmScheduler.PREFS, MODE_PRIVATE).edit()
                 .putBoolean(TimerAlarmScheduler.KEY_RUNNING, false)
                 .putBoolean(TimerAlarmScheduler.KEY_PAUSED, false)
@@ -2835,15 +2883,21 @@ public final class MainActivity extends AppCompatActivity {
             return;
         }
         timerTopicValue = timerTopic.getText().toString().trim();
-        if (stopwatchMode) {
-            startStopwatch();
-            return;
-        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
                 && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
                 != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS},
                     REQUEST_NOTIFICATIONS);
+            return;
+        }
+        if (!FocusTimerNotificationService.notificationsAvailable(this)) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Turn on timer notifications")
+                    .setMessage("Allow the active timer notification to show your time and provide pause and resume controls.")
+                    .setNegativeButton("Not now", null)
+                    .setPositiveButton("Open settings", (dialog, which) ->
+                            openFocusTimerNotificationSettings())
+                    .show();
             return;
         }
         if (!alarmNotificationsAvailable()) {
@@ -2854,6 +2908,14 @@ public final class MainActivity extends AppCompatActivity {
                     .setPositiveButton("Open settings", (dialog, which) ->
                             openAlarmNotificationSettings())
                     .show();
+            return;
+        }
+        if (stopwatchMode) {
+            startStopwatch();
+            return;
+        }
+        if (stopwatchMode) {
+            startStopwatch();
             return;
         }
         if (!TimerAlarmScheduler.canScheduleExact(this)) {
@@ -2908,6 +2970,7 @@ public final class MainActivity extends AppCompatActivity {
                 .putBoolean(TimerAlarmScheduler.KEY_INTERRUPTED, timerInterruptedValue)
                 .apply();
         TimerAlarmScheduler.scheduleTimer(this, timerEndMillis, timerToken);
+        FocusTimerNotificationService.showOrUpdate(this);
         render();
         handler.removeCallbacks(timerTick);
         handler.post(timerTick);
@@ -2944,6 +3007,7 @@ public final class MainActivity extends AppCompatActivity {
                 .putString(TimerAlarmScheduler.KEY_TOPIC_ID, timerTopicIdValue)
                 .putBoolean(TimerAlarmScheduler.KEY_INTERRUPTED, timerInterruptedValue)
                 .apply();
+        FocusTimerNotificationService.showOrUpdate(this);
         render();
         handler.removeCallbacks(timerTick);
         handler.post(timerTick);
@@ -2967,6 +3031,7 @@ public final class MainActivity extends AppCompatActivity {
                 .putLong(TimerAlarmScheduler.KEY_PAUSED_REMAINING_MILLIS,
                         timerPausedRemainingMillis)
                 .apply();
+        FocusTimerNotificationService.showOrUpdate(this);
         render();
     }
 
@@ -2984,6 +3049,7 @@ public final class MainActivity extends AppCompatActivity {
                 .putLong(TimerAlarmScheduler.KEY_END_MILLIS, timerEndMillis)
                 .apply();
         if (!timerStopwatch) TimerAlarmScheduler.scheduleTimer(this, timerEndMillis, timerToken);
+        FocusTimerNotificationService.showOrUpdate(this);
         render();
         handler.removeCallbacks(timerTick);
         handler.post(timerTick);
@@ -3031,6 +3097,7 @@ public final class MainActivity extends AppCompatActivity {
                     .putBoolean(TimerAlarmScheduler.KEY_STOPWATCH, false)
                     .putBoolean(TimerAlarmScheduler.KEY_ALARM_RINGING, false)
                     .apply();
+            FocusTimerNotificationService.stop(this);
             timerRunning = false;
             timerPaused = false;
             timerStopwatch = false;

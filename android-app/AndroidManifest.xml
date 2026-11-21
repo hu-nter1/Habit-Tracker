@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
@@ -26,6 +27,9 @@
         </activity>
         <receiver
             android:name=".TimerAlarmReceiver"
+            android:exported="false" />
+        <receiver
+            android:name=".FocusTimerActionReceiver"
             android:exported="false" />
         <receiver
             android:name=".AlarmActionReceiver"
@@ -54,5 +58,13 @@
             android:name=".AlarmSoundService"
             android:exported="false"
             android:foregroundServiceType="mediaPlayback" />
+        <service
+            android:name=".FocusTimerNotificationService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="User-started focus countdown and stopwatch displayed with an interactive ongoing notification." />
+        </service>
     </application>
 </manifest>

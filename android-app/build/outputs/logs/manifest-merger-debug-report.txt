@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:1:1-58:12
-INJECTED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:1:1-58:12
-INJECTED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:1:1-58:12
-INJECTED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:1:1-58:12
+ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:1:1-70:12
+INJECTED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:1:1-70:12
+INJECTED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:1:1-70:12
+INJECTED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:1:1-70:12
 MERGED from [com.google.android.material:material:1.12.0] /data/gradle/caches/8.9/transforms/0c904728dc3a8d192cc0c0faeb598900/transformed/material-1.12.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] /data/gradle/caches/8.9/transforms/878e6606f0fa93cf854b981722e3b33e/transformed/constraintlayout-2.0.1/AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.appcompat:appcompat-resources:1.6.1] /data/gradle/caches/8.9/transforms/0d38d18784cbd338fdfb8cd75d195486/transformed/appcompat-resources-1.6.1/AndroidManifest.xml:17:1-22:12
@@ -81,13 +81,17 @@ uses-permission#android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK
 ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:8:5-92
 	android:name
 		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:8:22-89
-uses-permission#android.permission.RECEIVE_BOOT_COMPLETED
-ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:9:5-81
+uses-permission#android.permission.FOREGROUND_SERVICE_SPECIAL_USE
+ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:9:5-89
 	android:name
-		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:9:22-78
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:9:22-86
+uses-permission#android.permission.RECEIVE_BOOT_COMPLETED
+ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:10:5-81
+	android:name
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:10:22-78
 application
-ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:11:5-57:19
-INJECTED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:11:5-57:19
+ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:12:5-69:19
+INJECTED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:12:5-69:19
 MERGED from [com.google.android.material:material:1.12.0] /data/gradle/caches/8.9/transforms/0c904728dc3a8d192cc0c0faeb598900/transformed/material-1.12.0/AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.12.0] /data/gradle/caches/8.9/transforms/0c904728dc3a8d192cc0c0faeb598900/transformed/material-1.12.0/AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] /data/gradle/caches/8.9/transforms/878e6606f0fa93cf854b981722e3b33e/transformed/constraintlayout-2.0.1/AndroidManifest.xml:9:5-20
@@ -109,99 +113,119 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /data/gradl
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.13.0] /data/gradle/caches/8.9/transforms/b203f511e6f88234a93304f4ae9934a6/transformed/core-1.13.0/AndroidManifest.xml:28:18-86
 	android:label
-		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:13:9-41
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:14:9-41
 	android:roundIcon
-		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:15:9-48
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:16:9-48
 	android:icon
-		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:14:9-43
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:15:9-43
 	android:allowBackup
-		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:12:9-36
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:13:9-36
 	android:theme
-		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:16:9-40
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:17:9-40
 activity#com.personal.studytracker.MainActivity
-ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:17:9-26:20
+ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:18:9-27:20
 	android:screenOrientation
-		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:21:13-49
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:22:13-49
 	android:exported
-		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:20:13-36
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:21:13-36
 	android:configChanges
-		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:19:13-59
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:20:13-59
 	android:name
-		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:18:13-41
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:19:13-41
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:22:13-25:29
+ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:23:13-26:29
 action#android.intent.action.MAIN
-ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:23:17-69
+ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:24:17-69
 	android:name
-		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:23:25-66
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:24:25-66
 category#android.intent.category.LAUNCHER
-ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:24:17-77
+ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:25:17-77
 	android:name
-		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:24:27-74
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:25:27-74
 receiver#com.personal.studytracker.TimerAlarmReceiver
-ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:27:9-29:40
+ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:28:9-30:40
 	android:exported
-		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:29:13-37
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:30:13-37
 	android:name
-		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:28:13-47
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:29:13-47
+receiver#com.personal.studytracker.FocusTimerActionReceiver
+ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:31:9-33:40
+	android:exported
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:33:13-37
+	android:name
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:32:13-53
 receiver#com.personal.studytracker.AlarmActionReceiver
-ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:30:9-32:40
-	android:exported
-		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:32:13-37
-	android:name
-		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:31:13-48
-receiver#com.personal.studytracker.TimerBootReceiver
-ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:33:9-43:20
-	android:enabled
-		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:35:13-35
+ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:34:9-36:40
 	android:exported
 		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:36:13-37
 	android:name
-		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:34:13-46
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:35:13-48
+receiver#com.personal.studytracker.TimerBootReceiver
+ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:37:9-47:20
+	android:enabled
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:39:13-35
+	android:exported
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:40:13-37
+	android:name
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:38:13-46
 intent-filter#action:name:android.intent.action.BOOT_COMPLETED+action:name:android.intent.action.MY_PACKAGE_REPLACED+action:name:android.intent.action.TIMEZONE_CHANGED+action:name:android.intent.action.TIME_SET
-ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:37:13-42:29
+ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:41:13-46:29
 action#android.intent.action.BOOT_COMPLETED
-ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:38:17-79
+ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:42:17-79
 	android:name
-		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:38:25-76
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:42:25-76
 action#android.intent.action.MY_PACKAGE_REPLACED
-ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:39:17-84
+ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:43:17-84
 	android:name
-		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:39:25-81
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:43:25-81
 action#android.intent.action.TIME_SET
-ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:40:17-73
+ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:44:17-73
 	android:name
-		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:40:25-70
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:44:25-70
 action#android.intent.action.TIMEZONE_CHANGED
-ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:41:17-81
+ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:45:17-81
 	android:name
-		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:41:25-78
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:45:25-78
 receiver#com.personal.studytracker.DailyReminderReceiver
-ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:44:9-46:40
+ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:48:9-50:40
 	android:exported
-		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:46:13-37
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:50:13-37
 	android:name
-		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:45:13-50
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:49:13-50
 receiver#com.personal.studytracker.PlanReminderReceiver
-ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:47:9-49:40
+ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:51:9-53:40
 	android:exported
-		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:49:13-37
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:53:13-37
 	android:name
-		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:48:13-49
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:52:13-49
 receiver#com.personal.studytracker.PlanReminderActionReceiver
-ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:50:9-52:40
+ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:54:9-56:40
 	android:exported
-		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:52:13-37
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:56:13-37
 	android:name
-		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:51:13-55
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:55:13-55
 service#com.personal.studytracker.AlarmSoundService
-ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:53:9-56:61
+ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:57:9-60:61
 	android:exported
-		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:55:13-37
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:59:13-37
 	android:foregroundServiceType
-		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:56:13-58
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:60:13-58
 	android:name
-		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:54:13-46
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:58:13-46
+service#com.personal.studytracker.FocusTimerNotificationService
+ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:61:9-68:19
+	android:exported
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:63:13-37
+	android:foregroundServiceType
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:64:13-55
+	android:name
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:62:13-58
+property#android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE
+ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:65:13-67:130
+	android:value
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:67:17-127
+	android:name
+		ADDED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml:66:17-76
 uses-sdk
 INJECTED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /home/king/Desktop/Tracker/android-app/AndroidManifest.xml

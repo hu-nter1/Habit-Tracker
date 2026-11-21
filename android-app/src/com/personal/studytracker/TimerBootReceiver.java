@@ -40,8 +40,13 @@ public final class TimerBootReceiver extends BroadcastReceiver {
             TimerAlarmReceiver.startAlarmService(context,
                     "Focus timer complete", "Your study session is complete.");
         }
-        if (!prefs.getBoolean(TimerAlarmScheduler.KEY_RUNNING, false)
-                || prefs.getBoolean(TimerAlarmScheduler.KEY_PAUSED, false)
+        if (!prefs.getBoolean(TimerAlarmScheduler.KEY_RUNNING, false)) return;
+        try {
+            FocusTimerNotificationService.showOrUpdate(context);
+        } catch (RuntimeException exception) {
+            Log.e(TAG, "Could not restore the active focus timer notification", exception);
+        }
+        if (prefs.getBoolean(TimerAlarmScheduler.KEY_PAUSED, false)
                 || prefs.getBoolean(TimerAlarmScheduler.KEY_STOPWATCH, false)) return;
         String token = prefs.getString(TimerAlarmScheduler.KEY_TOKEN, "");
         long endAt = prefs.getLong(TimerAlarmScheduler.KEY_END_MILLIS, 0L);

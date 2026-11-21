@@ -107,7 +107,11 @@ each topic.
 The Study tab includes a countdown timer (1–720 minutes) with 25- and
 50-minute presets and a count-up stopwatch. Both can be paused and resumed,
 require selecting a curriculum topic, and the stopwatch can be discarded
-before saving. Choose the focus alarm sound from the Study timer.
+before saving. While either mode is running, an ongoing phone notification
+shows a live countdown or elapsed stopwatch, the selected topic, and a
+Pause/Resume action; tapping it opens the Study screen. The notification is
+quiet and remains visible while the app is in the background. Choose the focus
+alarm sound from the Study timer.
 When the countdown ends, the app logs the session to the existing `<sessions>`
 XML section, then plays the device alarm sound and vibration. Dismiss and
 five-minute snooze controls are available both in the notification and inside

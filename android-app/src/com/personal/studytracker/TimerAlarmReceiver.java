@@ -67,6 +67,7 @@ public final class TimerAlarmReceiver extends BroadcastReceiver {
                 .putBoolean(TimerAlarmScheduler.KEY_ALARM_RINGING, true)
                 .apply();
         TimerAlarmScheduler.cancelTimer(context);
+        FocusTimerNotificationService.stop(context);
         String message = saved
                 ? (topic.isEmpty() ? "Your study session is complete." : "Finished: " + topic)
                 : "Timer ended, but the session could not be saved. Please check tracker data.";

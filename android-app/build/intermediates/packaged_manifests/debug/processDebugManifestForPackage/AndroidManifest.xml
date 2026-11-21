@@ -15,6 +15,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <permission
@@ -48,6 +49,9 @@
             android:name="com.personal.studytracker.TimerAlarmReceiver"
             android:exported="false" />
         <receiver
+            android:name="com.personal.studytracker.FocusTimerActionReceiver"
+            android:exported="false" />
+        <receiver
             android:name="com.personal.studytracker.AlarmActionReceiver"
             android:exported="false" />
         <receiver
@@ -75,6 +79,14 @@
             android:name="com.personal.studytracker.AlarmSoundService"
             android:exported="false"
             android:foregroundServiceType="mediaPlayback" />
+        <service
+            android:name="com.personal.studytracker.FocusTimerNotificationService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse" >
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="User-started focus countdown and stopwatch displayed with an interactive ongoing notification." />
+        </service>
 
         <provider
             android:name="androidx.startup.InitializationProvider"
